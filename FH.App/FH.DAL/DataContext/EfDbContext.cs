@@ -27,7 +27,7 @@ namespace FH.DAL.DataContext
         public DbSet<OrderItem> OrderItems { get; set; }
 
 
-        public EfDbContext(DbContextOptions<EfDbContext> options)
+        public EfDbContext(DbContextOptions options)
             : base(options)
         {
             //Database.EnsureCreated();
