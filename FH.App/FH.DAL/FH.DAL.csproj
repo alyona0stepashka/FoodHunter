@@ -13,8 +13,4 @@
     <ProjectReference Include="..\FH.Models\FH.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="EF\Repositories\" />
-  </ItemGroup>
-
 </Project>
