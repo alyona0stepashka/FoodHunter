@@ -104,8 +104,6 @@ namespace FH.App
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-
-
         }
 
 
@@ -126,13 +124,13 @@ namespace FH.App
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "post API V1"); });
-            app.UseMvc(routeBuilder =>
-            {
-                //routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
-                //routeBuilder.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
-                //routeBuilder.EnableDependencyInjection();
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
+            //app.UseMvc(routeBuilder =>
+            //{
+            //    routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
+            //    routeBuilder.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
+            //    routeBuilder.EnableDependencyInjection();
+            //});
         }
 
         //private static IEdmModel GetEdmModel()

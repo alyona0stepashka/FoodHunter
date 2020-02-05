@@ -11,6 +11,14 @@ namespace FH.Models.Models
     {
         public string ContactInfo { get; set; }
 
+        public string Vk { get; set; }
+
+        public string Facebook { get; set; }
+
+        public string Instagram { get; set; }
+
+        public string Site { get; set; }
+
         public string Name { get; set; }
 
         public string Describe { get; set; }
