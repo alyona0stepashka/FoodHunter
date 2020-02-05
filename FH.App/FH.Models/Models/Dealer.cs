@@ -26,9 +26,13 @@ namespace FH.Models.Models
         [ForeignKey("Specification")]
         public int? SpecificationId { get; set; }
 
+        [ForeignKey("File")]
+        public int? FileId { get; set; }
+
         //--------------------------
         public virtual List<Location> Locations { get; set; }
         public virtual DealerSpecification Specification { get; set; }
+        public virtual FileModel File { get; set; }
 
     }
 }

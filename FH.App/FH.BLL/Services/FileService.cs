@@ -73,7 +73,6 @@ namespace FH.BLL.Services
                 }
                 if (dealerId != null)
                 {
-                    file.DealerId = dealerId;
                     file.Path = $"/Images/Dealers/{dealerId}/";
                 }
                 await _db.FileModels.CreateAsync(file);

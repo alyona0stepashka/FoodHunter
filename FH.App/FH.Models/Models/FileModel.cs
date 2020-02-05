@@ -20,13 +20,13 @@ namespace FH.Models.Models
         [ForeignKey("Location")]
         public int? LocationId { get; set; }
 
-        [ForeignKey("Dealer")]
-        public int? DealerId { get; set; }
+        //[ForeignKey("Dealer")]
+        //public int? DealerId { get; set; }
 
         //---------------
 
         public virtual Feedback Feedback { get; set; }
         public virtual Location Location { get; set; }
-        public virtual Dealer Dealer { get; set; }
+        //public virtual Dealer Dealer { get; set; }
     }
 }
