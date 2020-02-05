@@ -46,7 +46,7 @@ namespace FH.BLL.Services
                 throw ex;
             }
         }
-        public async Task<int> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null, int? dealerId = null)
+        public async Task<int> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null, int? CompanyId = null)
         {
             try
             {
@@ -71,9 +71,9 @@ namespace FH.BLL.Services
                     file.LocationId = locationId;
                     file.Path = $"/Images/Locations/{locationId}/";
                 }
-                if (dealerId != null)
+                if (CompanyId != null)
                 {
-                    file.Path = $"/Images/Dealers/{dealerId}/";
+                    file.Path = $"/Images/Companys/{CompanyId}/";
                 }
                 await _db.FileModels.CreateAsync(file);
                 using (var fileStream = new FileStream($"{_appEnvironment.WebRootPath}{file.Path}{file.Name}{file.Extension}", FileMode.Create))

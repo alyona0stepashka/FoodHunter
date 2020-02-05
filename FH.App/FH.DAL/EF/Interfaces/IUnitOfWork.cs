@@ -13,7 +13,7 @@ namespace FH.DAL.EF.Interfaces
         IFullRepository<UserProfile> UserProfiles { get; }
         IFullRepository<FileModel> FileModels { get; }
         IFullRepository<CuisineUser> CuisineUsers { get; }
-        IFullRepository<Dealer> Dealers { get; }
+        IFullRepository<Company> Companys { get; }
         IFullRepository<Location> Locations { get; }
         IFullRepository<Feedback> Feedbacks { get; }
         IFullRepository<Manager> Managers { get; }
@@ -24,7 +24,7 @@ namespace FH.DAL.EF.Interfaces
         IFullRepository<OrderItem> OrderItems { get; }
         IRepository<Sex> Sexes { get; }
         IRepository<Cuisine> Cuisines { get; }
-        IRepository<DealerSpecification> DealerSpecifications { get; }
+        IRepository<CompanySpecification> CompanySpecifications { get; }
         IRepository<SubscriptionType> SubscriptionTypes { get; }
 
         Task SaveAsync();

@@ -29,10 +29,11 @@ namespace FH.BLL.Services
                     throw new Exception("Location not found");
                 }
 
+                var locationPhotos = _db.FileModels.GetWhere(m => m.LocationId == id).ToList();
                 var locationPage = new LocationPageVM(location)
                 {
                     Menus = _db.Menus.GetWhere(m => m.LocationId == location.Id).ToList(),
-                    LocationPhoto = _db.FileModels.GetWhere(m=>m.LocationId==id)
+                    LocationPhotos = locationPhotos.Select(m=> $"{m.Path}{m.Name}{m.Extension}").ToList()
                 };
 
                 return locationPage;
@@ -65,11 +66,11 @@ namespace FH.BLL.Services
             }
         }
 
-        public List<LocationTabVM> GetLocationsByDealer(int dealerId)
+        public List<LocationTabVM> GetLocationsByCompany(int CompanyId)
         {
             try
             {
-                var locations = _db.Locations.GetWhere(m =>m.DealerId==dealerId);
+                var locations = _db.Locations.GetWhere(m =>m.CompanyId==CompanyId);
                 if (!locations.Any())
                 {
                     throw new Exception("No one location found");
@@ -98,7 +99,7 @@ namespace FH.BLL.Services
                     Address = location.Address,
                     Longitude = location.Longitude,
                     Latitude = location.Latitude,
-                    DealerId = location.DealerId,
+                    CompanyId = location.CompanyId,
                     AdminId = userId
                 };
                 return new LocationPageVM(await _db.Locations.CreateAsync(newLocation));

@@ -37,7 +37,7 @@ namespace FH.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DealerSpecifications",
+                name: "CompanySpecifications",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -46,11 +46,11 @@ namespace FH.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DealerSpecifications", x => x.Id);
+                    table.PrimaryKey("PK_companyspecifications", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dealers",
+                name: "Companys",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -62,11 +62,11 @@ namespace FH.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dealers", x => x.Id);
+                    table.PrimaryKey("PK_companys", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Dealers_DealerSpecifications_SpecificationId",
+                        name: "FK_companys_companyspecifications_SpecificationId",
                         column: x => x.SpecificationId,
-                        principalTable: "DealerSpecifications",
+                        principalTable: "CompanySpecifications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -81,15 +81,15 @@ namespace FH.DAL.Migrations
                     Longitude = table.Column<decimal>(nullable: false),
                     Latitude = table.Column<decimal>(nullable: false),
                     Address = table.Column<string>(nullable: true),
-                    DealerId = table.Column<int>(nullable: true)
+                    CompanyId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Locations_Dealers_DealerId",
-                        column: x => x.DealerId,
-                        principalTable: "Dealers",
+                        name: "FK_Locations_companys_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companys",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -105,14 +105,14 @@ namespace FH.DAL.Migrations
                 column: "UserProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dealers_SpecificationId",
-                table: "Dealers",
+                name: "IX_companys_SpecificationId",
+                table: "Companys",
                 column: "SpecificationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_DealerId",
+                name: "IX_Locations_CompanyId",
                 table: "Locations",
-                column: "DealerId");
+                column: "CompanyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -124,10 +124,10 @@ namespace FH.DAL.Migrations
                 name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "Dealers");
+                name: "Companys");
 
             migrationBuilder.DropTable(
-                name: "DealerSpecifications");
+                name: "CompanySpecifications");
 
             migrationBuilder.CreateTable(
                 name: "UserCuisines",

@@ -34,7 +34,7 @@ namespace FH.DAL.Migrations
                     b.ToTable("Sexes");
                 });
 
-            modelBuilder.Entity("FH.Models.Models.Dealer", b =>
+            modelBuilder.Entity("FH.Models.Models.Company", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace FH.DAL.Migrations
 
                     b.HasIndex("SpecificationId");
 
-                    b.ToTable("Dealers");
+                    b.ToTable("Companys");
                 });
 
             modelBuilder.Entity("FH.Models.Models.Feedback", b =>
@@ -109,7 +109,7 @@ namespace FH.DAL.Migrations
 
                     b.Property<string>("AdminId");
 
-                    b.Property<int>("DealerId");
+                    b.Property<int>("CompanyId");
 
                     b.Property<decimal>("Latitude");
 
@@ -121,7 +121,7 @@ namespace FH.DAL.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.HasIndex("DealerId");
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Locations");
                 });
@@ -278,7 +278,7 @@ namespace FH.DAL.Migrations
                     b.ToTable("CuisineUsers");
                 });
 
-            modelBuilder.Entity("FH.Models.StaticModels.DealerSpecification", b =>
+            modelBuilder.Entity("FH.Models.StaticModels.CompanySpecification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -290,7 +290,7 @@ namespace FH.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DealerSpecifications");
+                    b.ToTable("CompanySpecifications");
                 });
 
             modelBuilder.Entity("FH.Models.StaticModels.SubscriptionType", b =>
@@ -471,9 +471,9 @@ namespace FH.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("FH.Models.Models.Dealer", b =>
+            modelBuilder.Entity("FH.Models.Models.Company", b =>
                 {
-                    b.HasOne("FH.Models.StaticModels.DealerSpecification", "Specification")
+                    b.HasOne("FH.Models.StaticModels.CompanySpecification", "Specification")
                         .WithMany()
                         .HasForeignKey("SpecificationId");
                 });
@@ -502,9 +502,9 @@ namespace FH.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("AdminId");
 
-                    b.HasOne("FH.Models.Models.Dealer", "Dealer")
+                    b.HasOne("FH.Models.Models.Company", "Company")
                         .WithMany("Locations")
-                        .HasForeignKey("DealerId")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

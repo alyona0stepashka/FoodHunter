@@ -7,7 +7,7 @@ namespace FH.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "DealerId",
+                name: "CompanyId",
                 table: "FileModels",
                 nullable: true);
 
@@ -17,9 +17,9 @@ namespace FH.DAL.Migrations
                 nullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_FileModels_DealerId",
+                name: "IX_FileModels_CompanyId",
                 table: "FileModels",
-                column: "DealerId");
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FileModels_LocationId",
@@ -27,10 +27,10 @@ namespace FH.DAL.Migrations
                 column: "LocationId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_FileModels_Dealers_DealerId",
+                name: "FK_FileModels_companys_CompanyId",
                 table: "FileModels",
-                column: "DealerId",
-                principalTable: "Dealers",
+                column: "CompanyId",
+                principalTable: "Companys",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -46,7 +46,7 @@ namespace FH.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_FileModels_Dealers_DealerId",
+                name: "FK_FileModels_companys_CompanyId",
                 table: "FileModels");
 
             migrationBuilder.DropForeignKey(
@@ -54,7 +54,7 @@ namespace FH.DAL.Migrations
                 table: "FileModels");
 
             migrationBuilder.DropIndex(
-                name: "IX_FileModels_DealerId",
+                name: "IX_FileModels_CompanyId",
                 table: "FileModels");
 
             migrationBuilder.DropIndex(
@@ -62,7 +62,7 @@ namespace FH.DAL.Migrations
                 table: "FileModels");
 
             migrationBuilder.DropColumn(
-                name: "DealerId",
+                name: "CompanyId",
                 table: "FileModels");
 
             migrationBuilder.DropColumn(

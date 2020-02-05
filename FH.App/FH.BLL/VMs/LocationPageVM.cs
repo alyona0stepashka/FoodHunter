@@ -12,9 +12,9 @@ namespace FH.BLL.VMs
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public string Address { get; set; }
-        public string DealerName { get; set; }
-        public string DealerPhoto { get; set; }
-        public string LocationPhoto { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyPhoto { get; set; }
+        public List<string> LocationPhotos { get; set; }
         public string Specification { get; set; }
         public string Vk { get; set; }
         public string Facebook { get; set; }
@@ -27,15 +27,15 @@ namespace FH.BLL.VMs
             Address = location.Address;
             Longitude = location.Longitude;
             Latitude = location.Latitude;
-            if (location.Dealer != null)
+            if (location.Company != null)
             {
-                Facebook = location.Dealer.Facebook;
-                Vk = location.Dealer.Vk;
-                Instagram = location.Dealer.Instagram;
-                Site = location.Dealer.Site;
-                Specification = location.Dealer.Specification.Value;
-                DealerName = location.Dealer.Name;
-                DealerPhoto = $"{location.Dealer.File.Path}{location.Dealer.File.Name}{location.Dealer.File.Extension}";
+                Facebook = location.Company.Facebook;
+                Vk = location.Company.Vk;
+                Instagram = location.Company.Instagram;
+                Site = location.Company.Site;
+                Specification = location.Company.Specification.Value;
+                CompanyName = location.Company.Name;
+                CompanyPhoto = $"{location.Company.File.Path}{location.Company.File.Name}{location.Company.File.Extension}";
             }
         }
     }

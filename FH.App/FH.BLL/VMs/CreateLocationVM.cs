@@ -10,6 +10,6 @@ namespace FH.BLL.VMs
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public string Address { get; set; }
-        public int DealerId { get; set; }
+        public int CompanyId { get; set; }
     }
 }

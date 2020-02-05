@@ -14,9 +14,9 @@ namespace FH.DAL.DataContext
         public DbSet<Sex> Sexes { get; set; }
         public DbSet<Cuisine> Cuisines { get; set; }
         public DbSet<CuisineUser> CuisineUsers { get; set; }
-        public DbSet<Dealer> Dealers { get; set; }
+        public DbSet<Company> Companys { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<DealerSpecification> DealerSpecifications { get; set; }
+        public DbSet<CompanySpecification> CompanySpecifications { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Manager> Managers { get; set; }
         public DbSet<Menu> Menus { get; set; }

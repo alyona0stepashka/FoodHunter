@@ -10,7 +10,7 @@ namespace FH.BLL.Interfaces
     {
         Task<LocationPageVM> GetLocationPageAsync(int id);
         List<LocationTabVM> GetLocationsNearPoint(decimal lon, decimal lat);
-        List<LocationTabVM> GetLocationsByDealer(int dealerId);
+        List<LocationTabVM> GetLocationsByCompany(int CompanyId);
         Task<LocationPageVM> CreateLocationAsync(CreateLocationVM location, string userId);
         Task DeleteLocationAsync(int id);
     }

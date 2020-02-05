@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FH.Models.Models
 {
-    public class Dealer: BaseEntity
+    public class Company: BaseEntity
     {
         public string ContactInfo { get; set; }
 
@@ -31,7 +31,7 @@ namespace FH.Models.Models
 
         //--------------------------
         public virtual List<Location> Locations { get; set; }
-        public virtual DealerSpecification Specification { get; set; }
+        public virtual CompanySpecification Specification { get; set; }
         public virtual FileModel File { get; set; }
 
     }

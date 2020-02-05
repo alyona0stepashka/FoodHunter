@@ -13,7 +13,7 @@ namespace FH.DAL.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Locations_Dealers_DealerId",
+                name: "FK_Locations_companys_CompanyId",
                 table: "Locations");
 
             migrationBuilder.DropForeignKey(
@@ -39,7 +39,7 @@ namespace FH.DAL.Migrations
                 newName: "IX_Locations_AdminId");
 
             migrationBuilder.AlterColumn<int>(
-                name: "DealerId",
+                name: "CompanyId",
                 table: "Locations",
                 nullable: false,
                 oldClrType: typeof(int),
@@ -52,7 +52,7 @@ namespace FH.DAL.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "AdditionalInfo",
-                table: "DealerSpecifications",
+                table: "CompanySpecifications",
                 nullable: true);
 
             migrationBuilder.CreateTable(
@@ -234,10 +234,10 @@ namespace FH.DAL.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Locations_Dealers_DealerId",
+                name: "FK_Locations_companys_CompanyId",
                 table: "Locations",
-                column: "DealerId",
-                principalTable: "Dealers",
+                column: "CompanyId",
+                principalTable: "Companys",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -253,7 +253,7 @@ namespace FH.DAL.Migrations
                 table: "Locations");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Locations_Dealers_DealerId",
+                name: "FK_Locations_companys_CompanyId",
                 table: "Locations");
 
             migrationBuilder.DropTable(
@@ -281,7 +281,7 @@ namespace FH.DAL.Migrations
 
             migrationBuilder.DropColumn(
                 name: "AdditionalInfo",
-                table: "DealerSpecifications");
+                table: "CompanySpecifications");
 
             migrationBuilder.RenameColumn(
                 name: "AdminId",
@@ -294,7 +294,7 @@ namespace FH.DAL.Migrations
                 newName: "IX_Locations_UserId");
 
             migrationBuilder.AlterColumn<int>(
-                name: "DealerId",
+                name: "CompanyId",
                 table: "Locations",
                 nullable: true,
                 oldClrType: typeof(int));
@@ -318,10 +318,10 @@ namespace FH.DAL.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Locations_Dealers_DealerId",
+                name: "FK_Locations_companys_CompanyId",
                 table: "Locations",
-                column: "DealerId",
-                principalTable: "Dealers",
+                column: "CompanyId",
+                principalTable: "Companys",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 

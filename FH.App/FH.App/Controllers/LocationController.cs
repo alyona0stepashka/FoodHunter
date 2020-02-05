@@ -59,16 +59,16 @@ namespace FH.App.Controllers
         }
 
         [HttpGet]
-        [Route("dealer/{dealerId}")]
-        public IActionResult GetAllLocationByDealer(int dealerId)
+        [Route("Company/{CompanyId}")]
+        public IActionResult GetAllLocationByCompany(int CompanyId)
         {
             try
             {
-                if (dealerId == 0)
+                if (CompanyId == 0)
                 {
-                    throw new Exception("DealerId is missing");
+                    throw new Exception("CompanyId is missing");
                 }
-                var locationPage = _locationService.GetLocationsByDealer(dealerId);
+                var locationPage = _locationService.GetLocationsByCompany(CompanyId);
                 return Ok(locationPage);
             }
             catch (Exception ex)
