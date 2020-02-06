@@ -92,12 +92,12 @@ namespace FH.BLL.Services
         {
             try
             {
-                var db_user = await _userManager.FindByIdAsync(user_id);
-                if (db_user == null)
+                var dbUser = await _userManager.FindByIdAsync(user_id);
+                if (dbUser == null)
                 {
                     throw new Exception("User not found");
                 }
-                var success = await _userManager.ConfirmEmailAsync(db_user, code);
+                var success = await _userManager.ConfirmEmailAsync(dbUser, code);
                 return success.Succeeded ? new OperationDetails(true, "Success", "") : new OperationDetails(false, "Error", "");
             }
             catch (Exception ex)
@@ -157,7 +157,7 @@ namespace FH.BLL.Services
                 {
                     if (user != null && await _userManager.CheckPasswordAsync(user, model.OldPassword))
                     {
-                        string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                         var result = await _userManager.ResetPasswordAsync(user, code, model.NewPassword);
 
                         if (!result.Succeeded)
@@ -181,8 +181,8 @@ namespace FH.BLL.Services
                 if (model.SexId!=null) { userProfile.SexId = model.SexId; }
                 if (model.DateBirth != null) { userProfile.DateBirth = model.DateBirth.Value; }
 
-                var edit_result = _db.UserProfiles.Update(userProfile);
-                if (edit_result==null)
+                var editResult = await _db.UserProfiles.UpdateAsync(userProfile);
+                if (editResult==null)
                 {
                     throw new Exception("Edit user info fail");
                 }
@@ -190,17 +190,17 @@ namespace FH.BLL.Services
                 if (model.CuisinePreference != null)
                 {
                     var dbCuisinePrefs = _db.CuisineUsers.GetAll().Where(m => m.UserProfileId == userProfile.Id);
-                    foreach (var db_item in dbCuisinePrefs)
+                    foreach (var dbItem in dbCuisinePrefs)
                     {
-                        if (!model.CuisinePreference.Select(m => m == db_item.CuisineId).Any())
+                        if (!model.CuisinePreference.Select(m => m == dbItem.CuisineId).Any())
                         {
-                           await _db.CuisineUsers.DeleteAsync(db_item.Id);
-                           model.CuisinePreference.Remove(db_item.CuisineId);
+                           await _db.CuisineUsers.DeleteAsync(dbItem.Id);
+                           model.CuisinePreference.Remove(dbItem.CuisineId);
                         }
                     }
-                    foreach (var new_item_id in model.CuisinePreference)
+                    foreach (var newItemId in model.CuisinePreference)
                     {
-                        var bu = await _db.CuisineUsers.CreateAsync(new CuisineUser { CuisineId = new_item_id, UserProfileId = userProfile.Id });
+                        var bu = await _db.CuisineUsers.CreateAsync(new CuisineUser { CuisineId = newItemId, UserProfileId = userProfile.Id });
                     }
                 }
 
