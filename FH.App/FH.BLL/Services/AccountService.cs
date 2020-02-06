@@ -171,7 +171,7 @@ namespace FH.BLL.Services
                     }
                 }
 
-                var userProfile = _db.UserProfiles.GetWhere(m => m.UserId == model.Id).First();
+                var userProfile = _db.UserProfiles.GetAll().First(m => m.UserId == model.Id);
                 if (userProfile == null)
                 {
                     throw new Exception("User profile not found");
@@ -189,7 +189,7 @@ namespace FH.BLL.Services
 
                 if (model.CuisinePreference != null)
                 {
-                    var dbCuisinePrefs = _db.CuisineUsers.GetWhere(m => m.UserProfileId == userProfile.Id);
+                    var dbCuisinePrefs = _db.CuisineUsers.GetAll().Where(m => m.UserProfileId == userProfile.Id);
                     foreach (var db_item in dbCuisinePrefs)
                     {
                         if (!model.CuisinePreference.Select(m => m == db_item.CuisineId).Any())

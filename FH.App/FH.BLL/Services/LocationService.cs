@@ -29,10 +29,10 @@ namespace FH.BLL.Services
                     throw new Exception("Location not found");
                 }
 
-                var locationPhotos = _db.FileModels.GetWhere(m => m.LocationId == id).ToList();
+                var locationPhotos = _db.FileModels.GetAll().Where(m => m.LocationId == id).ToList();
                 var locationPage = new LocationPageVM(location)
                 {
-                    Menus = _db.Menus.GetWhere(m => m.LocationId == location.Id).ToList(),
+                    Menus = _db.Menus.GetAll().Where(m => m.LocationId == location.Id).ToList(),
                     LocationPhotos = locationPhotos.Select(m=> $"{m.Path}{m.Name}{m.Extension}").ToList()
                 };
 
@@ -47,7 +47,7 @@ namespace FH.BLL.Services
         {
             try
             {
-                var locations = _db.Locations.GetWhere(m => IsInside(lon, lat, 5, m.Longitude, m.Latitude));
+                var locations = _db.Locations.GetAll().Where(m => IsInside(lon, lat, 5, m.Longitude, m.Latitude));
                 if (!locations.Any())
                 {
                     throw new Exception("No one location found");
@@ -70,7 +70,7 @@ namespace FH.BLL.Services
         {
             try
             {
-                var locations = _db.Locations.GetWhere(m =>m.CompanyId==CompanyId);
+                var locations = _db.Locations.GetAll().Where(m =>m.CompanyId==CompanyId);
                 if (!locations.Any())
                 {
                     throw new Exception("No one location found");

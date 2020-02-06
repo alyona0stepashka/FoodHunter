@@ -10,18 +10,18 @@ namespace FH.DAL.EF.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IFullRepository<UserProfile> UserProfiles { get; }
-        IFullRepository<FileModel> FileModels { get; }
-        IFullRepository<CuisineUser> CuisineUsers { get; }
-        IFullRepository<Company> Companys { get; }
-        IFullRepository<Location> Locations { get; }
-        IFullRepository<Feedback> Feedbacks { get; }
-        IFullRepository<Manager> Managers { get; }
-        IFullRepository<Menu> Menus { get; }
-        IFullRepository<MenuItem> MenuItems { get; }
-        IFullRepository<Subscription> Subscriptions { get; }
-        IFullRepository<Order> Orders { get; }
-        IFullRepository<OrderItem> OrderItems { get; }
+        IRepository<UserProfile> UserProfiles { get; }
+        IRepository<FileModel> FileModels { get; }
+        IRepository<CuisineUser> CuisineUsers { get; }
+        IRepository<Company> Companys { get; }
+        IRepository<Location> Locations { get; }
+        IRepository<Feedback> Feedbacks { get; }
+        IRepository<Manager> Managers { get; }
+        IRepository<Menu> Menus { get; }
+        IRepository<MenuItem> MenuItems { get; }
+        IRepository<Subscription> Subscriptions { get; }
+        IRepository<Order> Orders { get; }
+        IRepository<OrderItem> OrderItems { get; }
         IRepository<Sex> Sexes { get; }
         IRepository<Icon> Icons { get; }
         IRepository<Cuisine> Cuisines { get; }
