@@ -15,9 +15,22 @@ namespace FH.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("FH.Models.EnumModels.Icon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Icons");
+                });
 
             modelBuilder.Entity("FH.Models.EnumModels.Sex", b =>
                 {
@@ -42,11 +55,23 @@ namespace FH.DAL.Migrations
 
                     b.Property<string>("Describe");
 
+                    b.Property<string>("Facebook");
+
+                    b.Property<int?>("FileId");
+
+                    b.Property<string>("Instagram");
+
                     b.Property<string>("Name");
+
+                    b.Property<string>("Site");
 
                     b.Property<int?>("SpecificationId");
 
+                    b.Property<string>("Vk");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("FileId");
 
                     b.HasIndex("SpecificationId");
 
@@ -82,8 +107,6 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CompanyId");
-
                     b.Property<string>("Extension");
 
                     b.Property<int?>("FeedbackId");
@@ -95,8 +118,6 @@ namespace FH.DAL.Migrations
                     b.Property<string>("Path");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("FeedbackId");
 
@@ -159,6 +180,8 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("IconId");
+
                     b.Property<string>("Info");
 
                     b.Property<int>("LocationId");
@@ -166,6 +189,8 @@ namespace FH.DAL.Migrations
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IconId");
 
                     b.HasIndex("LocationId");
 
@@ -177,6 +202,8 @@ namespace FH.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FileModelId");
 
                     b.Property<string>("Info");
 
@@ -193,6 +220,8 @@ namespace FH.DAL.Migrations
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileModelId");
 
                     b.HasIndex("MenuId");
 
@@ -228,6 +257,8 @@ namespace FH.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Count");
+
+                    b.Property<bool>("IsPaid");
 
                     b.Property<int>("OrderId");
 
@@ -305,6 +336,21 @@ namespace FH.DAL.Migrations
                     b.ToTable("UserProfiles");
                 });
 
+            modelBuilder.Entity("FH.Models.StaticModels.CompanySpecification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AdditionalInfo");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanySpecifications");
+                });
+
             modelBuilder.Entity("FH.Models.StaticModels.Cuisine", b =>
                 {
                     b.Property<int>("Id")
@@ -335,21 +381,6 @@ namespace FH.DAL.Migrations
                     b.HasIndex("UserProfileId");
 
                     b.ToTable("CuisineUsers");
-                });
-
-            modelBuilder.Entity("FH.Models.StaticModels.CompanySpecification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AdditionalInfo");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CompanySpecifications");
                 });
 
             modelBuilder.Entity("FH.Models.StaticModels.SubscriptionType", b =>
@@ -532,6 +563,10 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.Company", b =>
                 {
+                    b.HasOne("FH.Models.Models.FileModel", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId");
+
                     b.HasOne("FH.Models.StaticModels.CompanySpecification", "Specification")
                         .WithMany()
                         .HasForeignKey("SpecificationId");
@@ -550,10 +585,6 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.FileModel", b =>
                 {
-                    b.HasOne("FH.Models.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
                     b.HasOne("FH.Models.Models.Feedback", "Feedback")
                         .WithMany("Photos")
                         .HasForeignKey("FeedbackId");
@@ -590,6 +621,11 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.Menu", b =>
                 {
+                    b.HasOne("FH.Models.EnumModels.Icon", "Icon")
+                        .WithMany()
+                        .HasForeignKey("IconId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("Menus")
                         .HasForeignKey("LocationId")
@@ -598,10 +634,15 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.MenuItem", b =>
                 {
+                    b.HasOne("FH.Models.Models.FileModel", "FileModel")
+                        .WithMany()
+                        .HasForeignKey("FileModelId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("FH.Models.Models.Menu", "Menu")
                         .WithMany("MenuItems")
                         .HasForeignKey("MenuId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.Order", b =>

@@ -24,6 +24,7 @@ namespace FH.DAL.DataContext
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<SubscriptionType> SubscriptionTypes { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Icon> Icons { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
 
 
@@ -31,6 +32,15 @@ namespace FH.DAL.DataContext
             : base(options)
         {
             //Database.EnsureCreated();
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<MenuItem>()
+                .HasOne(m=>m.Menu)
+                .WithMany(m=>m.MenuItems)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

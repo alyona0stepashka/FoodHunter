@@ -49,7 +49,7 @@ namespace FH.BLL.Services
                     Email = model.Email,
                     PasswordHash = model.Password,
                     UserName = model.Email,
-                    EmailConfirmed = false
+                    EmailConfirmed = /*false*/ true
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (!result.Succeeded)
@@ -67,17 +67,18 @@ namespace FH.BLL.Services
                     FileId = fileId,
                     UserId = user.Id
                 };
+                await _db.UserProfiles.CreateAsync(userProfile);
 
                 //await _chatService.SetLastOnlineAsync(user.Id);
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var encode = HttpUtility.UrlEncode(code);
-                var callbackUrl = new StringBuilder("https://")
-                    .AppendFormat(url)
-                    .AppendFormat("/api/account/email")
-                    .AppendFormat($"?user_id={user.Id}&code={encode}");
+                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                //var encode = HttpUtility.UrlEncode(code);
+                //var callbackUrl = new StringBuilder("https://")
+                //    .AppendFormat(url)
+                //    .AppendFormat("/api/account/email")
+                //    .AppendFormat($"?user_id={user.Id}&code={encode}");
 
-                await _emailService.SendEmailAsync(user.Email, "Confirm your account",
-                    $"Confirm the registration by clicking on the link: <a href='{callbackUrl}'>link</a>");
+                //await _emailService.SendEmailAsync(user.Email, "Confirm your account",
+                    //$"Confirm the registration by clicking on the link: <a href='{callbackUrl}'>link</a>");
                 return user.Id;
             }
             catch (Exception ex)

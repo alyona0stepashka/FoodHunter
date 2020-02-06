@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using FH.Models.EnumModels;
 
 namespace FH.Models.Models
 {
@@ -25,8 +26,12 @@ namespace FH.Models.Models
         [ForeignKey("FileModel")]
         public int FileModelId { get; set; }
 
+        //[ForeignKey("Icon")]
+        //public int IconId { get; set; }
+
         //--------------------------
         public virtual Menu Menu { get; set; }
         public virtual FileModel FileModel { get; set; }
+        //public virtual Icon Icon { get; set; }
     }
 }

@@ -35,6 +35,7 @@ namespace FH.DAL.EF.Repositories
         private IRepository<Cuisine> _cuisines;
         private IRepository<CompanySpecification> _companyspecifications;
         private IRepository<SubscriptionType> _subscriptionTypes;
+        private IRepository<Icon> _icons;
 
         public IFullRepository<UserProfile> UserProfiles => _userProfiles ?? (_userProfiles = new FullRepository<UserProfile>(_db));
         public IFullRepository<FileModel> FileModels => _fileModels ?? (_fileModels = new FullRepository<FileModel>(_db));
@@ -50,6 +51,7 @@ namespace FH.DAL.EF.Repositories
         public IFullRepository<OrderItem> OrderItems => _orderItems ?? (_orderItems = new FullRepository<OrderItem>(_db));
         public IRepository<Sex> Sexes => _sexes ?? (_sexes = new Repository<Sex>(_db));
         public IRepository<Cuisine> Cuisines => _cuisines ?? (_cuisines = new Repository<Cuisine>(_db));
+        public IRepository<Icon> Icons => _icons ?? (_icons = new Repository<Icon>(_db));
         public IRepository<CompanySpecification> CompanySpecifications => _companyspecifications ?? (_companyspecifications = new Repository<CompanySpecification>(_db));
         public IRepository<SubscriptionType> SubscriptionTypes => _subscriptionTypes ?? (_subscriptionTypes = new Repository<SubscriptionType>(_db));
 

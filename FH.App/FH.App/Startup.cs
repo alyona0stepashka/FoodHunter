@@ -4,7 +4,11 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using FH.BLL.Infrastructure;
+using FH.BLL.Interfaces;
+using FH.BLL.Services;
 using FH.DAL.DataContext;
+using FH.DAL.EF.Interfaces;
+using FH.DAL.EF.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -104,6 +108,13 @@ namespace FH.App
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
 
