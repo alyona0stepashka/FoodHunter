@@ -16,12 +16,12 @@ namespace FH.Models.Models
 
         [ForeignKey("SubscriptionType")]
         public int SubscriptionTypeId { get; set; }
+        public virtual SubscriptionType SubscriptionType { get; set; }
 
         [ForeignKey("Location")]
         public int LocationId { get; set; }
+        public virtual Location Location { get; set; }
 
         //----------------------
-        public virtual Location Location { get; set; }
-        public virtual SubscriptionType SubscriptionType { get; set; }
     }
 }

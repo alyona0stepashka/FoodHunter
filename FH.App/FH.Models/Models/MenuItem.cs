@@ -22,16 +22,10 @@ namespace FH.Models.Models
 
         [ForeignKey("Menu")]
         public int MenuId { get; set; }
+        public virtual Menu Menu { get; set; }
 
         [ForeignKey("FileModel")]
         public int FileModelId { get; set; }
-
-        //[ForeignKey("Icon")]
-        //public int IconId { get; set; }
-
-        //--------------------------
-        public virtual Menu Menu { get; set; }
         public virtual FileModel FileModel { get; set; }
-        //public virtual Icon Icon { get; set; }
     }
 }

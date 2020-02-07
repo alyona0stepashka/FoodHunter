@@ -16,17 +16,10 @@ namespace FH.Models.Models
 
         [ForeignKey("Feedback")]
         public int? FeedbackId { get; set; }
+        public virtual Feedback Feedback { get; set; }
 
         [ForeignKey("Location")]
         public int? LocationId { get; set; }
-
-        //[ForeignKey("Company")]
-        //public int? CompanyId { get; set; }
-
-        //---------------
-
-        public virtual Feedback Feedback { get; set; }
         public virtual Location Location { get; set; }
-        //public virtual Company Company { get; set; }
     }
 }

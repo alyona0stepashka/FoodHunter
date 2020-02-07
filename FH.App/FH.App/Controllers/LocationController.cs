@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using FH.BLL.Interfaces;
 using FH.BLL.VMs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FH.App.Controllers
 {
-    [Route("api/locations")]
+    [Route("api/location")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LocationController : ControllerBase
     {
         private readonly ILocationService _locationService;
@@ -86,7 +90,7 @@ namespace FH.App.Controllers
                 {
                     throw new Exception("Location is missing");
                 }
-                var locationPage = await _locationService.CreateLocationAsync(location, User.Claims.First(c => c.Type == "UserID").Value);
+                var locationPage = await _locationService.CreateLocationAsync(location, User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return Ok(locationPage);
             }
             catch (Exception ex)

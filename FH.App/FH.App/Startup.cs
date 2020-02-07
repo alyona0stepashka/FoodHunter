@@ -115,6 +115,7 @@ namespace FH.App
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICompanyService, CompanyService>();
         }
 
 

@@ -26,19 +26,19 @@ namespace FH.Models.Models
 
         [ForeignKey("Sex")]
         public int? SexId { get; set; }
+        public virtual Sex Sex { get; set; }
 
 
         [ForeignKey("File")]
         public int? FileId { get; set; }
+        public virtual FileModel File { get; set; }
 
         [Required]
         [ForeignKey("User")]
         public string UserId { get; set; }
+        public virtual IdentityUser User { get; set; }
 
         //---------------
-        public virtual IdentityUser User { get; set; }
-        public virtual FileModel File { get; set; }
-        public virtual Sex Sex { get; set; }
         public virtual List<CuisineUser> CuisinePreference { get; set; }
 
     }

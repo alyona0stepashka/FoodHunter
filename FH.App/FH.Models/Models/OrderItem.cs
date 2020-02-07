@@ -17,12 +17,12 @@ namespace FH.Models.Models
 
         [ForeignKey("Order")]
         public int OrderId { get; set; }
+        public virtual Order Order { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }
+        public virtual UserProfile User { get; set; }
 
         //------------------------
-        public virtual Order Order { get; set; }
-        public virtual UserProfile User { get; set; }
     }
 }

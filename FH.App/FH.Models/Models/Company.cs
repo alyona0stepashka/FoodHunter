@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using FH.Models.StaticModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FH.Models.Models
@@ -25,14 +26,18 @@ namespace FH.Models.Models
 
         [ForeignKey("Specification")]
         public int? SpecificationId { get; set; }
+        public virtual CompanySpecification Specification { get; set; }
 
         [ForeignKey("File")]
         public int? FileId { get; set; }
+        public virtual FileModel File { get; set; }
+
+        [ForeignKey("Admin")]
+        public string AdminId { get; set; }
+        public virtual IdentityUser Admin { get; set; }
 
         //--------------------------
         public virtual List<Location> Locations { get; set; }
-        public virtual CompanySpecification Specification { get; set; }
-        public virtual FileModel File { get; set; }
 
     }
 }
