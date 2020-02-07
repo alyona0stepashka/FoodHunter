@@ -20,8 +20,6 @@ namespace FH.BLL.Services
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            try
-            {
                 var emailMessage = new MimeMessage();
 
                 emailMessage.From.Add(new MailboxAddress("Site administration", "messendertest@mail.ru"));
@@ -41,11 +39,7 @@ namespace FH.BLL.Services
 
                     await client.DisconnectAsync(true);
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+           
         }
     }
 }

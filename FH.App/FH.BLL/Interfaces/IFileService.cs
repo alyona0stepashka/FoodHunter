@@ -9,6 +9,6 @@ namespace FH.BLL.Interfaces
     public interface IFileService
     {
         void IsValidFile(IFormFile file, int file_max_size_mb);
-        Task<int> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null, int? companyId = null);
+        Task<int> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null);
     }
 }

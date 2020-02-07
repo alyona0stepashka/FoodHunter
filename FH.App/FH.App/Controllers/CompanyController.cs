@@ -44,7 +44,9 @@ namespace FH.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCompany(CreateCompanyVM company)
+        //[AllowAnonymous]
+        // [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> CreateCompany([FromForm] CreateCompanyVM company)
         {
             try
             {
@@ -52,7 +54,9 @@ namespace FH.App.Controllers
                 {
                     throw new Exception("company is missing");
                 }
-                var companyPage = await _companyService.CreateCompanyAsync(company, User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                var companyPage =
+                    await _companyService.CreateCompanyAsync(company, User.Claims.First(c => c.Type == "UserID").Value);
                 return Ok(companyPage);
             }
             catch (Exception ex)

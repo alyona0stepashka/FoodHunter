@@ -26,8 +26,6 @@ namespace FH.BLL.Services
 
         public void IsValidFile(IFormFile file, int file_max_size_mb)
         {
-            try
-            {
                 if (file.Length == 0)
                 {
                     throw new Exception("Empty File");
@@ -40,16 +38,9 @@ namespace FH.BLL.Services
                 {
                     throw new Exception("Invalid file type.");
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
-        public async Task<int> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null, int? CompanyId = null)
+        public async Task<int> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null)
         {
-            try
-            {
                 IsValidFile(photo, 150);
                 var file = new FileModel()
                 {
@@ -57,6 +48,7 @@ namespace FH.BLL.Services
                     Extension = Path.GetExtension(photo.FileName),
 
                 };
+                file.Path = "/Images/";
                 if (feedbackId != null)
                 {
                     file.FeedbackId = feedbackId;
@@ -71,21 +63,33 @@ namespace FH.BLL.Services
                     file.LocationId = locationId;
                     file.Path = $"/Images/Locations/{locationId}/";
                 }
-                if (CompanyId != null)
-                {
-                    file.Path = $"/Images/Companys/{CompanyId}/";
-                }
                 await _db.FileModels.CreateAsync(file);
+
+                CreateDirectoryIfNotExist($"{_appEnvironment.WebRootPath}{file.Path}");
                 using (var fileStream = new FileStream($"{_appEnvironment.WebRootPath}{file.Path}{file.Name}{file.Extension}", FileMode.Create))
                 {
                     await photo.CopyToAsync(fileStream);
                 }
                 return file.Id;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+        }
+        public void CreateDirectoryIfNotExist(string path)
+        {
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+        }
+        public void CreateDirectoryIfNotExist(List<string> path_list)
+        {
+                var cur_path = _appEnvironment.WebRootPath + "\\Images\\";
+                foreach (var path in path_list)
+                {
+                    cur_path = cur_path + path + "\\";
+                    if (!Directory.Exists(cur_path))
+                    {
+                        Directory.CreateDirectory(cur_path);
+                    }
+                }
         }
     }
 }

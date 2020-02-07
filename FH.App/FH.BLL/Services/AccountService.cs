@@ -41,9 +41,6 @@ namespace FH.BLL.Services
 
         public async Task<string> RegisterUserAsync(RegisterVM model, string url)
         {
-            try
-
-            {
                 var user = new IdentityUser()
                 {
                     Email = model.Email,
@@ -80,18 +77,11 @@ namespace FH.BLL.Services
                 //await _emailService.SendEmailAsync(user.Email, "Confirm your account",
                     //$"Confirm the registration by clicking on the link: <a href='{callbackUrl}'>link</a>");
                 return user.Id;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
 
         public async Task<OperationDetails> ConfirmEmailAsync(string user_id, string code)
         {
-            try
-            {
                 var dbUser = await _userManager.FindByIdAsync(user_id);
                 if (dbUser == null)
                 {
@@ -99,18 +89,12 @@ namespace FH.BLL.Services
                 }
                 var success = await _userManager.ConfirmEmailAsync(dbUser, code);
                 return success.Succeeded ? new OperationDetails(true, "Success", "") : new OperationDetails(false, "Error", "");
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+           
         }
 
 
         public async Task<object> LoginUserAsync(LoginVM model)
         {
-            try
-            {
                 var user = await _userManager.FindByNameAsync(model.Email);
                 if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
@@ -140,18 +124,12 @@ namespace FH.BLL.Services
                 }
                 else
                     throw new Exception("User not found or invalid email/password");
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+           
         }
 
 
         public async Task EditAccountInfo(EditAccountInfoVM model)
         {
-            try
-            {
                 var user = await _userManager.FindByIdAsync(model.Id);
                 if (!String.IsNullOrEmpty(model.NewPassword) && !String.IsNullOrEmpty(model.OldPassword))
                 {
@@ -206,11 +184,7 @@ namespace FH.BLL.Services
 
                 await _emailService.SendEmailAsync(user.Email, "Edit your account info",
                     $"Your Account Info has been updating.");
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+           
         }
 
         public void Dispose()

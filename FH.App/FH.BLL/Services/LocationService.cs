@@ -21,8 +21,6 @@ namespace FH.BLL.Services
 
         public async Task<LocationPageVM> GetLocationPageAsync(int id)
         {
-            try
-            {
                 var location = await _db.Locations.GetByIdAsync(id);
                 if (location == null)
                 {
@@ -37,16 +35,10 @@ namespace FH.BLL.Services
                 };
 
                 return locationPage;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+          
         }
         public List<LocationTabVM> GetLocationsNearPoint(decimal lon, decimal lat)
         {
-            try
-            {
                 var locations = _db.Locations.GetAll().Where(m => IsInside(lon, lat, 5, m.Longitude, m.Latitude));
                 if (!locations.Any())
                 {
@@ -59,17 +51,11 @@ namespace FH.BLL.Services
                 }
 
                 return locationsReturn;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+          
         }
 
         public List<LocationTabVM> GetLocationsByCompany(int CompanyId)
         {
-            try
-            {
                 var locations = _db.Locations.GetAll().Where(m =>m.CompanyId==CompanyId);
                 if (!locations.Any())
                 {
@@ -82,17 +68,11 @@ namespace FH.BLL.Services
                 }
 
                 return locationsReturn;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+          
         }
 
         public async Task<LocationPageVM> CreateLocationAsync(CreateLocationVM location, string userId)
         {
-            try
-            {
                 var newLocation = new Location()
                 {
                     Name = location.Name,
@@ -103,23 +83,13 @@ namespace FH.BLL.Services
                     AdminId = userId
                 };
                 return new LocationPageVM(await _db.Locations.CreateAsync(newLocation));
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+          
         }
 
         public async Task DeleteLocationAsync(int id)
         {
-            try
-            {
                 await _db.Locations.DeleteAsync(id);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+          
         }
 
 

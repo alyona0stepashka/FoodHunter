@@ -38,8 +38,8 @@ namespace FH.BLL.VMs
             Name = c.Name;
             Describe = c.Describe;
             Specification = c.Specification.Value;
-            LogoPath = $"{c.File.Path}{c.File.Name}{c.File.Extension}";
-            Locations = c.Locations.Select(m => new LocationPageVM(m)).ToList();
+            LogoPath = $"{c.File?.Path}{c.File?.Name}{c.File?.Extension}";
+            Locations = c.Locations?.Select(m => new LocationPageVM(m)).ToList();
         }
     }
 }

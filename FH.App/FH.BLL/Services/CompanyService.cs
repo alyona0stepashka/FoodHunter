@@ -25,25 +25,16 @@ namespace FH.BLL.Services
 
         public async Task<CompanyPageVM> GetCompanyPageAsync(int id)
         {
-            try
-            {
                 var Company = await _db.Companys.GetByIdAsync(id);
                 if (Company == null)
                 {
                     throw new Exception("Company not found");
                 }
                 return new CompanyPageVM(Company);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
         }
 
         public async Task<CompanyPageVM> CreateCompanyAsync(CreateCompanyVM Company, string userId)
         {
-            try 
-            { 
                 var fileId = await _fileService.CreateFileDbAsync(Company.LogoFile);
                 var newCompany = new Company()
                 {
@@ -58,24 +49,13 @@ namespace FH.BLL.Services
                     FileId = fileId,
                     AdminId = userId
                 };
-                return new CompanyPageVM(await _db.Companys.CreateAsync(newCompany));
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+                var model = await _db.Companys.CreateAsync(newCompany);
+                return new CompanyPageVM(model);
         }
 
         public async Task DeleteCompanyAsync(int id)
         {
-            try
-            {
                 await _db.Companys.DeleteAsync(id);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
         }
     }
 }
