@@ -33,19 +33,19 @@ namespace FH.BLL.Services
                 return new CompanyPageVM(Company);
         }
 
-        public async Task<CompanyPageVM> CreateCompanyAsync(CreateCompanyVM Company, string userId)
+        public async Task<CompanyPageVM> CreateCompanyAsync(CreateCompanyVM company, string userId)
         {
-                var fileId = await _fileService.CreateFileDbAsync(Company.LogoFile);
+                var fileId = await _fileService.CreateFileDbAsync(company.LogoFile);
                 var newCompany = new Company()
                 {
-                    Name = Company.Name,
-                    ContactInfo = Company.ContactInfo,
-                    Vk = Company.Vk,
-                    Facebook = Company.Facebook,
-                    Instagram = Company.Instagram,
-                    Site = Company.Site,
-                    Describe = Company.Describe,
-                    SpecificationId = Company.SpecificationId,
+                    Name = company.Name,
+                    ContactInfo = company.ContactInfo,
+                    Vk = company.Vk,
+                    Facebook = company.Facebook,
+                    Instagram = company.Instagram,
+                    Site = company.Site,
+                    Describe = company.Describe,
+                    SpecificationId = company.SpecificationId,
                     FileId = fileId,
                     AdminId = userId
                 };
