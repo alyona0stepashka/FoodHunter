@@ -25,10 +25,11 @@ namespace FH.App.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<object> Register([FromBody]RegisterVM model)
+        public async Task<object> Register([FromForm] RegisterVM model)
         {
             try
             {
+                model.Photo = HttpContext.Request.Form.Files[0];
                 if (await _accountService.RegisterUserAsync(model, HttpContext.Request.Host.ToString()) == null)
                 {
                     throw new Exception("Register fail");

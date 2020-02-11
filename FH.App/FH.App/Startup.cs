@@ -63,6 +63,17 @@ namespace FH.App
                 options.Password.RequiredLength = 4;
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyAllowSpecificOrigins",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200")
+
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
             var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
 
@@ -151,6 +162,7 @@ Example: 'Bearer 12345abcdef'",
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IStaticService, StaticService>();
             services.AddScoped<ICompanyService, CompanyService>();
         }
 
@@ -166,7 +178,8 @@ Example: 'Bearer 12345abcdef'",
             //    app.UseHsts();
             //}
 
-            //app.UseHttpsRedirection();
+            app.UseCors("MyAllowSpecificOrigins");
+            app.UseHttpsRedirection();
             app.UseMvc();
 
             app.UseDefaultFiles();

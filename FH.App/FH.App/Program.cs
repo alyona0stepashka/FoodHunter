@@ -28,7 +28,8 @@ namespace FH.App
                 {
                     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     var uow = services.GetRequiredService<IUnitOfWork>();
-                    EfDbInitializer.InitializeAsync(uow, userManager).Wait();
+                    var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    EfDbInitializer.InitializeAsync(uow, userManager, rolesManager).Wait();
                 }
                 catch (Exception ex)
                 {

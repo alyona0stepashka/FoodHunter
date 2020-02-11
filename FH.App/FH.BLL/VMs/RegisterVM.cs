@@ -10,6 +10,8 @@ namespace FH.BLL.VMs
 
     public class RegisterVM
     {
+        public string Role { get; set; } = "user";
+
         public string Email { get; set; }
 
         public string Password { get; set; }
@@ -18,12 +20,14 @@ namespace FH.BLL.VMs
 
         public string LastName { get; set; }
 
+        public string Phone { get; set; }
+
         [Range(typeof(DateTime), "1900-12-12", "2020-12-12",
             ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public DateTime DateBirth { get; set; }
 
         public int? SexId { get; set; }
 
-        public IFormFile Photo { get; set; }
+        public IFormFile Photo { get; set; } = null;
     }
 }

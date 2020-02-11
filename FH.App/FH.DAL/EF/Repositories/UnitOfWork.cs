@@ -36,6 +36,8 @@ namespace FH.DAL.EF.Repositories
         private IRepository<CompanySpecification> _companyspecifications;
         private IRepository<SubscriptionType> _subscriptionTypes;
         private IRepository<Icon> _icons;
+        private IRepository<Table> _tables;
+        private IRepository<TableBook> _tableBooks;
 
         public IRepository<UserProfile> UserProfiles => _userProfiles ?? (_userProfiles = new Repository<UserProfile>(_db));
         public IRepository<FileModel> FileModels => _fileModels ?? (_fileModels = new Repository<FileModel>(_db));
@@ -52,6 +54,8 @@ namespace FH.DAL.EF.Repositories
         public IRepository<Sex> Sexes => _sexes ?? (_sexes = new Repository<Sex>(_db));
         public IRepository<Cuisine> Cuisines => _cuisines ?? (_cuisines = new Repository<Cuisine>(_db));
         public IRepository<Icon> Icons => _icons ?? (_icons = new Repository<Icon>(_db));
+        public IRepository<Table> Tables => _tables ?? (_tables = new Repository<Table>(_db));
+        public IRepository<TableBook> TableBooks => _tableBooks ?? (_tableBooks = new Repository<TableBook>(_db));
         public IRepository<CompanySpecification> CompanySpecifications => _companyspecifications ?? (_companyspecifications = new Repository<CompanySpecification>(_db));
         public IRepository<SubscriptionType> SubscriptionTypes => _subscriptionTypes ?? (_subscriptionTypes = new Repository<SubscriptionType>(_db));
 

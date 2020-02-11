@@ -13,7 +13,7 @@ namespace FH.DAL.DataContext
 {
     public class EfDbInitializer
     {
-        public static async Task InitializeAsync(IUnitOfWork db, UserManager<IdentityUser> userManager)
+        public static async Task InitializeAsync(IUnitOfWork db, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //------------------------
             var id1 = 0;
@@ -129,6 +129,13 @@ namespace FH.DAL.DataContext
                 }
             }
 
+            //-----------------------
+            if (roleManager.Roles.ToList().Count == 0)
+            {
+                roleManager.CreateAsync(new IdentityRole("manager")).Wait();
+                roleManager.CreateAsync(new IdentityRole("user")).Wait();
+            }
+
             //---------------------
             if (!userManager.Users.Any())
             {
@@ -145,7 +152,9 @@ namespace FH.DAL.DataContext
                     EmailConfirmed = true,
                 };
                 await userManager.CreateAsync(newUser, "parol01");
+                userManager.AddToRoleAsync(newUser, "manager").Wait();
                 await userManager.CreateAsync(newUser2, "parol01");
+                userManager.AddToRoleAsync(newUser2, "user").Wait();
                 var userProfile = new UserProfile()
                 {
                     FirstName = "User",

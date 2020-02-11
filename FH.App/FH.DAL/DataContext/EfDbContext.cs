@@ -26,6 +26,8 @@ namespace FH.DAL.DataContext
         public DbSet<Order> Orders { get; set; }
         public DbSet<Icon> Icons { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Table> Tables { get; set; }
+        public DbSet<TableBook> TableBooks { get; set; }
 
 
         public EfDbContext(DbContextOptions options)
@@ -36,9 +38,16 @@ namespace FH.DAL.DataContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<MenuItem>()
                 .HasOne(m=>m.Menu)
                 .WithMany(m=>m.MenuItems)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(m => m.Table)
+                .WithMany(m => m.Orders)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }

@@ -222,6 +222,40 @@ namespace FH.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Companys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ContactInfo = table.Column<string>(nullable: true),
+                    Vk = table.Column<string>(nullable: true),
+                    Facebook = table.Column<string>(nullable: true),
+                    Instagram = table.Column<string>(nullable: true),
+                    Site = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Describe = table.Column<string>(nullable: true),
+                    SpecificationId = table.Column<int>(nullable: true),
+                    FileId = table.Column<int>(nullable: true),
+                    AdminId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companys", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Companys_AspNetUsers_AdminId",
+                        column: x => x.AdminId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Companys_CompanySpecifications_SpecificationId",
+                        column: x => x.SpecificationId,
+                        principalTable: "CompanySpecifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
                 {
@@ -243,6 +277,12 @@ namespace FH.DAL.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Locations_Companys_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companys",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -274,28 +314,6 @@ namespace FH.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    WelcomeCode = table.Column<Guid>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    LocationId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Locations_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Subscriptions",
                 columns: table => new
                 {
@@ -305,7 +323,8 @@ namespace FH.DAL.Migrations
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
                     SubscriptionTypeId = table.Column<int>(nullable: false),
-                    LocationId = table.Column<int>(nullable: false)
+                    LocationId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -320,6 +339,98 @@ namespace FH.DAL.Migrations
                         name: "FK_Subscriptions_SubscriptionTypes_SubscriptionTypeId",
                         column: x => x.SubscriptionTypeId,
                         principalTable: "SubscriptionTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tables",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Number = table.Column<int>(nullable: false),
+                    Info = table.Column<string>(nullable: true),
+                    LocationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tables", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tables_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    WelcomeCode = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    TableId = table.Column<int>(nullable: false),
+                    LocationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Tables_TableId",
+                        column: x => x.TableId,
+                        principalTable: "Tables",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TableBooks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    StarTime = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false),
+                    TableId = table.Column<int>(nullable: false),
+                    ClientId = table.Column<string>(nullable: true),
+                    TableBookId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TableBooks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TableBooks_AspNetUsers_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TableBooks_TableBooks_TableBookId",
+                        column: x => x.TableBookId,
+                        principalTable: "TableBooks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TableBooks_Tables_TableId",
+                        column: x => x.TableId,
+                        principalTable: "Tables",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -417,7 +528,7 @@ namespace FH.DAL.Migrations
                     Title = table.Column<string>(nullable: true),
                     Count = table.Column<double>(nullable: false),
                     PricePerItem = table.Column<decimal>(nullable: false),
-                    IsPaid = table.Column<bool>(nullable: false),
+                    Status = table.Column<string>(nullable: true),
                     OrderId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },
@@ -436,33 +547,6 @@ namespace FH.DAL.Migrations
                         principalTable: "UserProfiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Companys",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ContactInfo = table.Column<string>(nullable: true),
-                    Vk = table.Column<string>(nullable: true),
-                    Facebook = table.Column<string>(nullable: true),
-                    Instagram = table.Column<string>(nullable: true),
-                    Site = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Describe = table.Column<string>(nullable: true),
-                    SpecificationId = table.Column<int>(nullable: true),
-                    FileId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companys", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Companys_CompanySpecifications_SpecificationId",
-                        column: x => x.SpecificationId,
-                        principalTable: "CompanySpecifications",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -588,6 +672,11 @@ namespace FH.DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Companys_AdminId",
+                table: "Companys",
+                column: "AdminId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Companys_FileId",
                 table: "Companys",
                 column: "FileId");
@@ -683,6 +772,11 @@ namespace FH.DAL.Migrations
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_TableId",
+                table: "Orders",
+                column: "TableId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_LocationId",
                 table: "Subscriptions",
                 column: "LocationId");
@@ -691,6 +785,31 @@ namespace FH.DAL.Migrations
                 name: "IX_Subscriptions_SubscriptionTypeId",
                 table: "Subscriptions",
                 column: "SubscriptionTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_UserId",
+                table: "Subscriptions",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TableBooks_ClientId",
+                table: "TableBooks",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TableBooks_TableBookId",
+                table: "TableBooks",
+                column: "TableBookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TableBooks_TableId",
+                table: "TableBooks",
+                column: "TableId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tables_LocationId",
+                table: "Tables",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserProfiles_FileId",
@@ -708,24 +827,16 @@ namespace FH.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Locations_Companys_CompanyId",
-                table: "Locations",
-                column: "CompanyId",
-                principalTable: "Companys",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_UserProfiles_FileModels_FileId",
-                table: "UserProfiles",
+                name: "FK_Companys_FileModels_FileId",
+                table: "Companys",
                 column: "FileId",
                 principalTable: "FileModels",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Companys_FileModels_FileId",
-                table: "Companys",
+                name: "FK_UserProfiles_FileModels_FileId",
+                table: "UserProfiles",
                 column: "FileId",
                 principalTable: "FileModels",
                 principalColumn: "Id",
@@ -742,6 +853,10 @@ namespace FH.DAL.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Companys_AspNetUsers_AdminId",
+                table: "Companys");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Locations_AspNetUsers_AdminId",
                 table: "Locations");
@@ -782,6 +897,9 @@ namespace FH.DAL.Migrations
                 name: "Subscriptions");
 
             migrationBuilder.DropTable(
+                name: "TableBooks");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -795,6 +913,9 @@ namespace FH.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "SubscriptionTypes");
+
+            migrationBuilder.DropTable(
+                name: "Tables");
 
             migrationBuilder.DropTable(
                 name: "Sexes");

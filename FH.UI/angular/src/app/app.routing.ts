@@ -4,7 +4,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { AuthGuard } from './guards/auth.guard';
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 
-import {LayoutComponent} from '../components/layout/layout/layout.component';
+import {LayoutComponent} from './components/layout/layout/layout.component';
 import {LoginComponent} from './pages/login/login/login.component';
 import {RegisterComponent} from './pages/register/register/register.component';
 import {AboutUsComponent} from './pages/about-us/about-us.component/../about-us/about-us.component';

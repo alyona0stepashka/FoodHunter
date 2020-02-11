@@ -27,6 +27,8 @@ namespace FH.DAL.EF.Interfaces
         IRepository<Cuisine> Cuisines { get; }
         IRepository<CompanySpecification> CompanySpecifications { get; }
         IRepository<SubscriptionType> SubscriptionTypes { get; }
+        IRepository<Table> Tables { get; }
+        IRepository<TableBook> TableBooks { get; }
 
         Task SaveAsync();
     }

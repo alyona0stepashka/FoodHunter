@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using FH.Models.StaticModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace FH.Models.Models
 {
@@ -21,6 +22,11 @@ namespace FH.Models.Models
         [ForeignKey("Location")]
         public int LocationId { get; set; }
         public virtual Location Location { get; set; }
+
+
+        [ForeignKey("User")]
+        public string UserId { get; set; }
+        public virtual IdentityUser User { get; set; }
 
         //----------------------
     }

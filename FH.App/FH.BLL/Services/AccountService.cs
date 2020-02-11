@@ -46,6 +46,7 @@ namespace FH.BLL.Services
                     Email = model.Email,
                     PasswordHash = model.Password,
                     UserName = model.Email,
+                    PhoneNumber = model.Phone,
                     EmailConfirmed = /*false*/ true
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -53,6 +54,7 @@ namespace FH.BLL.Services
                 {
                     throw new Exception("Register error");
                 }
+                _userManager.AddToRoleAsync(user, model.Role).Wait();
                 var fileId = await _fileService.CreateFileDbAsync(model.Photo, userId:user.Id);
                 var userProfile = new UserProfile()
                 {

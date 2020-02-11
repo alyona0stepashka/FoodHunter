@@ -17,10 +17,10 @@ export const ROUTES: RouteInfo[] = [
     // { path: '/table',         title: 'Table List',        icon:'nc-tile-56',    class: '' },
     // { path: '/typography',    title: 'Typography',        icon:'nc-caps-small', class: '' },
     // { path: '/upgrade',       title: 'Upgrade to PRO',    icon:'nc-spaceship',  class: 'active-pro' },
-    { path: '/welcome/login',         title: 'Login',             icon:'nc-diamond',    class: '' },
-    { path: '/welcome/register',      title: 'Register',          icon:'nc-pin-3',      class: '' },
-    { path: '/welcome/about-us',      title: 'About Us',          icon:'nc-bell-55',    class: '' },
-    { path: '/welcome/contact-us',    title: 'Contact Us',        icon:'nc-single-02',  class: '' }
+    { path: '/welcome/login',         title: 'Login',             icon:'nc-key-25',    class: '' },
+    { path: '/welcome/register',      title: 'Register',          icon:'nc-simple-add',      class: '' },
+    { path: '/welcome/about-us',      title: 'About Us',          icon:'nc-briefcase-24',    class: '' },
+    { path: '/welcome/contact-us',    title: 'Contact Us',        icon:'nc-send',  class: '' }
 ];
 
 @Component({

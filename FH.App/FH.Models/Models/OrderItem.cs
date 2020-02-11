@@ -13,7 +13,7 @@ namespace FH.Models.Models
 
         public decimal PricePerItem { get; set; }
 
-        public bool IsPaid { get; set; }
+        public string Status { get; set; }
 
         [ForeignKey("Order")]
         public int OrderId { get; set; }
