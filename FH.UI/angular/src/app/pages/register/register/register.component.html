@@ -1,5 +1,7 @@
 <div class="col-md-12">
-  <div class="card card-user">
+  <div class="card card-user" style="background-position-x: right;
+  background-position-y: bottom; background-image: url(http://localhost:4200/assets/img/pusheen/25.gif);
+  background-repeat: no-repeat;">
     <div class="card-header">
       <h5 class="card-title">Create a new user account</h5>
     </div>
@@ -12,7 +14,7 @@
                 <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
                   accept="image/*" (change)="uploadPhoto($event.target.files)" class="form-control btn btn-primary"
                   placeholder="Photo">
-                <img [src]="imageUrl" class="avatar" style="max-width: 10rem; max-height: 10rem;">
+                <img [src]="imageUrl" class="avatar" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
               </div>
             </div>
           </div>
@@ -92,7 +94,7 @@
           <div class="col-md-12">
             <div class="form-group">
               <label>Password</label>
-              <input type="password" formControlName="Password" class="form-control"
+              <input type="password" formControlName="Password" class="form-control" placeholder="Password"
                 [ngClass]="{ 'is-invalid': submitted && f.Password.errors }" />
               <div *ngIf="submitted && f.Password.errors" class="invalid-feedback">
                 <div *ngIf="f.Password.errors.required">Password is required</div>
