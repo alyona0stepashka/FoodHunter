@@ -41,7 +41,7 @@ export const AppRoutes: Routes = [
       {path: 'contact-us', component: ContactUsComponent},
     ]
   }, {
-    path: 'dashboard-user', component: LayoutComponent,
+    path: 'control-user', component: LayoutComponent,
     children: [
       // {path: 'login', component: LoginComponent},
       // {path: 'register', component: RegisterComponent},

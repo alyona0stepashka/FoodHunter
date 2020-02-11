@@ -106,19 +106,24 @@ namespace FH.BLL.Services
                     }
                     //await _chatService.SetLastOnlineAsync(user.Id);
                     var options = new IdentityOptions();
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var isManager = roles.Any(m => m.Equals("manager"));
 
-                    var tokenDescriptor = new SecurityTokenDescriptor
+                var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(new Claim[]
                         {
                             new Claim("UserID", user.Id),
+                            new Claim("IsManager", isManager.ToString())
                         }),
                         Expires = DateTime.UtcNow.AddDays(1),
+                        
                         SigningCredentials =
                             new SigningCredentials(
                                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_applicationSettingsOption.JwT_Secret)),
                                 SecurityAlgorithms.HmacSha256Signature)
                     };
+
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                     var token = tokenHandler.WriteToken(securityToken);

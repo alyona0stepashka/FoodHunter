@@ -22,4 +22,16 @@ export class UserService {
     body.append("Photo", fileToUpload);
     return this.http.post(environment.serverURL + 'api/account/register', body);
   }
+
+  login(loginFormData: FormGroup) {
+    const body = {
+      Email: loginFormData.value.Email,
+      Password: loginFormData.value.Password
+    };
+    return this.http.post(environment.serverURL + 'api/account/login', body);
+  }
+
+  getMyProfile() {
+    return this.http.get(environment.serverURL + 'api/users/current');
+  }
 }
