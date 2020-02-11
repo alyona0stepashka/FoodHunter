@@ -28,9 +28,10 @@ namespace FH.DAL.EF.Repositories
             return _db.Set<TEntity>() /*.AsNoTracking()*/;
         }
 
-        public virtual TEntity Update(TEntity entity)
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
             _db.Set<TEntity>().Update(entity);
+            await Save();
             return entity;
         }
 
@@ -38,12 +39,14 @@ namespace FH.DAL.EF.Repositories
         {
             var entity = await GetByIdAsync(id);
             _db.Set<TEntity>().Remove(entity);
+            await Save();
         }
 
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
-            await _db.Set<TEntity>().AddAsync(entity);
-            return entity;
+            var newEntity = await _db.Set<TEntity>().AddAsync(entity);
+            await Save();
+            return newEntity.Entity;
         }
 
         public virtual async Task Save()

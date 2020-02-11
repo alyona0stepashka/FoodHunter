@@ -19,15 +19,16 @@ namespace FH.Models.Models
 
         [ForeignKey("Admin")]
         public string AdminId { get; set; }
+        public virtual IdentityUser Admin { get; set; }
 
-        [ForeignKey("Dealer")]
-        public int DealerId { get; set; } 
+        [ForeignKey("Company")]
+        public int CompanyId { get; set; } 
+        public virtual Company Company { get; set; }
 
         //-----------------------
-        public virtual IdentityUser Admin { get; set; }
         public virtual List<Manager> Managers { get; set; }
-        public virtual Dealer Dealer { get; set; }
         public virtual List<Subscription> Subscriptions { get; set; }
         public virtual List<Menu> Menus { get; set; }
+        public virtual List<Table> Tables { get; set; }
     }
 }

@@ -15,13 +15,13 @@ namespace FH.Models.Models
 
         [ForeignKey("Location")]
         public int? LocationId { get; set; }
+        public virtual Location Location { get; set; }
 
         [ForeignKey("MenuItem")]
         public int? MenuItemId { get; set; }
+        public virtual MenuItem MenuItem { get; set; }
 
         //--------------------------
         public virtual List<FileModel> Photos { get; set; }
-        public virtual Location Location { get; set; }
-        public virtual MenuItem MenuItem { get; set; }
     }
 }

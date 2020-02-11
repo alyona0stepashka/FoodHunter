@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using FH.BLL.Infrastructure;
+using FH.BLL.Interfaces;
+using FH.BLL.Services;
 using FH.DAL.DataContext;
+using FH.DAL.EF.Interfaces;
+using FH.DAL.EF.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,6 +63,17 @@ namespace FH.App
                 options.Password.RequiredLength = 4;
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyAllowSpecificOrigins",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200")
+
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
             var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
 
@@ -103,36 +120,78 @@ namespace FH.App
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme.
+Enter 'Bearer' [space] and then your token in the text input below.
+Example: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+
+                        },
+                        new List<string>()
+                    }
+                });
             });
 
-
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IStaticService, StaticService>();
+            services.AddScoped<ICompanyService, CompanyService>();
         }
 
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
+            //}
+            //else
+            //{
+            //    app.UseHsts();
+            //}
 
+            app.UseCors("MyAllowSpecificOrigins");
             app.UseHttpsRedirection();
             app.UseMvc();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "post API V1"); });
-            app.UseMvc(routeBuilder =>
-            {
-                //routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
-                //routeBuilder.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
-                //routeBuilder.EnableDependencyInjection();
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
+            //app.UseMvc(routeBuilder =>
+            //{
+            //    routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
+            //    routeBuilder.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
+            //    routeBuilder.EnableDependencyInjection();
+            //});
         }
 
         //private static IEdmModel GetEdmModel()

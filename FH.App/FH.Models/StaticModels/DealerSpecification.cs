@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FH.Models.StaticModels
 {
-    public class DealerSpecification: BaseEntity
+    public class CompanySpecification: BaseEntity
     {
         public string Value { get; set; }
         public string AdditionalInfo { get; set; }

@@ -12,12 +12,12 @@ namespace FH.Models.Models
 
         [ForeignKey("Location")]
         public int LocationId { get; set; }
+        public virtual Location Location { get; set; }
 
         [ForeignKey("UserProfile")]
         public int UserProfileId { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
 
         //-------------------------
-        public virtual Location Location { get; set; }
-        public virtual UserProfile UserProfile { get; set; }
     }
 }
