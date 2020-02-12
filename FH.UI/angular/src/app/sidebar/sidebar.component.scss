@@ -1,0 +1,72 @@
+.avatar-mini {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  max-width: 3rem;
+  max-height: 3rem;
+  border-color: #ffffff;
+  border-width: 2px;
+  border-radius: 50%;
+}
+
+.nav a,
+.dropdown-item {
+  display: block;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+.dropdown-container {
+  padding-left: 1rem;
+}
+
+.nc-minimal-down {
+  float: right;
+  text-align-last: end;
+}
+
+.open {
+  background-color: #d0d0d066 !important;
+  margin: 0 !important;
+}
+
+.collapsed,
+.nc-minimal-down > .collapsed {
+  display: none;
+  max-height: 0rem;
+}
+
+ul {
+  list-style: none;
+}
+
+a .sidebar-mini-icon {
+  text-transform: uppercase;
+  width: 34px;
+  margin-right: 10px;
+  margin-left: 0;
+  font-size: 12px;
+  text-align: center;
+  line-height: 20px;
+  position: relative;
+  float: left;
+  z-index: 1;
+  display: inherit;
+  color: rgb(193, 192, 190);
+}
+
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  top: 2rem !important;
+  right: 2rem !important;
+}

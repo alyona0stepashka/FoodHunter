@@ -9,7 +9,7 @@ import { environment } from 'environments/environment';
 export class UserService {
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
-  
+
   register(registerFormData: FormGroup, fileToUpload: File) {
     const body: FormData = new FormData();
     body.append("Email", registerFormData.value.Email);
@@ -20,7 +20,7 @@ export class UserService {
     body.append("DateBirth", registerFormData.value.DateBirth);
     body.append("SexId", registerFormData.value.Sex);
     body.append("Photo", fileToUpload);
-    return this.http.post(environment.serverURL + 'api/account/register', body);
+    return this.http.post(environment.serverURL + '/api/account/register', body);
   }
 
   login(loginFormData: FormGroup) {
@@ -28,10 +28,10 @@ export class UserService {
       Email: loginFormData.value.Email,
       Password: loginFormData.value.Password
     };
-    return this.http.post(environment.serverURL + 'api/account/login', body);
+    return this.http.post(environment.serverURL + '/api/account/login', body);
   }
 
   getMyProfile() {
-    return this.http.get(environment.serverURL + 'api/users/current');
+    return this.http.get(environment.serverURL + '/api/users/current');
   }
 }

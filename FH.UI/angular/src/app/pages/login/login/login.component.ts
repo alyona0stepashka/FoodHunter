@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'app/services/user.service';
+import * as jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (localStorage.getItem('token') != null) {
-      this.router.navigateByUrl('/control-user/dashboard');
+      const token = jwt_decode(localStorage.getItem('token'));
+      (token.IsManager) ? this.router.navigateByUrl('/control-manager/dashboard') : this.router.navigateByUrl('/control-user/dashboard');
     }
     this.loginForm = this.formBuilder.group({
       Email: ['', [Validators.required, Validators.email]],
@@ -41,10 +43,28 @@ export class LoginComponent implements OnInit {
     this.service.login(this.loginForm).subscribe(
       (res: any) => {
         localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('/control-user/dashboard');
+        const token = jwt_decode(res.token);
+        localStorage.setItem('IsManager', token.IsManager);
+        localStorage.setItem('FullName', token.FullName);
+        localStorage.setItem('Icon', token.Icon);
+        let IsManager = (token.IsManager.toLowerCase() === 'true');
+        (IsManager) ? localStorage.setItem('CurrentRole', "true") : localStorage.setItem('CurrentRole', "false");
+        window.location.reload(true);
+        (IsManager) ? this.router.navigateByUrl('/control-manager/dashboard') : this.router.navigateByUrl('/control-user/dashboard');
+        // true = manager, false = user
       },
       err => {
-        this.toastr.error(err.error, 'Error');
+        this.toastr.error(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">' + err.error + '</span>',
+          "",
+          {
+            timeOut: 4000,
+            enableHtml: true,
+            closeButton: true,
+            toastClass: "alert alert-danger alert-with-icon",
+            positionClass: "toast-top-right"
+          }
+        );
       }
     );
 

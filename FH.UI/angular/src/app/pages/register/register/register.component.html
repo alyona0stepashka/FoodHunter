@@ -1,6 +1,6 @@
 <div class="col-md-12">
   <div class="card card-user" style="background-position-x: right;
-  background-position-y: top; background-image: url(http://localhost:4200/assets/img/pusheen/26-flip-vertical.gif);
+  background-position-y: top; background-image: url(http://localhost:4200/assets/img/pusheen/26-flip-vertical.png);
   background-repeat: no-repeat;">
     <div class="card-header">
       <h5 class="card-title" style="background: #ffffff; width: fit-content;">Create a new user account</h5>
@@ -14,7 +14,8 @@
                 <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
                   accept="image/*" (change)="uploadPhoto($event.target.files)" class="form-control btn btn-primary"
                   placeholder="Photo">
-                <img [src]="imageUrl" class="avatar" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                <img [src]="imageUrl" class="avatar"
+                  style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
               </div>
             </div>
           </div>
