@@ -21,15 +21,18 @@ const ROUTES_WELCOME: RouteInfo[] = [
 ];
 
 const ROUTES_MANAGER: RouteInfo[] = [
-    { path: '/welcome/login', title: 'Login1', icon: 'nc-key-25', class: '', childItems: [] },
+    {
+        path: '/welcome/login', title: 'Login1', icon: 'nc-key-25', class: '', childItems: [
+            { path: '/welcome/register', title: 'Register', icon: 'R', class: '', childItems: [] }]
+    },
+    { path: '/welcome/login', title: 'Register1', icon: 'nc-key-25', class: '', childItems: [] },
     { path: '/welcome/about-us', title: 'About Us1', icon: 'nc-briefcase-24', class: '', childItems: [] },
     { path: '/welcome/contact-us', title: 'Contact Us1', icon: 'nc-send', class: '', childItems: [] }
 ];
 
 const ROUTES_USER: RouteInfo[] = [
     {
-        path: '/welcome/login', title: 'Login2', icon: 'nc-key-25', class: '', childItems: [
-            { path: '/welcome/register', title: 'Register', icon: 'nc-simple-add', class: '', childItems: [] }]
+        path: '/welcome/login', title: 'Login2', icon: 'nc-key-25', class: '', childItems: []
     },
     { path: '/welcome/register', title: 'Register2', icon: 'nc-simple-add', class: '', childItems: [] },
     { path: '/welcome/about-us', title: 'About Us2', icon: 'nc-briefcase-24', class: '', childItems: [] },
@@ -79,20 +82,13 @@ export class SidebarComponent implements OnInit {
             });
         }
 
-        const logout = document.getElementsByClassName("logout-btn");
-        logout[0].addEventListener("click", function () {
-            //this.logoutFunc()
+        if (this.isLogin) {
+            const logout = document.getElementsByClassName("logout-btn");
+            logout[0].addEventListener("click", function () {
+                localStorage.clear();
+                window.location.reload(true);
+            });
+        }
 
-            localStorage.clear();
-            window.location.reload(true);
-        });
     }
-
-    // ngOnChanges() {
-    //     this.isLogin = (localStorage.getItem('token') != null);
-    //     this.fullName = localStorage.getItem('FullName');
-    //     this.icon = environment.serverURL + localStorage.getItem('Icon');
-    // }
-
-
 }

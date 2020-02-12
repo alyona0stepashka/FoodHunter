@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'app/services/user.service';
 import * as jwt_decode from "jwt-decode";
+import * as colors from '../../../shared/fixedplugin/fixedplugin.component';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
       Password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
+
 
   get f() { return this.loginForm.controls; }
 
