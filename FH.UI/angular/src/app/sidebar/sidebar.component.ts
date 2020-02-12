@@ -21,21 +21,12 @@ const ROUTES_WELCOME: RouteInfo[] = [
 ];
 
 const ROUTES_MANAGER: RouteInfo[] = [
-    {
-        path: '/welcome/login', title: 'Login1', icon: 'nc-key-25', class: '', childItems: [
-            { path: '/welcome/register', title: 'Register', icon: 'R', class: '', childItems: [] }]
-    },
-    { path: '/welcome/login', title: 'Register1', icon: 'nc-key-25', class: '', childItems: [] },
-    { path: '/welcome/about-us', title: 'About Us1', icon: 'nc-briefcase-24', class: '', childItems: [] },
+    { path: '/dashboard-manager/dashboard', title: 'Dashboard', icon: 'nc-layout-11', class: '', childItems: [] },
     { path: '/welcome/contact-us', title: 'Contact Us1', icon: 'nc-send', class: '', childItems: [] }
 ];
 
 const ROUTES_USER: RouteInfo[] = [
-    {
-        path: '/welcome/login', title: 'Login2', icon: 'nc-key-25', class: '', childItems: []
-    },
-    { path: '/welcome/register', title: 'Register2', icon: 'nc-simple-add', class: '', childItems: [] },
-    { path: '/welcome/about-us', title: 'About Us2', icon: 'nc-briefcase-24', class: '', childItems: [] },
+    { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', class: '', childItems: [] },
     { path: '/welcome/contact-us', title: 'Contact Us2', icon: 'nc-send', class: '', childItems: [] }
 ];
 

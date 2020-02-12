@@ -14,7 +14,7 @@
                                 [ngClass]="{ 'is-invalid': submitted && f.Email.errors }" />
                             <div *ngIf="submitted && f.Email.errors" class="invalid-feedback">
                                 <div *ngIf="f.Email.errors.required">Email is required</div>
-                                <div *ngIf="f.Email.errors.Email">Email must be a valid email address</div>
+                                <div *ngIf="f.Email.errors.email">Email must be a valid email address</div>
                             </div>
                         </div>
                     </div>

@@ -51,8 +51,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('Icon', token.Icon);
         let IsManager = (token.IsManager.toLowerCase() === 'true');
         (IsManager) ? localStorage.setItem('CurrentRole', "true") : localStorage.setItem('CurrentRole', "false");
-        window.location.reload(true);
-        (IsManager) ? this.router.navigateByUrl('/control-manager/dashboard') : this.router.navigateByUrl('/control-user/dashboard');
+        //window.location.reload();
+        (IsManager) ? this.router.navigateByUrl('/dashboard-manager/dashboard') : this.router.navigateByUrl('/dashboard-user/dashboard');
         // true = manager, false = user
       },
       err => {
