@@ -1,6 +1,6 @@
 <div class="col-md-12">
   <div class="card card-user" style="background-position-x: right;
-  background-position-y: top; background-image: url(http://localhost:4200/assets/img/pusheen/26-flip-vertical.png);
+  background-position-y: top; background-image: url(http://localhost:4200/assets/img/pusheen/26-flip-vertical-1.png);
   background-repeat: no-repeat;">
     <div class="card-header">
       <h5 class="card-title" style="background: #ffffff; width: fit-content;">Create a new user account</h5>
@@ -16,17 +16,34 @@
                   placeholder="Photo">
                 <img [src]="imageUrl" class="avatar"
                   style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                <div *ngIf="submitted && f.Photo.errors" class="invalid-feedback">
+                  <div *ngIf="f.Photo.errors.required">Photo is required</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Role</label>
+              <select formControlName="Role" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.Role.errors }" placeholder="Role">
+                <option value="" selected disabled hidden>Choose your role on this platform...</option>
+                <option value="user">I'm a client</option>
+                <option value="manager">I'm a manager</option>
+              </select>
+              <div *ngIf="submitted && f.Role.errors" class="invalid-feedback">
+                <div *ngIf="f.Role.errors.required">Role is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
             <div class="form-group">
               <label>Phone number</label>
               <input type="text" class="form-control" placeholder="375-XX-XXX-XX-XX" formControlName="Phone"
                 [ngClass]="{ 'is-invalid': submitted && f.Phone.errors }">
-              <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+              <div *ngIf="submitted && f.Phone.errors" class="invalid-feedback">
                 <div *ngIf="f.Phone.errors.required">Phone is required</div>
                 <!-- <div *ngIf="f.Phone.errors.Phone">Phone must be a valid phone number</div>  -->
               </div>
@@ -37,7 +54,7 @@
               <label>Email address</label>
               <input type="email" class="form-control" placeholder="Email" formControlName="Email"
                 [ngClass]="{ 'is-invalid': submitted && f.Email.errors }">
-              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              <div *ngIf="submitted && f.Email.errors" class="invalid-feedback">
                 <div *ngIf="f.Email.errors.required">Email address is required</div>
                 <div *ngIf="f.Email.errors.Email">Email must be a valid email address</div>
               </div>

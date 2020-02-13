@@ -11,9 +11,9 @@ import { Location } from '@angular/common';
 
 export class NavbarComponent implements OnInit {
 
-  public isLogin = (localStorage.getItem('IsLogin') != null);
+  public isLogin = (localStorage.getItem('token') != null);
   public isUser = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'false'));
-  public isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'true'));
+  public isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
 
   private listTitles: any[];
   location: Location;
@@ -40,9 +40,25 @@ export class NavbarComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.isLogin = (localStorage.getItem('IsLogin') != null);
+    this.isLogin = (localStorage.getItem('token') != null);
     this.isUser = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'false'));
-    this.isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'true'));
+    this.isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
+  }
+
+  switchRole() {
+    if (this.isCurrentUser) {
+      localStorage.setItem('CurrentRole', 'false');
+      this.isCurrentUser = !this.isCurrentUser;
+      console.log(this.isCurrentUser);
+
+      this.router.navigateByUrl('/dashboard-user/dashboard')
+    }
+    else {
+      localStorage.setItem('CurrentRole', 'true');
+      this.isCurrentUser = !this.isCurrentUser;
+      this.router.navigateByUrl('/dashboard-manager/dashboard')
+      console.log(this.isCurrentUser);
+    }
   }
 
   getTitle() {

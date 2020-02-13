@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'app/services/user.service';
-import { DatePipe } from '@angular/common'; 
+import { DatePipe } from '@angular/common';
 import { StaticService } from 'app/services/static.service';
 import { StaticBase } from 'app/models/static-base.model';
 
@@ -22,11 +22,11 @@ export class RegisterComponent implements OnInit {
     private toastr: ToastrService,
     private staticService: StaticService) { }
 
-    registerForm: FormGroup;
-    submitted = false;
-    UploadFile: File = null;
-    imageUrl = './assets/img/upload-photo.jpg';
-    public sexes: StaticBase[] = new Array();
+  registerForm: FormGroup;
+  submitted = false;
+  UploadFile: File = null;
+  imageUrl = './assets/img/upload-photo.jpg';
+  public sexes: StaticBase[] = new Array();
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -35,9 +35,10 @@ export class RegisterComponent implements OnInit {
       Phone: ['', [Validators.required/*, Validators.pattern("^(375-)[0-9]{2}(-)[0-9]{3}(-)[0-9]{2}(-)[0-9]{2}$")*/]],
       Sex: ['', [Validators.required]],
       DateBirth: ['', [Validators.required]],
-        Email: ['', [Validators.required, Validators.email]],
-        Password: ['', [Validators.required, Validators.minLength(6)]],
-        Photo: [null, [Validators.required]]
+      Email: ['', [Validators.required, Validators.email]],
+      Password: ['', [Validators.required, Validators.minLength(6)]],
+      Photo: [null, [Validators.required]],
+      Role: ['', [Validators.required]]
     });
     this.staticService.getSexes().subscribe(
       res => {
@@ -56,11 +57,11 @@ export class RegisterComponent implements OnInit {
     this.submitted = true;
 
     if (this.registerForm.invalid) {
-        return null;
+      return null;
     }
 
     this.service.register(this.registerForm, this.UploadFile).subscribe(
-      (res: any) => { 
+      (res: any) => {
         // this.userId = res as string;
         // this.resetForm();
         this.toastr.success(
@@ -81,7 +82,7 @@ export class RegisterComponent implements OnInit {
         console.log(err);
         this.toastr.error(err.error, 'Error');
       }
-    ); 
+    );
   }
 
   uploadPhoto(file: FileList) {

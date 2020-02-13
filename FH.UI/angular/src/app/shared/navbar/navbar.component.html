@@ -36,7 +36,7 @@
             </p>
           </a>
         </li>
-        <li *ngIf="isUser && isLogin" class="nav-item btn-rotate" ngbDropdown placement="bottom-left">
+        <li *ngIf="!isUser && isLogin" class="nav-item btn-rotate" ngbDropdown placement="bottom-left">
           <a class="nav-link" ngbDropdownToggle id="navbarDropdownMenuLink">
             <i class="nc-icon nc-refresh-69"></i>
             <p>
@@ -44,8 +44,10 @@
             </p>
           </a>
           <div ngbDropdownMenu aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-right">
-            <a *ngIf="isCurrentUser" ngbDropdownItem href="javascript:void(0)">Switch current role to "manager"</a>
-            <a *ngIf="!isCurrentUser" ngbDropdownItem href="javascript:void(0)">Switch current role to "client"</a>
+            <a *ngIf="isCurrentUser" ngbDropdownItem href="javascript:void(0)" (onclick)="switchRole()">Switch current
+              role to "manager"</a>
+            <a *ngIf="!isCurrentUser" ngbDropdownItem href="javascript:void(0)" (onclick)="switchRole()">Switch current
+              role to "client"</a>
           </div>
         </li>
         <li class="nav-item">

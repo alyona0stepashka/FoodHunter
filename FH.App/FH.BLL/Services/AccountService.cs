@@ -52,7 +52,7 @@ namespace FH.BLL.Services
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
-                throw new Exception("Register error");
+                throw new Exception($"Register error ({result.Errors.FirstOrDefault()?.Description})");
             }
 
             _userManager.AddToRoleAsync(user, model.Role).Wait();

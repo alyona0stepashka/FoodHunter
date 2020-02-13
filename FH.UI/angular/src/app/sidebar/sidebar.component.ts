@@ -66,6 +66,11 @@ export class SidebarComponent implements OnInit {
         const dropdowns = document.getElementsByClassName("dropdown-item");
         let i: number;
         for (i = 0; i < dropdowns.length; i++) {
+            dropdowns[i].removeEventListener("click", function () {
+                this.classList.toggle("open");
+                const dropdownContent = this.nextElementSibling;
+                dropdownContent.classList.toggle("collapsed");
+            });
             dropdowns[i].addEventListener("click", function () {
                 this.classList.toggle("open");
                 const dropdownContent = this.nextElementSibling;
