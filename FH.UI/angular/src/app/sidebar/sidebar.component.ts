@@ -1,37 +1,90 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'environments/environment';
+import { Router } from '@angular/router';
 
 
-export interface RouteInfo {
+export class RouteInfo {
     path: string;
     title: string;
     icon: string;
     class: string;
+    childItems: RouteInfo[];
 }
 
-export const ROUTES: RouteInfo[] = [
-    // { path: '/dashboard',     title: 'Dashboard',         icon:'nc-bank',       class: '' },
-    // { path: '/icons',         title: 'Icons',             icon:'nc-diamond',    class: '' },
-    // { path: '/maps',          title: 'Maps',              icon:'nc-pin-3',      class: '' },
-    // { path: '/notifications', title: 'Notifications',     icon:'nc-bell-55',    class: '' },
-    // { path: '/user',          title: 'User Profile',      icon:'nc-single-02',  class: '' },
-    // { path: '/table',         title: 'Table List',        icon:'nc-tile-56',    class: '' },
-    // { path: '/typography',    title: 'Typography',        icon:'nc-caps-small', class: '' },
-    // { path: '/upgrade',       title: 'Upgrade to PRO',    icon:'nc-spaceship',  class: 'active-pro' },
-    { path: '/welcome/login',         title: 'Login',             icon:'nc-key-25',    class: '' },
-    { path: '/welcome/register',      title: 'Register',          icon:'nc-simple-add',      class: '' },
-    { path: '/welcome/about-us',      title: 'About Us',          icon:'nc-briefcase-24',    class: '' },
-    { path: '/welcome/contact-us',    title: 'Contact Us',        icon:'nc-send',  class: '' }
+export var ROUTES: RouteInfo[] = [];
+
+const ROUTES_WELCOME: RouteInfo[] = [
+    { path: '/welcome/login', title: 'Login', icon: 'nc-key-25', class: '', childItems: [] },
+    { path: '/welcome/register', title: 'Register', icon: 'nc-simple-add', class: '', childItems: [] },
+    { path: '/welcome/about-us', title: 'About Us', icon: 'nc-briefcase-24', class: '', childItems: [] },
+    { path: '/welcome/contact-us', title: 'Contact Us', icon: 'nc-send', class: '', childItems: [] }
+];
+
+const ROUTES_MANAGER: RouteInfo[] = [
+    { path: '/dashboard-manager/dashboard', title: 'Dashboard', icon: 'nc-layout-11', class: '', childItems: [] },
+    { path: '/welcome/contact-us', title: 'Contact Us1', icon: 'nc-send', class: '', childItems: [] }
+];
+
+const ROUTES_USER: RouteInfo[] = [
+    { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', class: '', childItems: [] },
+    { path: '/welcome/contact-us', title: 'Contact Us2', icon: 'nc-send', class: '', childItems: [] }
 ];
 
 @Component({
     moduleId: module.id,
     selector: 'sidebar-cmp',
     templateUrl: 'sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss']
 })
 
 export class SidebarComponent implements OnInit {
+
+    constructor(private router: Router) { }
+
+    public isLogin = (localStorage.getItem('token') != null);
+    public fullName = localStorage.getItem('FullName');
+    public icon = environment.serverURL + localStorage.getItem('Icon');
     public menuItems: any[];
+    public userItems: RouteInfo[] = [
+        {
+            path: '#', title: this.fullName, icon: this.icon, class: '', childItems: [
+                { path: '#', title: 'Logout', icon: 'X', class: 'logout-btn', childItems: [] }]
+        }
+
+    ];
+
     ngOnInit() {
+        ROUTES = ROUTES_WELCOME.filter(menuItem => menuItem);
+        if (this.isLogin) {
+            (localStorage.getItem('CurrentRole')) ? ROUTES = ROUTES_MANAGER.filter(menuItem => menuItem) : ROUTES = ROUTES_USER.filter(menuItem => menuItem);
+            ROUTES.concat(this.userItems.filter(menuItem => menuItem));
+        }
         this.menuItems = ROUTES.filter(menuItem => menuItem);
+    }
+
+    ngAfterViewInit() {
+        const dropdowns = document.getElementsByClassName("dropdown-item");
+        let i: number;
+        for (i = 0; i < dropdowns.length; i++) {
+            dropdowns[i].removeEventListener("click", function () {
+                this.classList.toggle("open");
+                const dropdownContent = this.nextElementSibling;
+                dropdownContent.classList.toggle("collapsed");
+            });
+            dropdowns[i].addEventListener("click", function () {
+                this.classList.toggle("open");
+                const dropdownContent = this.nextElementSibling;
+                dropdownContent.classList.toggle("collapsed");
+            });
+        }
+
+        if (this.isLogin) {
+            const logout = document.getElementsByClassName("logout-btn");
+            logout[0].addEventListener("click", function () {
+                localStorage.clear();
+                window.location.reload(true);
+            });
+        }
+
     }
 }

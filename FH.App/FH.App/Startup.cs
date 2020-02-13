@@ -50,7 +50,8 @@ namespace FH.App
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<EfDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection")))
+                    options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"))
+                        .UseLazyLoadingProxies())
                 .AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<EfDbContext>();
 

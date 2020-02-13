@@ -10,6 +10,6 @@ export class StaticService {
   constructor(private http: HttpClient) { }
 
   getSexes() {
-    return this.http.get(environment.serverURL + 'api/static/sex');
+    return this.http.get(environment.serverURL + '/api/static/sex');
   }
 }
