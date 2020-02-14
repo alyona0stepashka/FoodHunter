@@ -9,25 +9,26 @@ export class RouteInfo {
     icon: string;
     class: string;
     childItems: RouteInfo[];
+    onclick: any;
 }
 
 export var ROUTES: RouteInfo[] = [];
 
 const ROUTES_WELCOME: RouteInfo[] = [
-    { path: '/welcome/login', title: 'Login', icon: 'nc-key-25', class: '', childItems: [] },
-    { path: '/welcome/register', title: 'Register', icon: 'nc-simple-add', class: '', childItems: [] },
-    { path: '/welcome/about-us', title: 'About Us', icon: 'nc-briefcase-24', class: '', childItems: [] },
-    { path: '/welcome/contact-us', title: 'Contact Us', icon: 'nc-send', class: '', childItems: [] }
+    { path: '/welcome/login', title: 'Login', icon: 'nc-key-25', class: '', onclick: {}, childItems: [] },
+    { path: '/welcome/register', title: 'Register', icon: 'nc-simple-add', onclick: {}, class: '', childItems: [] },
+    { path: '/welcome/about-us', title: 'About Us', icon: 'nc-briefcase-24', onclick: {}, class: '', childItems: [] },
+    { path: '/welcome/contact-us', title: 'Contact Us', icon: 'nc-send', onclick: {}, class: '', childItems: [] }
 ];
 
 const ROUTES_MANAGER: RouteInfo[] = [
-    { path: '/dashboard-manager/dashboard', title: 'Dashboard', icon: 'nc-layout-11', class: '', childItems: [] },
-    { path: '/welcome/contact-us', title: 'Contact Us1', icon: 'nc-send', class: '', childItems: [] }
+    { path: '/dashboard-manager/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
+    { path: '/dashboard-manager/location', title: 'Location', icon: 'nc-bank', onclick: {}, class: '', childItems: [] }
 ];
 
 const ROUTES_USER: RouteInfo[] = [
-    { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', class: '', childItems: [] },
-    { path: '/welcome/contact-us', title: 'Contact Us2', icon: 'nc-send', class: '', childItems: [] }
+    { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
+    { path: '/welcome/contact-us', title: 'Contact Us2', icon: 'nc-send', class: '', onclick: {}, childItems: [] }
 ];
 
 @Component({
@@ -42,18 +43,30 @@ export class SidebarComponent implements OnInit {
     constructor(private router: Router) { }
 
     public isLogin = (localStorage.getItem('token') != null);
+    public isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
+    public isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
     public fullName = localStorage.getItem('FullName');
     public icon = environment.serverURL + localStorage.getItem('Icon');
     public menuItems: any[];
+    public currentRole = 'Manager';
+
     public userItems: RouteInfo[] = [
         {
-            path: '#', title: this.fullName, icon: this.icon, class: '', childItems: [
-                { path: '#', title: 'Logout', icon: 'X', class: 'logout-btn', childItems: [] }]
+            path: '#', title: this.fullName, icon: this.icon, class: '', onclick: {}, childItems: [
+                { path: '#', title: 'Switch current role to ' + this.currentRole, icon: 'S', class: 'switch-role-btn', onclick: this.switchRole, childItems: [] },
+                { path: '#', title: 'Logout', icon: 'X', class: 'logout-btn', onclick: this.logout, childItems: [] }]
         }
 
     ];
 
     ngOnInit() {
+
+        this.isLogin = (localStorage.getItem('token') != null);
+        this.isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
+        this.isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
+        this.fullName = localStorage.getItem('FullName');
+        this.icon = environment.serverURL + localStorage.getItem('Icon');
+
         ROUTES = ROUTES_WELCOME.filter(menuItem => menuItem);
         if (this.isLogin) {
             (localStorage.getItem('CurrentRole')) ? ROUTES = ROUTES_MANAGER.filter(menuItem => menuItem) : ROUTES = ROUTES_USER.filter(menuItem => menuItem);
@@ -78,13 +91,51 @@ export class SidebarComponent implements OnInit {
             });
         }
 
-        if (this.isLogin) {
-            const logout = document.getElementsByClassName("logout-btn");
-            logout[0].addEventListener("click", function () {
-                localStorage.clear();
-                window.location.reload(true);
-            });
-        }
+        //if (this.isLogin) {
+        // const logout = document.getElementsByClassName("logout-btn");
+        // logout[0].addEventListener("click", function () {
+        //     localStorage.clear();
+        //     window.location.reload(true);
+        // });
+        // const switchRole = document.getElementsByClassName("switch-role-btn");
+        // switchRole[0].addEventListener("click", function () {
+        //     if (this.isCurrentUser) {
+        //         localStorage.setItem('CurrentRole', 'false');
+        //         this.currentRole = "Manager";
+        //         this.isCurrentUser = !this.isCurrentUser;
+        //         document.location.reload(true)
+        //         //this.router.navigateByUrl('/dashboard-user/dashboard')
+        //     }
+        //     else {
+        //         localStorage.setItem('CurrentRole', 'true');
+        //         this.currentRole = "Client";
+        //         this.isCurrentUser = !this.isCurrentUser;
+        //         document.location.reload(true)
+        //         //this.router.navigateByUrl('/dashboard-manager/dashboard')
+        //     }
+        // });
+        // }
+    }
 
+    public logout(e: any) {
+        localStorage.clear();
+        window.location.reload(true);
+        this.router.navigateByUrl('/welcome/login');
+    }
+
+
+    public switchRole(e: any) {
+        if (this.isCurrentUser) {
+            localStorage.setItem('CurrentRole', 'false');
+            this.currentRole = "Manager";
+            this.isCurrentUser = !this.isCurrentUser;
+            this.router.navigateByUrl('/dashboard-user/dashboard');
+        }
+        else {
+            localStorage.setItem('CurrentRole', 'true');
+            this.currentRole = "Client";
+            this.isCurrentUser = !this.isCurrentUser;
+            this.router.navigateByUrl('/dashboard-manager/dashboard');
+        }
     }
 }

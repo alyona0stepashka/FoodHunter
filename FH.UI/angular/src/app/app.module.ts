@@ -24,6 +24,8 @@ import {AboutUsComponent} from './pages/about-us/about-us.component/../about-us/
 import {ContactUsComponent} from './pages/contact-us/contact-us.component/../contact-us/contact-us.component';
 import { DashboardUserComponent } from './pages/dashboard-user/dashboard-user/dashboard-user.component';
 import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-manager/dashboard-manager.component';
+import { ForbiddenComponent } from './pages/forbidden/forbidden/forbidden.component';
+import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -37,7 +39,9 @@ import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-m
     AboutUsComponent,
     ContactUsComponent,
     DashboardUserComponent,
-    DashboardManagerComponent
+    DashboardManagerComponent,
+    ForbiddenComponent,
+    LocationManagerComponent
     //AdminLayoutComponent
   ],
   imports: [

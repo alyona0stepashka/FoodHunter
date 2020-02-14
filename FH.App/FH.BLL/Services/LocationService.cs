@@ -54,9 +54,9 @@ namespace FH.BLL.Services
           
         }
 
-        public List<LocationTabVM> GetLocationsByCompany(int CompanyId)
+        public List<LocationTabVM> GetLocationsByCompany(int companyId)
         {
-                var locations = _db.Locations.GetAll().Where(m =>m.CompanyId==CompanyId);
+                var locations = _db.Locations.GetAll().Where(m =>m.CompanyId==companyId);
                 if (!locations.Any())
                 {
                     throw new Exception("No one location found");
@@ -98,9 +98,6 @@ namespace FH.BLL.Services
 
         static bool IsInside(decimal lon_x, decimal lat_y, int distance, decimal x, decimal y)
         {
-            // Compare radius of circle with 
-            // distance of its center from 
-            // given point 
             return (((x - lon_x) * (x - lon_x) + (y - lat_y) * (y - lat_y) <= distance * distance));
         }
 

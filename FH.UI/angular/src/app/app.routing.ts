@@ -7,6 +7,8 @@ import { AboutUsComponent } from './pages/about-us/about-us.component/../about-u
 import { ContactUsComponent } from './pages/contact-us/contact-us.component/../contact-us/contact-us.component';
 import { DashboardUserComponent } from './pages/dashboard-user/dashboard-user/dashboard-user.component';
 import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-manager/dashboard-manager.component';
+import { ForbiddenComponent } from './pages/forbidden/forbidden/forbidden.component';
+import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
 
 export const AppRoutes: Routes = [
   //   {
@@ -32,24 +34,27 @@ export const AppRoutes: Routes = [
   //   }]},{
   {
     path: 'welcome', component: LayoutComponent,
-    children: [
-      { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent },
-      { path: 'about-us', component: AboutUsComponent },
-      { path: 'contact-us', component: ContactUsComponent },
+    children: [{
+      path: 'forbidden', component: ForbiddenComponent
+    },
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
+    { path: 'about-us', component: AboutUsComponent },
+    { path: 'contact-us', component: ContactUsComponent },
     ]
   }, {
-    path: 'dashboard-manager', component: LayoutComponent,
+    path: 'dashboard-manager', component: LayoutComponent, canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', component: DashboardManagerComponent },
+      { path: 'dashboard', component: DashboardManagerComponent, canActivate: [AuthGuard] },
+      { path: 'location', component: LocationManagerComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},
     ]
   }, {
-    path: 'dashboard-user', component: LayoutComponent,
+    path: 'dashboard-user', component: LayoutComponent, canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', component: DashboardUserComponent },
+      { path: 'dashboard', component: DashboardUserComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},

@@ -11,19 +11,24 @@
   </div>
   <div *ngIf="isLogin" class="logo" style="padding: 0;">
     <ul class="nav">
-      <li *ngFor="let userItem of userItems" routerLinkActive="active" class="{{userItem.class}}">
+      <li routerLinkActive="active">
         <a class="dropdown-item" style="margin-top: -0.7rem;">
-          <img src="{{userItem.icon}}" class="avatar-mini" />
-          <span style="white-space: normal;">&nbsp;&nbsp;&nbsp;{{userItem.title}}<b class="caret"></b></span>
-          <!-- <i class="nc-icon nc-minimal-down" style="float:right;"></i> -->
-
+          <img src="{{icon}}" class="avatar-mini" />
+          <span style="white-space: normal;">&nbsp;&nbsp;&nbsp;{{fullName}}<b class="caret"></b></span>
         </a>
         <ul class="dropdown-container collapsed">
-          <li style="margin:0;" *ngFor="let childItem of userItem.childItems" routerLinkActive="active"
-            class="{{childItem.class}} ">
-            <a [routerLink]="[childItem.path]">
-              <span class="sidebar-mini-icon">{{childItem.icon}}</span><span
-                style="text-transform: none !important;">{{childItem.title}}</span>
+          <li *ngIf="IsManager" style="margin:0;" routerLinkActive="active" class="switch-role-btn">
+            <a style="margin-top: 0;" (click)="switchRole()">
+              <span class="sidebar-mini-icon">S</span>
+              <span *ngIf="isCurrentUser" style="text-transform: none !important;">Switch current role to
+                Manager</span>
+              <span *ngIf="!isCurrentUser" style="text-transform: none !important;">Switch current role to Client</span>
+            </a>
+          </li>
+          <li style="margin:0;" routerLinkActive="active" class="logout-btn">
+            <a style="margin-top: 0;" (click)="logout()">
+              <span class="sidebar-mini-icon">L</span>
+              <span style="text-transform: none !important;">Logout</span>
             </a>
           </li>
         </ul>
