@@ -1,40 +1,187 @@
-<ngb-tabset [destroyOnHide]="false">
-    <ngb-tab title="Simple">
-        <ng-template ngbTabContent>
-            <div>
-                <div class="">
-                    <div class="card card-user" style="border-top-left-radius: initial;">
-                        <div class="card-header">
-                            <h5 class="card-title">403 Forbidden</h5>
+<div class="col-md-12">
+    <div class="card card-user">
+        <div class="card-header">
+            <h5 class="card-title">Register your business location</h5>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label>Company</label>&nbsp;&nbsp;&nbsp;<a href="#" (click)="open(newCompany)">+ new</a>
+                            <select formControlName="CompanyId" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.CompanyId.errors }" placeholder="Company">
+                                <option value="" selected disabled hidden>Choose your company...</option>
+                                <option *ngFor="let company of companies" value="{{company.Id}}">
+                                    {{company.Name}}</option>
+                            </select>
+                            <div *ngIf="submitted && f.CompanyId.errors" class="invalid-feedback">
+                                <div *ngIf="f.CompanyId.errors.required">Company is required</div>
+                            </div>
                         </div>
-                        <div class="card-body">
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label>Your coordinates (Lon/Lat)</label>&nbsp;&nbsp;&nbsp;<a href="#"
+                                (click)="open(findCoordinates)">&oplus;
+                                find now</a>
                             <div class="row">
-                                <div class="col-md-12" style="text-align: center;">
-                                    <img src="../../../../assets/img/pusheen/403.jpg">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input Title="Longitude" type="text" formControlName="Longitude"
+                                            class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.Longitude.errors }"
+                                            placeholder="Longitude" />
+                                        <div *ngIf="submitted && f.Longitude.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Longitude.errors.required">Longitude is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input Title="Latitude" type="text" formControlName="Latitude"
+                                            class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.Latitude.errors }"
+                                            placeholder="Latitude" />
+                                        <div *ngIf="submitted && f.Latitude.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Latitude.errors.required">Latitude is required
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Location Name</label>
+                            <input Title="Name" type="text" formControlName="Name" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.Name.errors }" placeholder="Name" />
+                            <div *ngIf="submitted && f.Name.errors" class="invalid-feedback">
+                                <div *ngIf="f.Name.errors.required">Name is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input Title="Address" type="text" formControlName="Address" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.Address.errors }" placeholder="Address" />
+                            <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
+                                <div *ngIf="f.Address.errors.required">Address is required</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Register Location</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
+<ng-template #newCompany let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Register your business company</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="companyForm" (ngSubmit)="onSubmitCompany()">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group row">
+                        <!-- <div class="col-md-4"> -->
+                        <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
+                            accept="image/*" (change)="uploadPhoto($event.target.files)"
+                            class="form-control btn btn-primary" placeholder="Photo">
+                        <img [src]="imageUrl" class="avatar"
+                            style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                        <div *ngIf="submittedCompany && f2.Photo.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Photo.errors.required">Company Logo is required</div>
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input Title="Name" type="text" formControlName="Name" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f.Name.errors }"
+                            placeholder="Full oficial name" />
+                        <div *ngIf="submittedCompany && f2.Name.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Name.errors.required">Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Specification</label>
+                        <select formControlName="SpecificationId" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.SpecificationId.errors }"
+                            placeholder="Specification">
+                            <option value="" selected disabled hidden>Choose your main specification...</option>
+                            <option *ngFor="let spec of specifications" value="{{spec.Id}}">
+                                {{spec.Name}}</option>
+                        </select>
+                        <div *ngIf="submittedCompany && f2.SpecificationId.errors" class="invalid-feedback">
+                            <div *ngIf="f2.SpecificationId.errors.required">Specification is required</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </ng-template>
-    </ngb-tab>
-    <ngb-tab>
-        <ng-template ngbTabTitle>Fancy title</ng-template>
-        <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee
-            squid.
-            <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
-                farm-to-table
-                craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco
-                ad vinyl
-                cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS
-                salvia
-                yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit,
-                sustainable jean
-                shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr
-                butcher vero
-                sint qui sapiente accusamus tattooed echo park.</p>
-        </ng-template>
-    </ngb-tab>
-</ngb-tabset>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Contact Info</label>
+                        <textarea Title="ContactInfo" type="text" formControlName="ContactInfo" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.ContactInfo.errors }"
+                            placeholder="ContactInfo">
+                        <div *ngIf="submittedCompany && f2.ContactInfo.errors" class="invalid-feedback">
+                            <div *ngIf="f2.ContactInfo.errors.required">Contact Info is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Describe Info</label>
+                        <textarea Title="Describe Info" type="text" formControlName="Describe" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Describe.errors }"
+                            placeholder="Any info about your company...">
+                        <div *ngIf="submittedCompany && f2.Describe.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Describe.errors.required">Describe Info is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><i class="nc-icon nc-world-2"></i>Site link</label>
+                        <input Title="Site" type="text" formControlName="Site" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Site.errors }"
+                            placeholder="Site link"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Vk link</label>
+                        <input Title="Vk" type="text" formControlName="Vk" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Vk.errors }"
+                            placeholder="Vk link"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+</ng-template>

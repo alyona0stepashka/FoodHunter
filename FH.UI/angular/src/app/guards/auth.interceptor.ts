@@ -27,9 +27,9 @@ export class AuthInterceptor implements HttpInterceptor {
                         if (err.status == 403) {
                             this.router.navigateByUrl('/welcome/forbidden');
                         }
-                        // if (err.status == 500) {
-                        //     this.router.navigateByUrl('/welcome/oops');
-                        // }
+                        if (err.status == 500) {
+                            this.router.navigateByUrl('/welcome/oops');
+                        }
                     }
                 )
             )

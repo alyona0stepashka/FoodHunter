@@ -9,6 +9,7 @@ import { DashboardUserComponent } from './pages/dashboard-user/dashboard-user/da
 import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-manager/dashboard-manager.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
+import { OopsComponent } from './pages/oops/oops.component';
 
 export const AppRoutes: Routes = [
   //   {
@@ -36,6 +37,8 @@ export const AppRoutes: Routes = [
     path: 'welcome', component: LayoutComponent,
     children: [{
       path: 'forbidden', component: ForbiddenComponent
+    }, {
+      path: 'oops', component: OopsComponent
     },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },

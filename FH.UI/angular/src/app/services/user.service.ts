@@ -11,7 +11,6 @@ export class UserService {
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
   register(registerFormData: FormGroup, fileToUpload: File) {
-    console.log("form1", registerFormData);
     const body: FormData = new FormData();
     body.append("Email", registerFormData.value.Email);
     body.append("FirstName", registerFormData.value.FirstName);
@@ -22,8 +21,6 @@ export class UserService {
     body.append("SexId", registerFormData.value.Sex);
     body.append("Photo", fileToUpload);
     body.append("Role", registerFormData.value.Role);
-    console.log("form2", body);
-
     return this.http.post(environment.serverURL + '/api/account/register', body);
   }
 

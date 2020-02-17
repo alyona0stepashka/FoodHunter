@@ -17,7 +17,7 @@
           <span style="white-space: normal;">&nbsp;&nbsp;&nbsp;{{fullName}}<b class="caret"></b></span>
         </a>
         <ul class="dropdown-container collapsed">
-          <li *ngIf="IsManager" style="margin:0;" routerLinkActive="active" class="switch-role-btn">
+          <li *ngIf="isManager" style="margin:0;" routerLinkActive="active" class="switch-role-btn">
             <a style="margin-top: 0;" (click)="switchRole()">
               <span class="sidebar-mini-icon">S</span>
               <span *ngIf="isCurrentUser" style="text-transform: none !important;">Switch current role to

@@ -5,8 +5,8 @@ import { ToastrModule } from "ngx-toastr";
 import { CommonModule } from '@angular/common';
 import { SidebarModule } from './sidebar/sidebar.module';
 import { FooterModule } from './shared/footer/footer.module';
-import { NavbarModule} from './shared/navbar/navbar.module';
-import { FixedPluginModule} from './shared/fixedplugin/fixedplugin.module';
+import { NavbarModule } from './shared/navbar/navbar.module';
+import { FixedPluginModule } from './shared/fixedplugin/fixedplugin.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -17,15 +17,16 @@ import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 
 import { AuthInterceptor } from './guards/auth.interceptor';
-import {LayoutComponent} from './components/layout/layout/layout.component';
-import {LoginComponent} from './pages/login/login/login.component';
-import {RegisterComponent} from './pages/register/register/register.component';
-import {AboutUsComponent} from './pages/about-us/about-us.component/../about-us/about-us.component';
-import {ContactUsComponent} from './pages/contact-us/contact-us.component/../contact-us/contact-us.component';
+import { LayoutComponent } from './components/layout/layout/layout.component';
+import { LoginComponent } from './pages/login/login/login.component';
+import { RegisterComponent } from './pages/register/register/register.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component/../about-us/about-us.component';
+import { ContactUsComponent } from './pages/contact-us/contact-us.component/../contact-us/contact-us.component';
 import { DashboardUserComponent } from './pages/dashboard-user/dashboard-user/dashboard-user.component';
 import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-manager/dashboard-manager.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
+import { OopsComponent } from './pages/oops/oops.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -41,7 +42,8 @@ import { LocationManagerComponent } from './pages/location-manager/location-mana
     DashboardUserComponent,
     DashboardManagerComponent,
     ForbiddenComponent,
-    LocationManagerComponent
+    LocationManagerComponent,
+    OopsComponent
     //AdminLayoutComponent
   ],
   imports: [
