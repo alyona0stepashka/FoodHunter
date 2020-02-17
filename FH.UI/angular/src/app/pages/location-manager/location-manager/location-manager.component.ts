@@ -8,6 +8,8 @@ import { StaticService } from 'app/services/static.service';
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
+declare var google: any;
+
 @Component({
   selector: 'app-location-manager',
   templateUrl: './location-manager.component.html',
@@ -29,6 +31,7 @@ export class LocationManagerComponent implements OnInit {
   submitted = false;
   public companies = new Array();
   public specifications = new Array();
+  public myLatlng: any;
 
   UploadFile: File = null;
   imageUrl = './assets/img/upload-photo.jpg';
@@ -71,6 +74,7 @@ export class LocationManagerComponent implements OnInit {
         this.toastr.error(err.error, 'Error');
       }
     );
+    this.loadMap();
   }
 
   get f() { return this.locationForm.controls; }
@@ -160,5 +164,47 @@ export class LocationManagerComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  loadMap() {
+    this.getPosition().then(pos => {
+      this.myLatlng = new google.maps.LatLng(pos.lat, pos.lng);
+      console.log(`Positon: ${pos.lng} ${pos.lat}`);
+    });
+    var mapOptions = {
+      zoom: 13,
+      center: this.myLatlng,
+      scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
+      styles: [{ "featureType": "water", "stylers": [{ "saturation": 43 }, { "lightness": -11 }, { "hue": "#0088ff" }] }, { "featureType": "road", "elementType": "geometry.fill", "stylers": [{ "hue": "#ff0000" }, { "saturation": -100 }, { "lightness": 99 }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "color": "#808080" }, { "lightness": 54 }] }, { "featureType": "landscape.man_made", "elementType": "geometry.fill", "stylers": [{ "color": "#ece2d9" }] }, { "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [{ "color": "#ccdca1" }] }, { "featureType": "road", "elementType": "labels.text.fill", "stylers": [{ "color": "#767676" }] }, { "featureType": "road", "elementType": "labels.text.stroke", "stylers": [{ "color": "#ffffff" }] }, { "featureType": "poi", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape.natural", "elementType": "geometry.fill", "stylers": [{ "visibility": "on" }, { "color": "#b8cb93" }] }, { "featureType": "poi.park", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.sports_complex", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.medical", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.business", "stylers": [{ "visibility": "simplified" }] }]
+
+    }
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    var marker = new google.maps.Marker({
+      position: this.myLatlng,
+      title: "Hello World!"
+    });
+
+    // To add the marker to the map, call setMap();
+    marker.setMap(map);
+  }
+
+  setGeolocationForm() {
+    this.locationForm.value.Latitude = this.myLatlng.lat();
+    this.locationForm.value.Longitude = this.myLatlng.lng();
+  }
+
+  getPosition(): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      navigator.geolocation.getCurrentPosition(resp => {
+
+        resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
+      },
+        err => {
+          reject(err);
+        });
+    });
+
   }
 }

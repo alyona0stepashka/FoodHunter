@@ -98,7 +98,7 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="form-group row">
-                        <!-- <div class="col-md-4"> -->
+
                         <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
                             accept="image/*" (change)="uploadPhoto($event.target.files)"
                             class="form-control btn btn-primary" placeholder="Photo">
@@ -107,7 +107,7 @@
                         <div *ngIf="submittedCompany && f2.Photo.errors" class="invalid-feedback">
                             <div *ngIf="f2.Photo.errors.required">Company Logo is required</div>
                         </div>
-                        <!-- </div> -->
+
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -172,6 +172,22 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
+                        <label>Facebook link</label>
+                        <input Title="Facebook" type="text" formControlName="Facebook" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Facebook.errors }"
+                            placeholder="Facebook link"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Instagram link</label>
+                        <input Title="Instagram" type="text" formControlName="Instagram" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Instagram.errors }"
+                            placeholder="Instagram link"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
                         <label>Vk link</label>
                         <input Title="Vk" type="text" formControlName="Vk" class="form-control"
                             [ngClass]="{ 'is-invalid': submittedCompany && f2.Vk.errors }"
@@ -182,6 +198,40 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Register Company</button>
+        </div>
+        <!-- <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button> -->
+    </div>
+</ng-template>
+
+
+
+<ng-template #findCoordinates let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Is it your bussiness location coordinates?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+              <div class="card ">
+                <div class="card-header ">
+                  Google Maps
+                </div>
+                <div class="card-body ">
+                  <div id="map" class="map"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button (click)="setGeolocationForm()" class="btn btn-success">Yes</button>&nbsp;
+            <button (click)="loadMap()" class="btn btn-danger">No (Refresh geolocation)</button>
+        </div>
     </div>
 </ng-template>
