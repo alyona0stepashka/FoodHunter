@@ -33,5 +33,20 @@ namespace FH.App.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("specification")]
+        public IActionResult GetSpecifications()
+        {
+            try
+            {
+                var specifications = _staticService.GetSpecifications();
+                return Ok(specifications);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

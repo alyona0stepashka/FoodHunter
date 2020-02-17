@@ -23,14 +23,24 @@ namespace FH.BLL.Services
             _fileService = fileService;
         }
 
+        public List<CompanyPageVM> GetAllCompanies()
+        {
+            var companies = _db.Companys.GetAll().ToList();
+            if (companies == null)
+            {
+                throw new Exception("Company not found");
+            }
+            return companies.Select(m=> new CompanyPageVM(m)).ToList();
+        }
+
         public async Task<CompanyPageVM> GetCompanyPageAsync(int id)
         {
-                var Company = await _db.Companys.GetByIdAsync(id);
-                if (Company == null)
+                var company = await _db.Companys.GetByIdAsync(id);
+                if (company == null)
                 {
                     throw new Exception("Company not found");
                 }
-                return new CompanyPageVM(Company);
+                return new CompanyPageVM(company);
         }
 
         public async Task<CompanyPageVM> CreateCompanyAsync(CreateCompanyVM company, string userId)

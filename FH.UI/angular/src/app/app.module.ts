@@ -11,7 +11,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { AgmCoreModule } from '@agm/core';
+
 
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
@@ -54,6 +55,9 @@ import { OopsComponent } from './pages/oops/oops.component';
     BrowserAnimationsModule,
     RouterModule.forRoot(AppRoutes, {
       useHash: true
+    }),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCpVhQiwAllg1RAFaxMWSpQruuGARy0Y1k'
     }),
     SidebarModule,
     NavbarModule,

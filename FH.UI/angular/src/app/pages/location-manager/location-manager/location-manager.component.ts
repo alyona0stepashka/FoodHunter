@@ -5,8 +5,11 @@ import { ToastrService } from 'ngx-toastr';
 import { LocationService } from 'app/services/location.service';
 import { CompanyService } from 'app/services/company.service';
 import { StaticService } from 'app/services/static.service';
+import { MouseEvent } from '@agm/core';
+
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from 'environments/environment';
 
 declare var google: any;
 
@@ -32,9 +35,12 @@ export class LocationManagerComponent implements OnInit {
   public companies = new Array();
   public specifications = new Array();
   public myLatlng: any;
-
+  public lat = 0;
+  public lng = 0;
+  public zoom = 1;
   UploadFile: File = null;
   imageUrl = './assets/img/upload-photo.jpg';
+  public serverUrl = environment.serverURL;
 
   ngOnInit() {
     this.locationForm = this.formBuilder.group({
@@ -42,7 +48,6 @@ export class LocationManagerComponent implements OnInit {
       CompanyId: ['', [Validators.required]],
       Longitude: ['', [Validators.required]],
       Latitude: ['', [Validators.required]],
-      DateBirth: ['', [Validators.required]],
       Address: ['', [Validators.required]]
     });
     this.companyForm = this.formBuilder.group({
@@ -56,6 +61,11 @@ export class LocationManagerComponent implements OnInit {
       Photo: [null, [Validators.required]],
       SpecificationId: ['']
     });
+    this.loadStatic();
+    this.loadMap();
+  }
+
+  loadStatic() {
     this.companyService.getAllCompanies().subscribe(
       res => {
         this.companies = res as [];
@@ -74,7 +84,6 @@ export class LocationManagerComponent implements OnInit {
         this.toastr.error(err.error, 'Error');
       }
     );
-    this.loadMap();
   }
 
   get f() { return this.locationForm.controls; }
@@ -149,7 +158,7 @@ export class LocationManagerComponent implements OnInit {
   }
 
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -168,30 +177,35 @@ export class LocationManagerComponent implements OnInit {
 
   loadMap() {
     this.getPosition().then(pos => {
+      this.lng = pos.lng;
+      this.lat = pos.lat;
       this.myLatlng = new google.maps.LatLng(pos.lat, pos.lng);
       console.log(`Positon: ${pos.lng} ${pos.lat}`);
     });
-    var mapOptions = {
-      zoom: 13,
-      center: this.myLatlng,
-      scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
-      styles: [{ "featureType": "water", "stylers": [{ "saturation": 43 }, { "lightness": -11 }, { "hue": "#0088ff" }] }, { "featureType": "road", "elementType": "geometry.fill", "stylers": [{ "hue": "#ff0000" }, { "saturation": -100 }, { "lightness": 99 }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "color": "#808080" }, { "lightness": 54 }] }, { "featureType": "landscape.man_made", "elementType": "geometry.fill", "stylers": [{ "color": "#ece2d9" }] }, { "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [{ "color": "#ccdca1" }] }, { "featureType": "road", "elementType": "labels.text.fill", "stylers": [{ "color": "#767676" }] }, { "featureType": "road", "elementType": "labels.text.stroke", "stylers": [{ "color": "#ffffff" }] }, { "featureType": "poi", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape.natural", "elementType": "geometry.fill", "stylers": [{ "visibility": "on" }, { "color": "#b8cb93" }] }, { "featureType": "poi.park", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.sports_complex", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.medical", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.business", "stylers": [{ "visibility": "simplified" }] }]
+    // var mapOptions = {
+    //   zoom: 13,
+    //   center: this.myLatlng,
+    //   scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
+    //   styles: [{ "featureType": "water", "stylers": [{ "saturation": 43 }, { "lightness": -11 }, { "hue": "#0088ff" }] }, { "featureType": "road", "elementType": "geometry.fill", "stylers": [{ "hue": "#ff0000" }, { "saturation": -100 }, { "lightness": 99 }] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "color": "#808080" }, { "lightness": 54 }] }, { "featureType": "landscape.man_made", "elementType": "geometry.fill", "stylers": [{ "color": "#ece2d9" }] }, { "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [{ "color": "#ccdca1" }] }, { "featureType": "road", "elementType": "labels.text.fill", "stylers": [{ "color": "#767676" }] }, { "featureType": "road", "elementType": "labels.text.stroke", "stylers": [{ "color": "#ffffff" }] }, { "featureType": "poi", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape.natural", "elementType": "geometry.fill", "stylers": [{ "visibility": "on" }, { "color": "#b8cb93" }] }, { "featureType": "poi.park", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.sports_complex", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.medical", "stylers": [{ "visibility": "on" }] }, { "featureType": "poi.business", "stylers": [{ "visibility": "simplified" }] }]
 
-    }
-    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    // }
+    // var mapEl = document.getElementById("mapGoogle");
+    // console.log("map", mapEl);
 
-    var marker = new google.maps.Marker({
-      position: this.myLatlng,
-      title: "Hello World!"
-    });
+    // var map = new google.maps.Map(document.getElementById("mapGoogle"), mapOptions);
 
-    // To add the marker to the map, call setMap();
-    marker.setMap(map);
+    // var marker = new google.maps.Marker({
+    //   position: this.myLatlng,
+    //   title: "Your location"
+    // });
+
+    // // To add the marker to the map, call setMap();
+    // marker.setMap(map);
   }
 
   setGeolocationForm() {
-    this.locationForm.value.Latitude = this.myLatlng.lat();
-    this.locationForm.value.Longitude = this.myLatlng.lng();
+    this.locationForm.patchValue({ Latitude: this.myLatlng.lat(), Longitude: this.myLatlng.lng() });
+    this.modalService.dismissAll();
   }
 
   getPosition(): Promise<any> {
@@ -207,4 +221,33 @@ export class LocationManagerComponent implements OnInit {
     });
 
   }
+  // mapClicked($event: MouseEvent) {
+  //   this.markers.push({
+  //     lat: $event.coords.lat,
+  //     lng: $event.coords.lng,
+  //     draggable: true
+  //   });
+  // }
+
+  markerDragEnd(m: marker, $event: MouseEvent) {
+    console.log('dragEnd', m, $event);
+    this.markers = new Array();
+    this.markers.push(m);
+  }
+
+  markers: marker[] = [
+    {
+      lat: this.lat,
+      lng: this.lng,
+      label: 'Your location',
+      draggable: true
+    }
+  ];
+
+}
+interface marker {
+  lat: number;
+  lng: number;
+  label?: string;
+  draggable: boolean;
 }

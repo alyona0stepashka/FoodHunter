@@ -8,6 +8,7 @@ using FH.BLL.VMs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FH.App.Controllers
@@ -18,10 +19,26 @@ namespace FH.App.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CompanyController(ICompanyService companyService)
+        public CompanyController(ICompanyService companyService, UserManager<IdentityUser> userManager)
         {
             _companyService = companyService;
+            _userManager = userManager;
+        }
+
+        [HttpGet]
+        public IActionResult GetAllCompanies()
+        {
+            try
+            {
+                var companies =  _companyService.GetAllCompanies();
+                return Ok(companies);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -55,6 +72,7 @@ namespace FH.App.Controllers
                     throw new Exception("company is missing");
                 }
 
+                company.LogoFile = HttpContext.Request.Form.Files[0]; 
                 var companyPage =
                     await _companyService.CreateCompanyAsync(company, User.Claims.First(c => c.Type == "UserID").Value);
                 return Ok(companyPage);

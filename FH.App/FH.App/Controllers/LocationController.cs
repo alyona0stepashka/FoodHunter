@@ -64,15 +64,15 @@ namespace FH.App.Controllers
 
         [HttpGet]
         [Route("Company/{CompanyId}")]
-        public IActionResult GetAllLocationByCompany(int CompanyId)
+        public IActionResult GetAllLocationByCompany(int companyId)
         {
             try
             {
-                if (CompanyId == 0)
+                if (companyId == 0)
                 {
                     throw new Exception("CompanyId is missing");
                 }
-                var locationPage = _locationService.GetLocationsByCompany(CompanyId);
+                var locationPage = _locationService.GetLocationsByCompany(companyId);
                 return Ok(locationPage);
             }
             catch (Exception ex)
@@ -82,7 +82,7 @@ namespace FH.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLocation(CreateLocationVM location)
+        public async Task<IActionResult> CreateLocation([FromForm] CreateLocationVM location)
         {
             try
             {
