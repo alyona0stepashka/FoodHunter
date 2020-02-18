@@ -13,7 +13,12 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
+import { GalleryModule } from '@ngx-gallery/core';
+import { LightboxModule } from 'ngx-lightbox';
+
+import { MatTabsModule } from '@angular/material/tabs';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 
@@ -28,11 +33,17 @@ import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-m
 import { ForbiddenComponent } from './pages/forbidden/forbidden/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
 import { OopsComponent } from './pages/oops/oops.component';
+import { LocationPageComponent } from './pages/location-page/location-page/location-page.component';
+import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 
 @NgModule({
+  // exports: [
+  //   MatTabsModule
+  // ],
   declarations: [
     AppComponent,
     LayoutComponent,
@@ -44,11 +55,17 @@ import { OopsComponent } from './pages/oops/oops.component';
     DashboardManagerComponent,
     ForbiddenComponent,
     LocationManagerComponent,
-    OopsComponent
+    OopsComponent,
+    LocationPageComponent,
+    MenuManagerComponent
     //AdminLayoutComponent
   ],
   imports: [
-    //BrowserModule,
+    BrowserModule,
+    //MatTabsModule,
+    GalleryModule,
+    NgxDropzoneModule,
+    LightboxModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,

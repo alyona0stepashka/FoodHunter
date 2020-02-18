@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-4">
             <div class="form-group">
               <label>Role</label>
               <select formControlName="Role" class="form-control"
@@ -38,22 +38,26 @@
               </div>
             </div>
           </div>
-          <div class="form-group">
-            <label>Phone number</label>
-            <input type="text" class="form-control" placeholder="375-XX-XXX-XX-XX" formControlName="Phone"
-              [ngClass]="{ 'is-invalid': submitted && f.Phone.errors }">
-            <div *ngIf="submitted && f.Phone.errors" class="invalid-feedback">
-              <div *ngIf="f.Phone.errors.required">Phone is required</div>
-              <!-- <div *ngIf="f.Phone.errors.Phone">Phone must be a valid phone number</div>  -->
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Phone number</label>
+              <input type="text" class="form-control" placeholder="375-XX-XXX-XX-XX" formControlName="Phone"
+                [ngClass]="{ 'is-invalid': submitted && f.Phone.errors }">
+              <div *ngIf="submitted && f.Phone.errors" class="invalid-feedback">
+                <div *ngIf="f.Phone.errors.required">Phone is required</div>
+                <!-- <div *ngIf="f.Phone.errors.Phone">Phone must be a valid phone number</div>  -->
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label>Email address</label>
-            <input type="email" class="form-control" placeholder="Email" formControlName="Email"
-              [ngClass]="{ 'is-invalid': submitted && f.Email.errors }">
-            <div *ngIf="submitted && f.Email.errors" class="invalid-feedback">
-              <div *ngIf="f.Email.errors.required">Email address is required</div>
-              <div *ngIf="f.Email.errors.Email">Email must be a valid email address</div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <label>Email address</label>
+              <input type="email" class="form-control" placeholder="Email" formControlName="Email"
+                [ngClass]="{ 'is-invalid': submitted && f.Email.errors }">
+              <div *ngIf="submitted && f.Email.errors" class="invalid-feedback">
+                <div *ngIf="f.Email.errors.required">Email address is required</div>
+                <div *ngIf="f.Email.errors.Email">Email must be a valid email address</div>
+              </div>
             </div>
           </div>
         </div>

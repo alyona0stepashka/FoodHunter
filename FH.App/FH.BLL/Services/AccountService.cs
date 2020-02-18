@@ -56,7 +56,7 @@ namespace FH.BLL.Services
             }
 
             _userManager.AddToRoleAsync(user, model.Role).Wait();
-            var fileId = await _fileService.CreateFileDbAsync(model.Photo, userId: user.Id);
+            var fileId = (await _fileService.CreateFileDbAsync(model.Photo, userId: user.Id)).Id;
             var userProfile = new UserProfile()
             {
                 FirstName = model.FirstName,
@@ -116,6 +116,8 @@ namespace FH.BLL.Services
                 var profile = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId.Equals(user.Id));
                 var icon = $"{profile?.File?.Path}{profile?.File?.Name}{profile?.File?.Extension}";
                 var fullName = $"{profile?.FirstName} {profile?.LastName}";
+                var myLocation = _db.Locations.GetAll().FirstOrDefault(m => m.AdminId == user.Id);
+                var myLocationId = myLocation?.Id ?? 0; 
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -124,6 +126,7 @@ namespace FH.BLL.Services
                         new Claim("UserID", user.Id),
                         new Claim("IsManager", isManager.ToString()),
                         new Claim("Icon", icon),
+                        new Claim("MyLocationId", myLocationId.ToString()),
                         new Claim("FullName", fullName)
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),

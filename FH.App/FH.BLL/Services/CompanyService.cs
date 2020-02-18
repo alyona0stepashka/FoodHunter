@@ -45,7 +45,7 @@ namespace FH.BLL.Services
 
         public async Task<CompanyPageVM> CreateCompanyAsync(CreateCompanyVM company, string userId)
         {
-                var fileId = await _fileService.CreateFileDbAsync(company.LogoFile);
+                var fileId = (await _fileService.CreateFileDbAsync(company.LogoFile)).Id;
                 var newCompany = new Company()
                 {
                     Name = company.Name,

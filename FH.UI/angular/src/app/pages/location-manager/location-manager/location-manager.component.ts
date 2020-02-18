@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -7,9 +7,15 @@ import { CompanyService } from 'app/services/company.service';
 import { StaticService } from 'app/services/static.service';
 import { MouseEvent } from '@agm/core';
 
+import { Lightbox } from 'ngx-lightbox';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+
+import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '@ngx-gallery/core';
+
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'environments/environment';
+import { FileService } from 'app/services/file.service';
 
 declare var google: any;
 
@@ -20,7 +26,12 @@ declare var google: any;
 })
 export class LocationManagerComponent implements OnInit {
 
-  constructor(private locationService: LocationService,
+  constructor(public gallery: Gallery,
+    private fileService: FileService,
+    private lbLightbox: Lightbox,
+    public dropzone: NgxDropzoneModule,
+    private router: Router,
+    private locationService: LocationService,
     private staticService: StaticService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -41,14 +52,27 @@ export class LocationManagerComponent implements OnInit {
   UploadFile: File = null;
   imageUrl = './assets/img/upload-photo.jpg';
   public serverUrl = environment.serverURL;
+  myLocationId = localStorage.getItem('MyLocationId');
+  public isEdit = false;
+  public location: any;
+  public isHideOverlay = true;
+
+  album = new Array();
+  UploadFiles: File[] = new Array();
+  private lbAlbum: GalleryItem[] = new Array();
+  @ViewChild('dropzone') drop;
 
   ngOnInit() {
+    this.loadLocation();
     this.locationForm = this.formBuilder.group({
       Name: ['', [Validators.required]],
       CompanyId: ['', [Validators.required]],
       Longitude: ['', [Validators.required]],
       Latitude: ['', [Validators.required]],
       Address: ['', [Validators.required]]
+
+      // TopPhoto: [null],
+      // PhotoAlbum: [new Array()]
     });
     this.companyForm = this.formBuilder.group({
       Name: ['', [Validators.required]],
@@ -61,8 +85,57 @@ export class LocationManagerComponent implements OnInit {
       Photo: [null, [Validators.required]],
       SpecificationId: ['']
     });
+    //this.toggleOverlay();
     this.loadStatic();
     this.loadMap();
+  }
+
+  // toggleOverlay(){
+  //   const elems = document.getElementsByClassName("lightboxOverlay");
+  //   for (let i = 0; i < elems.length; i++) {
+  //       elems[i].style.
+  //   }
+  // }
+
+  loadLocation() {
+    if (this.myLocationId != "0") {
+      this.isEdit = (this.myLocationId != "0");
+      this.locationService.getLocation(parseInt(this.myLocationId)).subscribe(
+        res => {
+          this.location = res;
+          this.locationForm.patchValue(
+            {
+              Name: this.location.Name,
+              CompanyId: this.location.CompanyId,
+              Longitude: this.location.Longitude,
+              Latitude: this.location.Latitude,
+              Address: this.location.Address
+            }
+          );
+          this.lbAlbum = new Array();
+          this.location.PhotoAlbum.forEach(element => {
+            const src = environment.serverURL + element.Value;
+            // const caption = '';
+            // const thumb = '';
+            const album = {
+              src,
+              // caption,
+              // thumb
+            };
+
+            this.lbAlbum.push(new ImageItem({ src: src }));
+          });
+          this.gallery.ref().load(this.lbAlbum);
+        },
+        err => {
+          console.log(err);
+          this.toastr.error(err.error, 'Error');
+        }
+
+        //  this.router.navigateByUrl('/dashboard-manager/location/' + this.myLocationId);
+
+      );
+    };
   }
 
   loadStatic() {
@@ -96,27 +169,51 @@ export class LocationManagerComponent implements OnInit {
     if (this.locationForm.invalid) {
       return null;
     }
+    if (this.isEdit) {
+      this.locationService.updateLocation(this.locationForm, this.myLocationId).subscribe(
+        (res: any) => {
+          // this.userId = res as string;
+          // this.resetForm();
+          this.toastr.success(
+            '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is updated</span>',
+            "",
+            {
+              timeOut: 4000,
+              closeButton: true,
+              enableHtml: true,
+              toastClass: "alert alert-success alert-with-icon"
+            }
+          );
+        },
+        err => {
+          console.log(err);
+          this.toastr.error(err.error, 'Error');
+        }
+      );
 
-    this.locationService.createLocation(this.locationForm).subscribe(
-      (res: any) => {
-        // this.userId = res as string;
-        // this.resetForm();
-        this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
-          "",
-          {
-            timeOut: 4000,
-            closeButton: true,
-            enableHtml: true,
-            toastClass: "alert alert-success alert-with-icon"
-          }
-        );
-      },
-      err => {
-        console.log(err);
-        this.toastr.error(err.error, 'Error');
-      }
-    );
+    }
+    else {
+      this.locationService.createLocation(this.locationForm).subscribe(
+        (res: any) => {
+          // this.userId = res as string;
+          // this.resetForm();
+          this.toastr.success(
+            '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+            "",
+            {
+              timeOut: 4000,
+              closeButton: true,
+              enableHtml: true,
+              toastClass: "alert alert-success alert-with-icon"
+            }
+          );
+        },
+        err => {
+          console.log(err);
+          this.toastr.error(err.error, 'Error');
+        }
+      );
+    }
   }
 
   onSubmitCompany() {
@@ -140,6 +237,7 @@ export class LocationManagerComponent implements OnInit {
             toastClass: "alert alert-success alert-with-icon"
           }
         );
+        this.modalService.dismissAll();
       },
       err => {
         console.log(err);
@@ -148,16 +246,76 @@ export class LocationManagerComponent implements OnInit {
     );
   }
 
-  uploadPhoto(file: FileList) {
-    this.UploadFile = file.item(0);
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-      this.imageUrl = event.target.result;
-    };
-    reader.readAsDataURL(this.UploadFile);
+
+  open(index: number): void {
+    console.log("click-img", this.lbAlbum[index]);
+
+    this.lbLightbox.open(this.lbAlbum, index);
   }
 
-  open(content) {
+  close(): void {
+    this.lbLightbox.close();
+  }
+
+  onDeletePhoto(id: number) {
+    this.fileService.deleteLocationAlbumPhoto(id).subscribe(
+      res => {
+        this.toastr.success('Photo deleted!', 'Deleting successful.');
+        this.loadLocation();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
+  onFilesAdded(files: File[]) {
+    this.UploadFiles = files;
+  }
+
+  onUploadFiles() {
+    if (this.UploadFiles.length < 1) {
+      return;
+    }
+    let isSuccess = true;
+    this.UploadFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      this.fileService.uploadLocationAlbumPhoto(file, this.myLocationId).subscribe(
+        (res: any) => {
+          this.loadLocation();
+        },
+        err => {
+          console.log(err);
+          isSuccess = false;
+        }
+      );
+    });
+    if (isSuccess) {
+      this.toastr.success('New photo added!', 'Process successful.');
+      this.drop.reset();
+
+    } else {
+      this.toastr.error('Some of files not added', 'Process error');
+    }
+  }
+
+  // uploadPhoto(file: FileList) {
+  //   this.UploadFile = file.item(0);
+  //   const reader = new FileReader();
+  //   reader.onload = (event: any) => {
+  //     this.imageUrl = event.target.result;
+  //   };
+  //   reader.readAsDataURL(this.UploadFile);
+  // }
+
+  onClearPhoto() {
+    this.UploadFiles = new Array();
+  }
+
+  openModal(content) {
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {

@@ -142,17 +142,21 @@ namespace FH.DAL.Migrations
 
                     b.Property<int>("CompanyId");
 
-                    b.Property<decimal>("Latitude");
+                    b.Property<string>("Latitude");
 
-                    b.Property<decimal>("Longitude");
+                    b.Property<string>("Longitude");
 
                     b.Property<string>("Name");
+
+                    b.Property<int?>("TopFileId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("TopFileId");
 
                     b.ToTable("Locations");
                 });
@@ -654,7 +658,7 @@ namespace FH.DAL.Migrations
                         .HasForeignKey("FeedbackId");
 
                     b.HasOne("FH.Models.Models.Location", "Location")
-                        .WithMany()
+                        .WithMany("PhotoAlbum")
                         .HasForeignKey("LocationId");
                 });
 
@@ -668,6 +672,10 @@ namespace FH.DAL.Migrations
                         .WithMany("Locations")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FH.Models.Models.FileModel", "TopFile")
+                        .WithMany()
+                        .HasForeignKey("TopFileId");
                 });
 
             modelBuilder.Entity("FH.Models.Models.Manager", b =>

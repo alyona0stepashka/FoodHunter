@@ -1,15 +1,52 @@
+<div *ngIf="isEdit" class="col-md-12">
+    <div class="card card-user">
+        <div class="card-header">
+            <h5 class="card-title">Manage photos</h5>
+        </div>
+        <div class="card-body">
+            <!-- <input type="file" #Image accept="image/*" (change)="uploadPhoto($event.target.files)" class="form-control col-sm-6" placeholder="Photo..." />  -->
+            <!-- <img [src]="imageUrl" style="max-height: 100px; max-width: 100px" class="col-sm-6"> -->
+
+            <!-- <ngx-dropzone (change)="onFilesAdded($event)" ()>
+                <ngx-dropzone-label>Drop files</ngx-dropzone-label>
+                <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-preview>
+            </ngx-dropzone> -->
+            <ngx-dropzone #dropzone [multiple]="true" [accept]="'image/*'" [maxFileSize]="5242880" [showPreviews]="true"
+                (filesAdded)="onFilesAdded($event)" (filesRejected)="onFilesRejected($event)"></ngx-dropzone>
+            <button class="btn btn-primary" Title="Upload images" (click)="onUploadFiles()"><i
+                    class="fas fa-folder-plus"></i></button>
+            <button class="btn btn-error" Title="Clear images" (click)="dropzone.reset(); onClearPhoto();"><i
+                    class="fas fa-folder-minus"></i></button>
+        </div>
+        <div *ngIf="lbAlbum.length<1" class=" text-center">
+            <label class="text-center">No Photo Yet</label>
+        </div>
+        <div *ngIf="lbAlbum.length>0" class="container col-md-12 row" style="margin-bottom: inherit;">
+            <div *ngFor="let photo of location.PhotoAlbum; let i = index" class="item text-center col-md-1"
+                style="margin-top: 1rem;">
+                <button (click)="onDeletePhoto(photo.Id)" style="position: absolute;"><i
+                        class="fas fa-times"></i></button>
+                <img style="max-height: 8rem; width: auto;" (click)="open(i)" src="{{serverUrl}}{{photo.Value}}" />
+                <!-- <img style="max-height: 8rem; width: auto;" src="{{serverUrl}}{{photo.Value}}" [attr.lightbox]="i" /> -->
+            </div>
+        </div>
+    </div>
+</div>
 <div class="col-md-12">
     <div class="card card-user">
         <div class="card-header">
-            <h5 class="card-title">Register your business location</h5>
+            <h5 *ngIf="!isEdit" class="card-title">Register your business location</h5>
+            <h5 *ngIf="isEdit" class="card-title">Update your business location info</h5>
         </div>
         <div class="card-body">
             <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
                 <div class="row">
                     <div class="col-md-7">
                         <div class="form-group">
-                            <label>Company</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
-                                (click)="open(newCompany)" title="Register your company if it is not yet">+ new</a>
+                            <label>Company</label>&nbsp;&nbsp;&nbsp;<a *ngIf="!isEdit" href="javascript:void(0)"
+                                (click)="openModal(newCompany)" title="Register your company if it is not yet">+ new</a>
                             <select formControlName="CompanyId" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && f.CompanyId.errors }" placeholder="Company">
                                 <option value="" selected disabled hidden>Choose your company...</option>
@@ -31,8 +68,8 @@
                     </div>
                     <div class="col-md-5">
                         <div class="form-group">
-                            <label>Your coordinates (Lon/Lat)</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
-                                (click)="open(findCoordinates)">&oplus;
+                            <label>Your coordinates (Lon/Lat)</label>&nbsp;&nbsp;&nbsp;<a *ngIf="!isEdit"
+                                href="javascript:void(0)" (click)="openModal(findCoordinates)">&oplus;
                                 find now</a>
                             <div class="row">
                                 <div class="col-md-6">
@@ -86,7 +123,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Register Location</button>
+                            <button *ngIf="!isEdit" type="submit" class="btn btn-primary">Register Location</button>
+                            <button *ngIf="isEdit" type="submit" class="btn btn-primary">Save Changes</button>
                         </div>
                     </div>
                 </div>
@@ -94,6 +132,7 @@
         </div>
     </div>
 </div>
+
 
 <ng-template #newCompany let-modal>
     <div class="modal-header">
@@ -122,7 +161,7 @@
                     <div class="form-group">
                         <label>Full Name</label>
                         <input Title="Name" type="text" formControlName="Name" class="form-control"
-                            [ngClass]="{ 'is-invalid': submittedCompany && f.Name.errors }"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Name.errors }"
                             placeholder="Full oficial name" />
                         <div *ngIf="submittedCompany && f2.Name.errors" class="invalid-feedback">
                             <div *ngIf="f2.Name.errors.required">Name is required</div>

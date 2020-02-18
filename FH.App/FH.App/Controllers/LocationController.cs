@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using FH.BLL.Interfaces;
 using FH.BLL.VMs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,11 +46,11 @@ namespace FH.App.Controllers
 
         [HttpGet]
         [Route("{lon}x{lat}")]
-        public IActionResult GetLocationsNearPoint(decimal lon, decimal lat)
+        public IActionResult GetLocationsNearPoint(string lon, string lat)
         {
             try
             {
-                if (lon == 0 || lat==0)
+                if (lon.IsNullOrEmpty() || lat.IsNullOrEmpty())
                 {
                     throw new Exception("Point is missing");
                 }
@@ -90,7 +91,26 @@ namespace FH.App.Controllers
                 {
                     throw new Exception("Location is missing");
                 }
-                var locationPage = await _locationService.CreateLocationAsync(location, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var locationPage = await _locationService.CreateLocationAsync(location, User.Claims.First(c => c.Type == "UserID").Value);
+                return Ok(locationPage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateLocation([FromForm] CreateLocationVM location)
+        {
+            try
+            {
+                if (location == null)
+                {
+                    throw new Exception("Location is missing");
+                }
+                var locationPage = await _locationService.UpdateLocationAsync(location);
                 return Ok(locationPage);
             }
             catch (Exception ex)

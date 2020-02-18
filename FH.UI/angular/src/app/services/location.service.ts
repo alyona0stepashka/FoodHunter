@@ -28,4 +28,16 @@ export class LocationService {
     //body.append("Photo", fileToUpload);
     return this.http.post(environment.serverURL + '/api/location', body);
   }
+
+  updateLocation(registerFormData: FormGroup, locId: string) {
+    const body: FormData = new FormData();
+    body.append("Id", locId);
+    body.append("CompanyId", registerFormData.value.CompanyId);
+    body.append("Longitude", registerFormData.value.Longitude);
+    body.append("Latitude", registerFormData.value.Latitude);
+    body.append("Name", registerFormData.value.Name);
+    body.append("Address", registerFormData.value.Address);
+    //body.append("Photo", fileToUpload);
+    return this.http.put(environment.serverURL + '/api/location', body);
+  }
 }

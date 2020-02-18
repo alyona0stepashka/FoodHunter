@@ -10,6 +10,8 @@ import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-m
 import { ForbiddenComponent } from './pages/forbidden/forbidden/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
 import { OopsComponent } from './pages/oops/oops.component';
+import { LocationPageComponent } from './pages/location-page/location-page/location-page.component';
+import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
 
 export const AppRoutes: Routes = [
   //   {
@@ -50,6 +52,8 @@ export const AppRoutes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardManagerComponent, canActivate: [AuthGuard] },
       { path: 'location', component: LocationManagerComponent, canActivate: [AuthGuard] },
+      { path: 'location/:id', component: LocationPageComponent, canActivate: [AuthGuard] },
+      { path: 'menu', component: MenuManagerComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},

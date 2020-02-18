@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FH.BLL.Interfaces;
 using FH.DAL.EF.Interfaces;
+using FH.Models.EnumModels;
 using FH.Models.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,16 +40,15 @@ namespace FH.BLL.Services
                     throw new Exception("Invalid file type.");
                 }
         }
-        public async Task<int> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null)
+        public async Task<Icon> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null)
         {
                 IsValidFile(photo, 150);
-                var file = new FileModel()
+                var file = new FileModel
                 {
                     Name = Guid.NewGuid().ToString(),
                     Extension = Path.GetExtension(photo.FileName),
-
+                    Path = "/Images/",
                 };
-                file.Path = "/Images/";
                 if (feedbackId != null)
                 {
                     file.FeedbackId = feedbackId;
@@ -70,7 +70,7 @@ namespace FH.BLL.Services
                 {
                     await photo.CopyToAsync(fileStream);
                 }
-                return file.Id;
+                return new Icon(file.Id, $"{file.Path}{file.Name}{file.Extension}"); 
         }
         public void CreateDirectoryIfNotExist(string path)
         {
@@ -79,17 +79,10 @@ namespace FH.BLL.Services
                         Directory.CreateDirectory(path);
                     }
         }
-        public void CreateDirectoryIfNotExist(List<string> path_list)
+
+        public async Task DeleteFile(int id)
         {
-                var cur_path = _appEnvironment.WebRootPath + "\\Images\\";
-                foreach (var path in path_list)
-                {
-                    cur_path = cur_path + path + "\\";
-                    if (!Directory.Exists(cur_path))
-                    {
-                        Directory.CreateDirectory(cur_path);
-                    }
-                }
+            await _db.FileModels.DeleteAsync(id);
         }
     }
 }
