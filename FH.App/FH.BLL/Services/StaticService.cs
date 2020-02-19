@@ -22,22 +22,33 @@ namespace FH.BLL.Services
 
         public List<Sex> GetSexes()
         {
-            var sexes = _db.Sexes.GetAll().ToList();
-            if (sexes == null)
+            var items = _db.Sexes.GetAll().ToList();
+            if (items == null)
             {
                 throw new Exception("Sexes not found");
             }
-            return sexes;
+            return items;
 
         }
         public List<CompanySpecification> GetSpecifications()
         {
-            var specifications = _db.CompanySpecifications.GetAll().ToList();
-            if (specifications == null)
+            var items = _db.CompanySpecifications.GetAll().ToList();
+            if (items == null)
             {
                 throw new Exception("Specifications not found");
             }
-            return specifications;
+            return items;
+
+        }
+
+        public List<Icon> GetIcons()
+        {
+            var items = _db.Icons.GetAll().ToList();
+            if (items == null)
+            {
+                throw new Exception("Icons not found");
+            }
+            return items;
 
         }
     }

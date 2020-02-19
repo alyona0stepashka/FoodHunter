@@ -16,4 +16,8 @@ export class StaticService {
   getSpecifications() {
     return this.http.get(environment.serverURL + '/api/static/specification');
   }
+
+  getIcons() {
+    return this.http.get(environment.serverURL + '/api/static/icon');
+  }
 }

@@ -26,7 +26,7 @@ declare var google: any;
 })
 export class LocationManagerComponent implements OnInit {
 
-  constructor(public gallery: Gallery,
+  constructor(//public gallery: Gallery,
     private fileService: FileService,
     private lbLightbox: Lightbox,
     public dropzone: NgxDropzoneModule,
@@ -53,14 +53,14 @@ export class LocationManagerComponent implements OnInit {
   imageUrl = './assets/img/upload-photo.jpg';
   public serverUrl = environment.serverURL;
   myLocationId = localStorage.getItem('MyLocationId');
-  public isEdit = false;
+  public isEdit = (this.myLocationId != null && this.myLocationId != '0');
   public location: any;
   public isHideOverlay = true;
 
   album = new Array();
   UploadFiles: File[] = new Array();
-  private lbAlbum: GalleryItem[] = new Array();
-  @ViewChild('dropzone') drop;
+  private lbAlbum: any[] = new Array();
+  @ViewChild('dropzone', { static: true }) drop;
 
   ngOnInit() {
     this.loadLocation();
@@ -99,7 +99,6 @@ export class LocationManagerComponent implements OnInit {
 
   loadLocation() {
     if (this.myLocationId != "0") {
-      this.isEdit = (this.myLocationId != "0");
       this.locationService.getLocation(parseInt(this.myLocationId)).subscribe(
         res => {
           this.location = res;
@@ -123,9 +122,9 @@ export class LocationManagerComponent implements OnInit {
               // thumb
             };
 
-            this.lbAlbum.push(new ImageItem({ src: src }));
+            this.lbAlbum.push({ src: src });
           });
-          this.gallery.ref().load(this.lbAlbum);
+          //this.gallery.ref().load(this.lbAlbum);
         },
         err => {
           console.log(err);
@@ -174,6 +173,8 @@ export class LocationManagerComponent implements OnInit {
         (res: any) => {
           // this.userId = res as string;
           // this.resetForm();
+
+          localStorage.setItem('MyLocationId', res.Id);
           this.toastr.success(
             '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is updated</span>',
             "",
@@ -197,6 +198,7 @@ export class LocationManagerComponent implements OnInit {
         (res: any) => {
           // this.userId = res as string;
           // this.resetForm();
+          this.isEdit = true;
           this.toastr.success(
             '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
             "",
@@ -237,6 +239,7 @@ export class LocationManagerComponent implements OnInit {
             toastClass: "alert alert-success alert-with-icon"
           }
         );
+        this.loadStatic();
         this.modalService.dismissAll();
       },
       err => {
@@ -302,14 +305,14 @@ export class LocationManagerComponent implements OnInit {
     }
   }
 
-  // uploadPhoto(file: FileList) {
-  //   this.UploadFile = file.item(0);
-  //   const reader = new FileReader();
-  //   reader.onload = (event: any) => {
-  //     this.imageUrl = event.target.result;
-  //   };
-  //   reader.readAsDataURL(this.UploadFile);
-  // }
+  uploadPhoto(file: FileList) {
+    this.UploadFile = file.item(0);
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.imageUrl = event.target.result;
+    };
+    reader.readAsDataURL(this.UploadFile);
+  }
 
   onClearPhoto() {
     this.UploadFiles = new Array();

@@ -62,7 +62,7 @@ import { BrowserModule } from '@angular/platform-browser';
   ],
   imports: [
     BrowserModule,
-    //MatTabsModule,
+    MatTabsModule,
     GalleryModule,
     NgxDropzoneModule,
     LightboxModule,

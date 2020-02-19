@@ -1,7 +1,7 @@
 <div *ngIf="isEdit" class="col-md-12">
     <div class="card card-user">
         <div class="card-header">
-            <h5 class="card-title">Manage photos</h5>
+            <h5 class="card-title"><i class="far fa-images"></i>&nbsp;Manage photos</h5>
         </div>
         <div class="card-body">
             <!-- <input type="file" #Image accept="image/*" (change)="uploadPhoto($event.target.files)" class="form-control col-sm-6" placeholder="Photo..." />  -->
@@ -34,11 +34,13 @@
         </div>
     </div>
 </div>
+
 <div class="col-md-12">
     <div class="card card-user">
         <div class="card-header">
-            <h5 *ngIf="!isEdit" class="card-title">Register your business location</h5>
-            <h5 *ngIf="isEdit" class="card-title">Update your business location info</h5>
+            <h5 *ngIf="!isEdit" class="card-title"><i class="far fa-edit"></i>&nbsp;Register your business location</h5>
+            <h5 *ngIf="isEdit" class="card-title"><i class="far fa-edit"></i>&nbsp;Update your business location info
+            </h5>
         </div>
         <div class="card-body">
             <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
@@ -144,8 +146,8 @@
     <div class="modal-body">
         <form [formGroup]="companyForm" (ngSubmit)="onSubmitCompany()">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group" style="text-align: center;">
+                <div class="col-md-2">
+                    <div class="form-group">
                         <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
                             accept="image/*" (change)="uploadPhoto($event.target.files)"
                             class="form-control btn btn-primary" placeholder="Photo">
@@ -157,7 +159,7 @@
 
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-10">
                     <div class="form-group">
                         <label>Full Name</label>
                         <input Title="Name" type="text" formControlName="Name" class="form-control"

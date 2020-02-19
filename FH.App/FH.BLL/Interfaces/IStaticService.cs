@@ -12,6 +12,7 @@ namespace FH.BLL.Interfaces
     public interface IStaticService
     {
         List<Sex> GetSexes();
+        List<Icon> GetIcons();
         List<CompanySpecification> GetSpecifications();
     }
 }

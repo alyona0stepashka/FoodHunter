@@ -55,7 +55,7 @@ namespace FH.BLL.Services
                 var locationPhotos = _db.FileModels.GetAll().Where(m => m.LocationId == id).ToList();
                 var locationPage = new LocationPageVM(location)
                 {
-                    Menus = _db.Menus.GetAll().Where(m => m.LocationId == location.Id).ToList(),
+                    //Menus = _db.Menus.GetAll().Where(m => m.LocationId == location.Id).ToList(),
                     //LocationPhotos = locationPhotos.Select(m=> $"{m.Path}{m.Name}{m.Extension}").ToList()
                 };
 

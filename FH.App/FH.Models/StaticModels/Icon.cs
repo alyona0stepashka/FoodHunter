@@ -8,6 +8,7 @@ namespace FH.Models.EnumModels
     public class Icon : BaseEntity
     {
         public string Value { get; set; }
+        public string Description { get; set; }
 
         public Icon(int id, string val)
         {
