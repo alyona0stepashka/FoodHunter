@@ -70,8 +70,11 @@
 
     <mat-tab *ngFor="let menu of menus">
         <ng-template mat-tab-label>
-            <i class="{{menu.Icon.Value}}"><span
-                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">{{menu.Title}}</span></i>
+            <i class="{{menu.Icon.Value}}">
+                <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                    {{menu.Title}}
+                </span>
+            </i>
         </ng-template>
         <div class="col-md-12">
             <div class="card card-user">
@@ -79,6 +82,12 @@
                     <h5 class="card-title" style="font-size: 1.3em;">{{menu.Info}}</h5>
                 </div>
                 <div class="card-body">
+                    <button title="Delete" class="btn btn-danger" (click)="deleteMenu(menu.Id)">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                    <button title="Edit" class="btn btn-primary" (click)="editMenu(menu.Id)">
+                        <i class="fas fa-pen"></i>
+                    </button>
                     <table>
                         <tbody>
                             <tr *ngFor="let item of menu.MenuItems">
@@ -110,7 +119,7 @@
                                 <td width="10%">
                                     <div class="row">
                                         <div class="item text-center col-md-12">
-                                            <button type="submit" class="btn btn-primary" title="Show details"><i
+                                            <button type="submit" class="btn btn-info" title="Show details"><i
                                                     class="fas fa-info-circle"></i></button>
                                         </div>
                                     </div>
@@ -122,7 +131,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="item text-center col-md-12">
-                                            <button type="submit" class="btn btn-primary" title="Delete"><i
+                                            <button type="submit" class="btn btn-danger" title="Delete"><i
                                                     class="far fa-trash-alt"></i></button>
                                         </div>
                                     </div>

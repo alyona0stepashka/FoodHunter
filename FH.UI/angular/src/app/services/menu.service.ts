@@ -14,6 +14,10 @@ export class MenuService {
     return this.http.get(environment.serverURL + '/api/menu/location/' + id);
   }
 
+  deleteMenu(id: string) {
+    return this.http.delete(environment.serverURL + '/api/menu/' + id);
+  }
+
   createMenu(registerFormData: FormGroup, locationId: string) {
     const body: FormData = new FormData();
     body.append("LocationId", locationId);

@@ -8,7 +8,8 @@ using FH.Models.Models;
 namespace FH.BLL.VMs
 {
     public class CreateMenuVM
-    { 
+    {
+        public int Id { get; set; }
         public int LocationId { get; set; }
         public string Title { get; set; }
         public string Info { get; set; }
