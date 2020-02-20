@@ -24,7 +24,7 @@ const ROUTES_WELCOME: RouteInfo[] = [
 const ROUTES_MANAGER: RouteInfo[] = [
     { path: '/dashboard-manager/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
     { path: '/dashboard-manager/location', title: 'Location', icon: 'nc-bank', onclick: {}, class: '', childItems: [] },
-    { path: '/dashboard-manager/menu', title: 'Menu', icon: 'nc-book-bookmark', onclick: {}, class: '', childItems: [] }
+    { path: '/dashboard-manager/menu/0', title: 'Menu', icon: 'nc-book-bookmark', onclick: {}, class: '', childItems: [] }
 ];
 
 const ROUTES_USER: RouteInfo[] = [

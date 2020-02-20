@@ -7,9 +7,10 @@ import { AboutUsComponent } from './pages/about-us/about-us.component/../about-u
 import { ContactUsComponent } from './pages/contact-us/contact-us.component/../contact-us/contact-us.component';
 import { DashboardUserComponent } from './pages/dashboard-user/dashboard-user/dashboard-user.component';
 import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-manager/dashboard-manager.component';
-import { ForbiddenComponent } from './pages/forbidden/forbidden/forbidden.component';
+import { ForbiddenComponent } from './pages/forbidden/403/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
-import { OopsComponent } from './pages/oops/oops.component';
+import { OopsComponent } from './pages/500/oops.component';
+// import { OopsComponent } from './pages/500/oops.component';
 import { LocationPageComponent } from './pages/location-page/location-page/location-page.component';
 import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
 
@@ -53,7 +54,7 @@ export const AppRoutes: Routes = [
       { path: 'dashboard', component: DashboardManagerComponent, canActivate: [AuthGuard] },
       { path: 'location', component: LocationManagerComponent, canActivate: [AuthGuard] },
       { path: 'location/:id', component: LocationPageComponent, canActivate: [AuthGuard] },
-      { path: 'menu', component: MenuManagerComponent, canActivate: [AuthGuard] },
+      { path: 'menu/:id', component: MenuManagerComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},

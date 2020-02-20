@@ -10,9 +10,6 @@ import { MouseEvent } from '@agm/core';
 import { Lightbox } from 'ngx-lightbox';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
-import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '@ngx-gallery/core';
-
-
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'environments/environment';
 import { FileService } from 'app/services/file.service';
@@ -70,9 +67,6 @@ export class LocationManagerComponent implements OnInit {
       Longitude: ['', [Validators.required]],
       Latitude: ['', [Validators.required]],
       Address: ['', [Validators.required]]
-
-      // TopPhoto: [null],
-      // PhotoAlbum: [new Array()]
     });
     this.companyForm = this.formBuilder.group({
       Name: ['', [Validators.required]],
@@ -85,17 +79,9 @@ export class LocationManagerComponent implements OnInit {
       Photo: [null, [Validators.required]],
       SpecificationId: ['']
     });
-    //this.toggleOverlay();
     this.loadStatic();
     this.loadMap();
   }
-
-  // toggleOverlay(){
-  //   const elems = document.getElementsByClassName("lightboxOverlay");
-  //   for (let i = 0; i < elems.length; i++) {
-  //       elems[i].style.
-  //   }
-  // }
 
   loadLocation() {
     if (this.myLocationId != "0") {
@@ -113,26 +99,14 @@ export class LocationManagerComponent implements OnInit {
           );
           this.lbAlbum = new Array();
           this.location.PhotoAlbum.forEach(element => {
-            const src = environment.serverURL + element.Value;
-            // const caption = '';
-            // const thumb = '';
-            const album = {
-              src,
-              // caption,
-              // thumb
-            };
 
-            this.lbAlbum.push({ src: src });
+            this.lbAlbum.push({ src: environment.serverURL + element.Value });
           });
-          //this.gallery.ref().load(this.lbAlbum);
         },
         err => {
           console.log(err);
           this.toastr.error(err.error, 'Error');
         }
-
-        //  this.router.navigateByUrl('/dashboard-manager/location/' + this.myLocationId);
-
       );
     };
   }
@@ -171,9 +145,6 @@ export class LocationManagerComponent implements OnInit {
     if (this.isEdit) {
       this.locationService.updateLocation(this.locationForm, this.myLocationId).subscribe(
         (res: any) => {
-          // this.userId = res as string;
-          // this.resetForm();
-
           localStorage.setItem('MyLocationId', res.Id);
           this.toastr.success(
             '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is updated</span>',
@@ -196,8 +167,6 @@ export class LocationManagerComponent implements OnInit {
     else {
       this.locationService.createLocation(this.locationForm).subscribe(
         (res: any) => {
-          // this.userId = res as string;
-          // this.resetForm();
           this.isEdit = true;
           this.toastr.success(
             '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
@@ -227,8 +196,6 @@ export class LocationManagerComponent implements OnInit {
 
     this.companyService.createCompany(this.companyForm, this.UploadFile).subscribe(
       (res: any) => {
-        // this.userId = res as string;
-        // this.resetForm();
         this.toastr.success(
           '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
           "",
@@ -305,6 +272,10 @@ export class LocationManagerComponent implements OnInit {
     }
   }
 
+  onClearPhoto() {
+    this.UploadFiles = new Array();
+  }
+
   uploadPhoto(file: FileList) {
     this.UploadFile = file.item(0);
     const reader = new FileReader();
@@ -312,10 +283,6 @@ export class LocationManagerComponent implements OnInit {
       this.imageUrl = event.target.result;
     };
     reader.readAsDataURL(this.UploadFile);
-  }
-
-  onClearPhoto() {
-    this.UploadFiles = new Array();
   }
 
   openModal(content) {

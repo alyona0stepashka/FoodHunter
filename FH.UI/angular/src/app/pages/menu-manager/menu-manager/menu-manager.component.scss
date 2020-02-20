@@ -4,3 +4,16 @@
 .mat-ink-bar {
   background-color: #f08a64 !important !important;
 }
+
+.toggle.ios,
+.toggle-on.ios,
+.toggle-off.ios {
+  border-radius: 20px;
+}
+.toggle.ios .toggle-handle {
+  border-radius: 20px;
+}
+
+textarea {
+  resize: both;
+}

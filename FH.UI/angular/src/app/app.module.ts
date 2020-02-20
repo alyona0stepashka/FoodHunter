@@ -19,6 +19,8 @@ import { GalleryModule } from '@ngx-gallery/core';
 import { LightboxModule } from 'ngx-lightbox';
 
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 
@@ -30,20 +32,18 @@ import { AboutUsComponent } from './pages/about-us/about-us.component/../about-u
 import { ContactUsComponent } from './pages/contact-us/contact-us.component/../contact-us/contact-us.component';
 import { DashboardUserComponent } from './pages/dashboard-user/dashboard-user/dashboard-user.component';
 import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-manager/dashboard-manager.component';
-import { ForbiddenComponent } from './pages/forbidden/forbidden/forbidden.component';
+import { ForbiddenComponent } from './pages/forbidden/403/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
-import { OopsComponent } from './pages/oops/oops.component';
+import { OopsComponent } from './pages/500/oops.component';
 import { LocationPageComponent } from './pages/location-page/location-page/location-page.component';
 import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { NotFoundComponent } from './pages/404/not-found/not-found.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 
 @NgModule({
-  // exports: [
-  //   MatTabsModule
-  // ],
   declarations: [
     AppComponent,
     LayoutComponent,
@@ -56,13 +56,15 @@ import { BrowserModule } from '@angular/platform-browser';
     ForbiddenComponent,
     LocationManagerComponent,
     OopsComponent,
+    NotFoundComponent,
     LocationPageComponent,
     MenuManagerComponent
     //AdminLayoutComponent
   ],
   imports: [
-    BrowserModule,
     MatTabsModule,
+    MatSlideToggleModule,
+    BrowserModule,
     GalleryModule,
     NgxDropzoneModule,
     LightboxModule,

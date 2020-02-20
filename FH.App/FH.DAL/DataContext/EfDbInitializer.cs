@@ -114,9 +114,9 @@ namespace FH.DAL.DataContext
             {
                 var list = new List<Icon>()
                 {
-                    new Icon() {Value="fas fa-star", Description = "Main menu"},
-                    new Icon() {Value="fas fa-baby-carriage", Description = "Child menu"},
-                    new Icon() {Value="fab fa-stripe-s", Description = "Special menu"},
+                    new Icon() {Value="fas fa-star", Description = "Main"},
+                    new Icon() {Value="fas fa-baby-carriage", Description = "For child"},
+                    new Icon() {Value="fab fa-stripe-s", Description = "Special"},
                     new Icon() {Value="fas fa-wine-bottle", Description = "Contains alcohol"},
                     new Icon() {Value="fas fa-leaf", Description = "Vegan"}, 
                     new Icon() {Value="fas fa-pepper-hot", Description = "Spicy"} 
