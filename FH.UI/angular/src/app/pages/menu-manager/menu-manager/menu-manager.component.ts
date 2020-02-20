@@ -62,6 +62,14 @@ export class MenuManagerComponent implements OnInit {
 
   async ngOnInit() {
     await this.activateRoute.params.subscribe(params => this.welcomeLocationId = params.id);
+
+    this.isLogin = (localStorage.getItem('token') != null);
+    this.locationId = localStorage.getItem("MyLocationId");
+    this.isLocationExist = (this.locationId != null && this.locationId != '0');
+    this.isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
+    this.isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
+    this.isEdit = (this.isLocationExist && this.isManager && !this.isCurrentUser);
+
     if (this.welcomeLocationId == '0') {
       this.welcomeLocationId = this.locationId;
       this.isEdit = true;
