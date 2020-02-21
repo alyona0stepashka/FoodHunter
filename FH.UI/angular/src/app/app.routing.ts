@@ -12,7 +12,7 @@ import { LocationManagerComponent } from './pages/location-manager/location-mana
 import { OopsComponent } from './pages/500/oops.component';
 // import { OopsComponent } from './pages/500/oops.component';
 import { LocationPageComponent } from './pages/location-page/location-page/location-page.component';
-import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
+import { MenuManagerComponent } from './pages/menu-manager/menu-manager-old/menu-manager.component';
 
 export const AppRoutes: Routes = [
   //   {

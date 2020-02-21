@@ -36,7 +36,7 @@ import { ForbiddenComponent } from './pages/forbidden/403/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
 import { OopsComponent } from './pages/500/oops.component';
 import { LocationPageComponent } from './pages/location-page/location-page/location-page.component';
-import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
+import { MenuManagerComponent } from './pages/menu-manager/menu-manager-old/menu-manager.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NotFoundComponent } from './pages/404/not-found/not-found.component';
 
