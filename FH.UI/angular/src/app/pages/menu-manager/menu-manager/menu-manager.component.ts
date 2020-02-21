@@ -32,6 +32,7 @@ export class MenuManagerComponent implements OnInit {
   menuForm: FormGroup;
   menuItemForm: FormGroup;
   submittedMenu = false;
+  submittedEditMenu = false;
   submittedMenuItem = false;
   //firat tab form
 
@@ -53,8 +54,12 @@ export class MenuManagerComponent implements OnInit {
   icons = new Array();
   //server lists
 
+  //crud menu
+  editMenu: any;
+  //crud menu
+
   //work with images
-  // Todo 21.02.2020 need to reset image after submit
+  // TODO 21.02.2020 need to reset image after submit
   UploadFile: File = null;
   imageUrl = './assets/img/upload-photo.jpg';
   serverUrl = environment.serverURL;
@@ -135,7 +140,7 @@ export class MenuManagerComponent implements OnInit {
     if (this.menuForm.invalid) {
       return null;
     }
-    this.menuService.createMenu(this.menuForm, this.welcomeLocationId).subscribe(
+    this.menuService.createMenu(this.menuForm, this.locationId).subscribe(
       (res: any) => {
         this.toastr.success(
           '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
@@ -184,13 +189,31 @@ export class MenuManagerComponent implements OnInit {
     );
   }
 
-  uploadPhoto(file: FileList) {
-    this.UploadFile = file.item(0);
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-      this.imageUrl = event.target.result;
-    };
-    reader.readAsDataURL(this.UploadFile);
+  onSubmitEditMenu() {
+    this.submittedEditMenu = true;
+    if (this.menuForm.invalid) {
+      return null;
+    }
+    this.menuService.updateMenu(this.menuForm, this.locationId).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationMenu();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
   }
 
   deleteMenu(id) {
@@ -218,13 +241,25 @@ export class MenuManagerComponent implements OnInit {
   setCurrentMenuId(id) {
     this.currentMenuId = id;
     console.log(id);
+  }
 
+  uploadPhoto(file: FileList) {
+    this.UploadFile = file.item(0);
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.imageUrl = event.target.result;
+    };
+    reader.readAsDataURL(this.UploadFile);
   }
 
   openModal(content, goal?: string, id?: any) {
     if (goal == "newMenuItem") {
       this.menuItemForm.patchValue({ MenuId: id });
       this.IsActive = true;
+    }
+    if (goal == "editMenu") {
+      this.editMenu = this.menus.find(m => m.Id == id);
+      this.menuForm.patchValue({ Id: id, Title: this.editMenu.Title, Info: this.editMenu.Info, IconId: this.editMenu.Icon.Id });
     }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

@@ -167,7 +167,7 @@
     </div>
 </div>
 
-<app-not-found *ngIf="isNotFound"></app-not-found>
+
 
 <ng-template #newMenuItem let-modal>
     <div class="modal-header">
@@ -268,7 +268,71 @@
     </div>
     <div class="modal-footer">
         <div class="form-group">
-            <button type="submit" (click)="onSubmitMenuItem()" class="btn btn-primary">Save Changes</button>
+            <button type="submit" (click)="onSubmitMenuItem()" class="btn btn-primary">Save New Item</button>
         </div>
+    </div>
+</ng-template>
+<!--/////////////////////////////  -->
+<ng-template #editMenu let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your menu info</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="menuForm" (ngSubmit)="onSubmitEditMenu()">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <label>Menu Name</label>
+                        <input Title="Title" type="text" formControlName="Title" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.Title.errors }" placeholder="Title" />
+                        <div *ngIf="submitted && f.Title.errors" class="invalid-feedback">
+                            <div *ngIf="f.Title.errors.required">Title is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Remark</label>
+                        <select formControlName="IconId" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.IconId.errors }" placeholder="Remark">
+                            <option value="" selected disabled hidden>Choose a remark...</option>
+                            <option *ngFor="let icon of icons" value="{{icon.Id}}">
+
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <i class="{{icon.Value}}"></i>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{icon.Description}}
+                                    </div>
+                                </div>
+                        </select>
+                        <div *ngIf="submitted && f.IconId.errors" class="invalid-feedback">
+                            <div *ngIf="f.IconId.errors.required">Remark is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea Title="Describe Info" type="text" formControlName="Info" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.Info.errors }"
+                            placeholder="Any info about your company..."></textarea>
+                        <div *ngIf="submitted && f.Info.errors" class="invalid-feedback">
+                            <div *ngIf="f.Info.errors.required">Info is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" (click)="onSubmitEditMenu()" class="btn btn-primary">Save
+                            changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </ng-template>
