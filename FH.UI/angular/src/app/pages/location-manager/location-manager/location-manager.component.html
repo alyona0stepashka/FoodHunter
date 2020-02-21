@@ -28,8 +28,8 @@
                 style="margin-top: 1rem;">
                 <button (click)="onDeletePhoto(photo.Id)" style="position: absolute;"><i
                         class="fas fa-times"></i></button>
-                <img style="max-height: 8rem; width: auto;" (click)="open(i)" src="{{serverUrl}}{{photo.Value}}" />
-                <!-- <img style="max-height: 8rem; width: auto;" src="{{serverUrl}}{{photo.Value}}" [attr.lightbox]="i" /> -->
+                <img style="max-height: 4rem; width: auto; cursor: pointer;" (click)="open(i)"
+                    src="{{serverUrl}}{{photo.Value}}" />
             </div>
         </div>
     </div>

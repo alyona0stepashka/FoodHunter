@@ -136,6 +136,14 @@ export class MenuManagerComponent implements OnInit {
     this.loadLocationMenu();
   }
 
+  open(index: number): void {
+    this.lbLightbox.open(this.lbAlbum, index);
+  }
+
+  close(): void {
+    this.lbLightbox.close();
+  }
+
   toggleIsActive() {
     this.IsChecked = !this.IsChecked;
     //this.IsActive = !this.IsActive;
@@ -147,9 +155,9 @@ export class MenuManagerComponent implements OnInit {
       res => {
         this.menus = res as [];
         this.isNotFound = (this.menus.length == 0 && !this.isEdit);
+        let index = 0;
         this.menus.forEach(menu => {
           if (menu != null && menu.MenuItems != null) {
-            let index = 0;
             menu.MenuItems.forEach(item => {
               this.openMenuItem = item;
               item.Photo.Number = index;
