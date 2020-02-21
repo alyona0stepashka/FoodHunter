@@ -86,6 +86,22 @@
                         <h5 class="card-title" style="font-size: 1.3em;">{{menu.Info}}</h5>
                     </div>
                     <div class="card-body">
+                        <div *ngIf="isEdit" class="row">
+                            <div class="col-md-12">
+                                <label class="card-title" style="font-size: 1.3em;">Menu actions:&nbsp;</label>
+                                <button title="Add new menu item" class="btn" style="padding: inherit;"
+                                    (click)="openModal(newMenuItem, 'newMenuItem', menu.Id)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button title="Edit menu" class="btn" style="padding: inherit;"
+                                    (click)="openModal(editMenu, 'editMenu', menu.Id)">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button title="Delete menu" class="btn" style="padding: inherit;"
+                                    (click)="deleteMenu(menu.Id)">
+                                    <i class="far fa-trash-alt"></i>
+                                </button></div>
+                        </div><br>
                         <table class="table table-striped">
                             <tbody>
                                 <ng-container *ngFor="let item of menu.MenuItems">
