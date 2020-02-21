@@ -5,6 +5,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'environments/environment';
 import { ActivatedRoute } from '@angular/router';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-menu-manager',
@@ -18,16 +19,20 @@ export class MenuManagerComponent implements OnInit {
     private staticService: StaticService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
-    private activateRoute: ActivatedRoute) { }
+    private activateRoute: ActivatedRoute,
+    private modalService: NgbModal) { }
 
   //logic vars
   currentMenuId: number;
-  serverUrl = environment.serverURL;
+  closeResult: string;
+  IsActive = true;
   //logic vars
 
   //firat tab form
   menuForm: FormGroup;
+  menuItemForm: FormGroup;
   submittedMenu = false;
+  submittedMenuItem = false;
   //firat tab form
 
   //my locationId & locationId from url
@@ -37,16 +42,23 @@ export class MenuManagerComponent implements OnInit {
   //myLocationId & locationId from url
 
   //bool vars for role access
-  public isLogin = (localStorage.getItem('token') != null);
-  public isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
-  public isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
-  public isEdit = (this.isLocationExist && this.isManager && !this.isCurrentUser);
+  isLogin = (localStorage.getItem('token') != null);
+  isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
+  isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
+  isEdit = (this.isLocationExist && this.isManager && !this.isCurrentUser);
   //bool vars for role access
 
   //server lists
-  public menus = new Array();
-  public icons = new Array();
+  menus = new Array();
+  icons = new Array();
   //server lists
+
+  //work with images
+  // Todo 21.02.2020 need to reset image after submit
+  UploadFile: File = null;
+  imageUrl = './assets/img/upload-photo.jpg';
+  serverUrl = environment.serverURL;
+  //work with images
 
   async ngOnInit() {
     await this.activateRoute.params.subscribe(params => this.welcomeLocationId = params.id);
@@ -74,7 +86,23 @@ export class MenuManagerComponent implements OnInit {
       Info: ['', [Validators.required]],
       IconId: ['', [Validators.required]]
     });
+    this.menuItemForm = this.formBuilder.group({
+      Id: [''],
+      Title: ['', [Validators.required]],
+      Info: ['', [Validators.required]],
+      Price: ['', [Validators.required]],
+      PriceWithSales: [''],
+      IsActive: [this.IsActive, [Validators.required]],
+      MenuId: ['', [Validators.required]],
+      Note: ['', [Validators.required]],
+      Photo: ['', [Validators.required]]
+    });
     this.loadLocationMenu();
+  }
+
+  toggleIsActive() {
+    this.IsActive = !this.IsActive;
+    this.menuItemForm.patchValue({ IsActive: this.IsActive });
   }
 
   loadLocationMenu() {
@@ -100,6 +128,8 @@ export class MenuManagerComponent implements OnInit {
 
   get f() { return this.menuForm.controls; }
 
+  get f2() { return this.menuItemForm.controls; }
+
   onSubmitMenu() {
     this.submittedMenu = true;
     if (this.menuForm.invalid) {
@@ -124,6 +154,43 @@ export class MenuManagerComponent implements OnInit {
         this.toastr.error(err.error, 'Error');
       }
     );
+  }
+
+  onSubmitMenuItem() {
+    this.submittedMenuItem = true;
+    if (this.menuItemForm.invalid) {
+      return null;
+    }
+    this.menuService.createMenuItem(this.menuItemForm, this.UploadFile).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationMenu();
+        this.modalService.dismissAll();
+        this.menuItemForm.reset();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
+  uploadPhoto(file: FileList) {
+    this.UploadFile = file.item(0);
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.imageUrl = event.target.result;
+    };
+    reader.readAsDataURL(this.UploadFile);
   }
 
   deleteMenu(id) {
@@ -152,6 +219,28 @@ export class MenuManagerComponent implements OnInit {
     this.currentMenuId = id;
     console.log(id);
 
+  }
+
+  openModal(content, goal?: string, id?: any) {
+    if (goal == "newMenuItem") {
+      this.menuItemForm.patchValue({ MenuId: id });
+      this.IsActive = true;
+    }
+    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
 }
