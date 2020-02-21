@@ -43,13 +43,13 @@ export class SidebarComponent implements OnInit {
 
     constructor(private router: Router) { }
 
-    public isLogin = (localStorage.getItem('token') != null);
-    public isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
-    public isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
-    public fullName = localStorage.getItem('FullName');
-    public icon = environment.serverURL + localStorage.getItem('Icon');
-    public menuItems: any[];
-    public currentRole = 'Manager';
+    isLogin = (localStorage.getItem('token') != null);
+    isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
+    isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
+    fullName = localStorage.getItem('FullName');
+    icon = environment.serverURL + localStorage.getItem('Icon');
+    menuItems: any[];
+    currentRole = 'Manager';
 
     public userItems: RouteInfo[] = [
         {

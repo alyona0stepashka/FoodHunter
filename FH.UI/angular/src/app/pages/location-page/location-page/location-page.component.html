@@ -2,12 +2,46 @@
     <div class="card card-user" [ngStyle]="{'background-image':'url('+topPhoto+')'}"
         style="transform: translate3d(0px, 0px, 0px); background-size: cover;">
         <div class="card-body" style="background-color: #ffffff; margin-top: 11rem;">
-            <div class="col-md-12">
+            <div class="col-md-12" style="padding-left: 0; padding-right: 0;">
                 <div class="col-md-12" style="text-align: center; margin-top: -4rem;">
                     <img src="{{companyPhoto}}"
                         style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;" />
                 </div>
-
+                <div class="col-md-12" style="padding-left: 0; padding-right: 0;">
+                    <mat-tab-group style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+                        <!-- ------------------------------------------>
+                        <mat-tab>
+                            <ng-template mat-tab-label><span
+                                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">Info</span>
+                            </ng-template>
+                            <div class="row">
+                                <!-- <div class="col-md-12">
+                                    <a *ngIf="locationInfo.Facebook!=null" href="{{locationInfo.Facebook}}"
+                                        class="btn"><i class="fab fa-facebook-square"></i></a>
+                                    <a *ngIf="locationInfo.Vk!=null" href="{{locationInfo.Vk}}" class="btn"><i
+                                            class="fab fa-vk"></i></a>
+                                    <a *ngIf="locationInfo.Instagram!=null" href="{{locationInfo.Instagram}}"
+                                        class="btn"><i class="fab fa-instagram"></i></a>
+                                    <a *ngIf="locationInfo.Site!=null" href="https://{{locationInfo.Site}}"
+                                        class="btn"><i class="fas fa-globe-americas"></i></a>
+                                </div> -->
+                            </div>
+                        </mat-tab>
+                        <!-- ------------------------------------------>
+                        <mat-tab>
+                            <ng-template mat-tab-label><span
+                                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">Menus</span>
+                            </ng-template>
+                            <app-menu-manager style="background-color: aquamarine;"></app-menu-manager>
+                        </mat-tab>
+                        <!-- ------------------------------------------>
+                        <mat-tab>
+                            <ng-template mat-tab-label><span
+                                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">Feedbacks</span>
+                            </ng-template>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
             </div>
         </div>
     </div>

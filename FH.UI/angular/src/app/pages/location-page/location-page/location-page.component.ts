@@ -36,9 +36,6 @@ export class LocationPageComponent implements OnInit {
     this.locationService.getLocation(this.locationId).subscribe(
       res => {
         this.locationInfo = res;
-        // if (this.locationInfo.PhotoAlbum != null && this.locationInfo.PhotoAlbum.lenght > 0) {
-        //   this.topPhoto = environment.serverURL + this.locationInfo.PhotoAlbum[0];
-        // }
         this.companyPhoto = this.serverUrl + this.locationInfo.CompanyPhoto;
       },
       err => {
