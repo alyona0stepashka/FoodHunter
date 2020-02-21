@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from 'environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
   selector: 'app-menu-manager',
@@ -20,12 +21,15 @@ export class MenuManagerComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private activateRoute: ActivatedRoute,
+    private lbLightbox: Lightbox,
     private modalService: NgbModal) { }
 
   //logic vars
   currentMenuId: number;
   closeResult: string;
   IsActive = true;
+  isNotFound = false;
+  IsChecked = true;
   //logic vars
 
   //firat tab form
@@ -89,6 +93,7 @@ export class MenuManagerComponent implements OnInit {
   UploadFile: File = null;
   imageUrl = './assets/img/upload-photo.jpg';
   serverUrl = environment.serverURL;
+  private lbAlbum: any[] = new Array();
   //work with images
 
   async ngOnInit() {
@@ -123,7 +128,7 @@ export class MenuManagerComponent implements OnInit {
       Info: ['', [Validators.required]],
       Price: ['', [Validators.required]],
       PriceWithSales: [''],
-      IsActive: [this.IsActive, [Validators.required]],
+      IsActive: [this.IsChecked, [Validators.required]],
       MenuId: ['', [Validators.required]],
       Note: ['', [Validators.required]],
       Photo: [''/*, [Validators.required]*/]
@@ -132,14 +137,27 @@ export class MenuManagerComponent implements OnInit {
   }
 
   toggleIsActive() {
-    this.IsActive = !this.IsActive;
-    this.menuItemForm.patchValue({ IsActive: this.IsActive });
+    this.IsChecked = !this.IsChecked;
+    //this.IsActive = !this.IsActive;
+    //this.menuItemForm.patchValue({ IsActive: this.IsActive });
   }
 
   loadLocationMenu() {
     this.menuService.getLocationMenus(this.welcomeLocationId).subscribe(
       res => {
         this.menus = res as [];
+        this.isNotFound = (this.menus.length == 0 && !this.isEdit);
+        this.menus.forEach(menu => {
+          if (menu != null && menu.MenuItems != null) {
+            let index = 0;
+            menu.MenuItems.forEach(item => {
+              this.openMenuItem = item;
+              item.Photo.Number = index;
+              index++;
+              this.lbAlbum.push({ src: environment.serverURL + item.Photo.Value, caption: item.Title });
+            })
+          }
+        });
         this.staticService.getIcons().subscribe(
           res => {
             this.icons = res as [];
@@ -151,6 +169,7 @@ export class MenuManagerComponent implements OnInit {
         );
       },
       err => {
+        this.isNotFound = true;
         console.log(err);
         this.toastr.error(err.error, 'Error');
       }
@@ -188,6 +207,7 @@ export class MenuManagerComponent implements OnInit {
   }
 
   onSubmitMenuItem() {
+    this.menuItemForm.patchValue({ IsActive: this.IsChecked });
     this.submittedMenuItem = true;
     if (this.menuItemForm.invalid) {
       return null;
@@ -266,6 +286,7 @@ export class MenuManagerComponent implements OnInit {
 
   onSubmitEditMenuItem() {
     this.submittedEditMenu = true;
+    this.menuItemForm.patchValue({ IsActive: this.IsChecked });
     if (this.menuItemForm.invalid) {
       return null;
     }
@@ -330,8 +351,9 @@ export class MenuManagerComponent implements OnInit {
 
   openModal(content, goal?: string, id?: any) {
     if (goal == "newMenuItem") {
-      this.menuItemForm.patchValue({ MenuId: id });
+      this.menuItemForm.patchValue({ MenuId: id, IsActive: true });
       this.IsActive = true;
+      this.IsChecked = true;
     }
     if (goal == "editMenu") {
       this.editMenu = this.menus.find(m => m.Id == id);
@@ -345,6 +367,7 @@ export class MenuManagerComponent implements OnInit {
           ...editMenuItem,
           Photo: null
         });
+      this.IsChecked = editMenuItem.IsActive;
       this.editItemPhotoPath = environment.serverURL + editMenuItem.Photo.Value;
     }
     if (goal == "openMenuItem") {
