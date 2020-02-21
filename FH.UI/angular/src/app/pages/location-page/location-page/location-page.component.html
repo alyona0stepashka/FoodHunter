@@ -1,96 +1,14 @@
 <div class="col-md-12">
-    <div class="card card-user">
-        <img *ngIf="location.TopPhoto==''" class="card-img-top" src="{{imageTopUrl}}" alt="Card image cap">
-        <img *ngIf="location.TopPhoto!=''" class="card-img-top" src="{{serverUrl}}{{location.TopPhoto}}"
-            alt="Card image cap">
-        <div class="card-body">
-            <!-- <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="form-group">
-                            <label>Company</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
-                                (click)="open(newCompany)" title="Register your company if it is not yet">+ new</a>
-                            <select formControlName="CompanyId" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.CompanyId.errors }" placeholder="Company">
-                                <option value="" selected disabled hidden>Choose your company...</option>
-                                <option *ngFor="let company of companies" value="{{company.Id}}">
+    <div class="card card-user" [ngStyle]="{'background-image':'url('+topPhoto+')'}"
+        style="transform: translate3d(0px, 0px, 0px); background-size: cover;">
+        <div class="card-body" style="background-color: #ffffff; margin-top: 11rem;">
+            <div class="col-md-12">
+                <div class="col-md-12" style="text-align: center; margin-top: -4rem;">
+                    <img src="{{companyPhoto}}"
+                        style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;" />
+                </div>
 
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <img src="{{serverUrl}}{{company.LogoPath}}">
-                                        </div>
-                                        <div class="col-md-9">
-                                            {{company.Name}}
-                                        </div>
-                                    </div>
-                            </select>
-                            <div *ngIf="submitted && f.CompanyId.errors" class="invalid-feedback">
-                                <div *ngIf="f.CompanyId.errors.required">Company is required</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label>Your coordinates (Lon/Lat)</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
-                                (click)="open(findCoordinates)">&oplus;
-                                find now</a>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input Title="Longitude" type="text" formControlName="Longitude"
-                                            class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.Longitude.errors }"
-                                            placeholder="Longitude" />
-                                        <div *ngIf="submitted && f.Longitude.errors" class="invalid-feedback">
-                                            <div *ngIf="f.Longitude.errors.required">Longitude is required
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input Title="Latitude" type="text" formControlName="Latitude"
-                                            class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.Latitude.errors }"
-                                            placeholder="Latitude" />
-                                        <div *ngIf="submitted && f.Latitude.errors" class="invalid-feedback">
-                                            <div *ngIf="f.Latitude.errors.required">Latitude is required
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Location Name</label>
-                            <input Title="Name" type="text" formControlName="Name" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.Name.errors }" placeholder="Name" />
-                            <div *ngIf="submitted && f.Name.errors" class="invalid-feedback">
-                                <div *ngIf="f.Name.errors.required">Name is required</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Address</label>
-                            <input Title="Address" type="text" formControlName="Address" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.Address.errors }" placeholder="Address" />
-                            <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
-                                <div *ngIf="f.Address.errors.required">Address is required</div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Register Location</button>
-                        </div>
-                    </div>
-                </div>
-            </form> -->
+            </div>
         </div>
     </div>
 </div>

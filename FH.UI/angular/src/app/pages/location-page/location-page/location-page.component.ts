@@ -17,21 +17,29 @@ export class LocationPageComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private router: Router) { }
 
-  locationId;
-  myLocationId = localStorage.getItem('MyLocationId');
-  public isEdit;
-  public location: any;
+  //logic vars
+  serverUrl = environment.serverURL;
+  //logic vars
 
-  UploadFile: File = null;
-  imageTopUrl = './assets/img/upload-photo.jpg';
-  public serverUrl = environment.serverURL;
+  //location tab
+  locationId;
+  locationInfo;
+  //location tab
+
+  //photos tab
+  companyPhoto = '';
+  topPhoto = './assets/img/header.jpg';
+  //photos tab
 
   async ngOnInit() {
     await this.activateRoute.params.subscribe(params => this.locationId = params.id);
-    this.isEdit = (this.locationId == this.myLocationId);
     this.locationService.getLocation(this.locationId).subscribe(
       res => {
-        this.location = res;
+        this.locationInfo = res;
+        // if (this.locationInfo.PhotoAlbum != null && this.locationInfo.PhotoAlbum.lenght > 0) {
+        //   this.topPhoto = environment.serverURL + this.locationInfo.PhotoAlbum[0];
+        // }
+        this.companyPhoto = this.serverUrl + this.locationInfo.CompanyPhoto;
       },
       err => {
         console.log(err);
@@ -39,14 +47,4 @@ export class LocationPageComponent implements OnInit {
       }
     );
   }
-
-  // uploadTopPhoto(file: FileList) {
-  //   this.UploadFile = file.item(0);
-  //   const reader = new FileReader();
-  //   reader.onload = (event: any) => {
-  //     this.imageTopUrl = event.target.result;
-  //   };
-  //   reader.readAsDataURL(this.UploadFile);
-  // }
-
 }
