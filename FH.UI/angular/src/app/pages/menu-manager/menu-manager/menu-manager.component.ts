@@ -238,6 +238,29 @@ export class MenuManagerComponent implements OnInit {
     );
   }
 
+  deleteMenuItem(id) {
+    this.menuService.deleteMenuItem(id).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationMenu();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
   setCurrentMenuId(id) {
     this.currentMenuId = id;
     console.log(id);

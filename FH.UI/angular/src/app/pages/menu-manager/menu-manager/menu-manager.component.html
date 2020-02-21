@@ -71,7 +71,7 @@
                 </div>
             </div>
         </mat-tab>
-
+        <!-- ////////////////////////////////// -->
         <mat-tab *ngFor="let menu of menus">
             <ng-template mat-tab-label>
                 <i class="{{menu.Icon.Value}}" (click)="setCurrentMenuId(menu.Id)">
@@ -147,6 +147,17 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        <td width="2%">
+                                            <div class="item text-center col-md-12" style="padding: 0;">
+                                                <ul style="list-style:none; padding:0; margin:0;">
+                                                    <li>
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Delete" (click)="deleteMenuItem(item.Id)"><i
+                                                                class="fas fa-ban"></i></button></li>
+                                                </ul>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </ng-container>
                             </tbody>
@@ -157,7 +168,7 @@
         </mat-tab>
 
     </mat-tab-group>
-
+    <!-- ///////////////////////////// -->
 
     <div *ngIf="!isLocationExist && isEdit" class="col-md-12">
         <div class="card-header">
@@ -167,7 +178,7 @@
     </div>
 </div>
 
-
+<!-- //////////////////////////////////// -->
 
 <ng-template #newMenuItem let-modal>
     <div class="modal-header">
