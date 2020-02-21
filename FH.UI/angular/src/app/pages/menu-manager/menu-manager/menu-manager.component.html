@@ -104,61 +104,79 @@
                         </div><br>
                         <table class="table table-striped">
                             <tbody>
-                                <tr *ngFor="let item of menu.MenuItems">
-                                    <td width="10%">
-                                        <div class="row">
-                                            <div class="item text-center col-md-12">
-                                                <img style="max-height: 8rem; width: auto;" (click)="open(i)"
-                                                    src="{{serverUrl}}{{item.Photo.Value}}" />
+                                <ng-container *ngFor="let item of menu.MenuItems">
+                                    <tr *ngIf="item.IsActive || isEdit">
+                                        <td width="10%">
+                                            <div class="row">
+                                                <div class="item text-center col-md-12">
+                                                    <img style="max-height: 8rem; width: auto;"
+                                                        (click)="open(item.Photo.Number)"
+                                                        src="{{serverUrl}}{{item.Photo.Value}}" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="item text-center col-md-12" style="margin-top: 1rem;"
-                                                title="{{item.Rate}}">
-                                                <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true"></ngb-rating>
+                                            <div class="row">
+                                                <div class="item text-center col-md-12" style="margin-top: 1rem;"
+                                                    title="{{item.Rate}}">
+                                                    <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true">
+                                                    </ngb-rating>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td width="88%">
-                                        <div class="row">
-                                            <div class="item text-center col-md-12">
-                                                <span style="white-space: normal;">{{item.Title}}</span>
+                                        </td>
+                                        <td width="88%">
+                                            <div class="row">
+                                                <div class="item text-center col-md-12">
+                                                    <span *ngIf="!item.IsActive" style="white-space: normal;"><i
+                                                            title="Ttem is not visible to the clients"
+                                                            class="fas fa-eye-slash"></i>&nbsp;{{item.Title}}</span>
+                                                    <span *ngIf="item.IsActive"
+                                                        style="white-space: normal;">{{item.Title}}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div *ngIf="item.PriceWithSales==null" class="item text-center col-md-12">
-                                                <span style="font-size: large;">{{item.Price}} BYN</span>
+                                            <div class="row">
+                                                <div *ngIf="item.PriceWithSales==null"
+                                                    class="item text-center col-md-12">
+                                                    <span style="font-size: large;">{{item.Price}} BYN</span>
+                                                </div>
+                                                <div *ngIf="item.PriceWithSales!=null"
+                                                    class="item text-center col-md-12">
+                                                    <span style="font-size: large;">{{item.PriceWithSales}}
+                                                        BYN</span>&nbsp;
+                                                    <span
+                                                        style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}
+                                                        BYN</span>
+                                                </div>
                                             </div>
-                                            <div *ngIf="item.PriceWithSales!=null" class="item text-center col-md-12">
-                                                <span style="font-size: large;">{{item.PriceWithSales}} BYN</span>&nbsp;
-                                                <span
-                                                    style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}
-                                                    BYN</span>
+                                        </td>
+                                        <td width="2%">
+                                            <div class="item text-center col-md-12" style="padding: 0;">
+                                                <ul style="list-style:none; padding:0; margin:0;">
+                                                    <li>
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Show details"
+                                                            (click)="openModal(openMenuItem, 'openMenuItem', item.Id)"><i
+                                                                class="fas fa-info-circle"></i></button>
+                                                    </li>
+                                                    <li>
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Edit"><i class="fas fa-pen"
+                                                                (click)="openModal(editMenuItem, 'editMenuItem', item.Id)"></i></button>
+                                                    </li>
+                                                    <li>
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Delete" (click)="deleteMenuItem(item.Id)"><i
+                                                                class="fas fa-ban"></i></button></li>
+                                                </ul>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td width="2%">
-                                        <div class="item text-center col-md-12" style="padding: 0;">
-                                            <button type="submit" class="btn "
-                                                style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                title="Show details"
-                                                (click)="openModal(openMenuItem, 'openMenuItem', item.Id)"><i
-                                                    class="fas fa-info-circle"></i></button>
-                                        </div>
-                                        <div *ngIf="isEdit" class="item text-center col-md-12" style="padding: 0;">
-                                            <button type="submit" class="btn "
-                                                style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                title="Edit"><i class="fas fa-pen"
-                                                    (click)="openModal(editMenuItem, 'editMenuItem', item.Id)"></i></button>
-                                        </div>
-                                        <div *ngIf="isEdit" class="item text-center col-md-12" style="padding: 0;">
-                                            <button type="submit" class="btn "
-                                                style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                title="Delete" (click)="deleteMenuItem(item.Id)"><i
-                                                    class="fas fa-ban"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            <!-- <div *ngIf="isEdit" class="item text-center col-md-12" style="padding: 0;">
+                                            </div>
+                                            <div *ngIf="isEdit" class="item text-center col-md-12" style="padding: 0;">
+                                            </div> -->
+                                        </td>
+                                    </tr>
+                                </ng-container>
                             </tbody>
                         </table>
                     </div>
@@ -177,7 +195,7 @@
     </div>
 
 
-    <ng-template *ngIf="isEdit" #editMenuItem let-modal>
+    <ng-template #editMenuItem let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Edit your menu item info</h4>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -192,7 +210,7 @@
                             <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;"
                                 #Image accept="image/*" (change)="uploadPhoto($event.target.files)"
                                 class="form-control btn btn-primary" placeholder="Photo">
-                            <img [src]="editItemPhotoPath" class="avatar" (click)="open(i)"
+                            <img [src]="editItemPhotoPath" class="avatar"
                                 style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
                             <div *ngIf="submittedMenuItem && f2.Photo.errors" class="invalid-feedback">
                                 <div *ngIf="f2.Photo.errors.required">Menu item photo is required</div>
@@ -213,26 +231,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-3">
-                            <div class="form-group">
-                                <label><i class="far fa-bookmark"></i>&nbsp;Remark</label>
-                                <select formControlName="IconId" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submittedMenuItem && f2.IconId.errors }"
-                                    placeholder="Remark">
-                                    <option value="" selected disabled hidden>Choose a remark...</option>
-                                    <option *ngFor="let icon of icons" value="{{icon.Id}}">
-
-                                        <div class="row">
-                                            <div class="col-md-1">
-                                                <i class="{{icon.Value}}"></i>
-                                            </div>
-                                            <div class="col-md-10">
-                                                {{icon.Description}}
-                                            </div>
-                                        </div>
-                                </select>
-                            </div>
-                        </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -301,7 +299,7 @@
         </div>
     </ng-template>
 
-    <ng-template *ngIf="isEdit" #newMenuItem let-modal>
+    <ng-template #newMenuItem let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Create new menu item</h4>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -316,7 +314,7 @@
                             <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;"
                                 #Image accept="image/*" (change)="uploadPhoto($event.target.files)"
                                 class="form-control btn btn-primary" placeholder="Photo">
-                            <img [src]="imageUrl" class="avatar" (click)="open(i)"
+                            <img [src]="imageUrl" class="avatar"
                                 style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
                             <div *ngIf="submittedMenuItem && f2.Photo.errors" class="invalid-feedback">
                                 <div *ngIf="f2.Photo.errors.required">Menu item photo is required</div>
@@ -324,9 +322,9 @@
 
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-10">
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label><i class="fas fa-flag"></i>&nbsp;Title</label>
                                     <input Title="Title" type="text" formControlName="Title" class="form-control"
@@ -337,26 +335,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-3">
-                            <div class="form-group">
-                                <label><i class="far fa-bookmark"></i>&nbsp;Remark</label>
-                                <select formControlName="IconId" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submittedMenuItem && f2.IconId.errors }"
-                                    placeholder="Remark">
-                                    <option value="" selected disabled hidden>Choose a remark...</option>
-                                    <option *ngFor="let icon of icons" value="{{icon.Id}}">
-
-                                        <div class="row">
-                                            <div class="col-md-1">
-                                                <i class="{{icon.Value}}"></i>
-                                            </div>
-                                            <div class="col-md-10">
-                                                {{icon.Description}}
-                                            </div>
-                                        </div>
-                                </select>
-                            </div>
-                        </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -426,7 +404,7 @@
     </ng-template>
 
 
-    <ng-template *ngIf="isEdit" #editMenu let-modal>
+    <ng-template #editMenu let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your menu info</h4>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -502,9 +480,44 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="item text-center col-md-12">
-                    <img style="max-height: 8rem; width: auto;" (click)="open(i)"
-                        src="{{serverUrl}}{{openMenuItem.Photo.Value}}" />
+                <div class="item text-center col-md-4">
+                    <img style="max-height: 22rem; width: auto;" (click)="open(openMenuItem.Photo.Number)"
+                        src="{{openItemPhotoPath}}" />
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>{{openMenuItem.Title}}</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Price:&nbsp;&nbsp;</label>
+                            <span *ngIf="openMenuItem.PriceWithSales==null"
+                                style="font-size: large;">{{openMenuItem.Price}}
+                                BYN</span>
+                            <span *ngIf="openMenuItem.PriceWithSales!=null"
+                                style="font-size: large;">{{openMenuItem.PriceWithSales}}
+                                BYN</span>&nbsp;
+                            <span *ngIf="openMenuItem.PriceWithSales!=null"
+                                style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}
+                                BYN</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Price:&nbsp;&nbsp;</label>
+                            <span *ngIf="openMenuItem.PriceWithSales==null"
+                                style="font-size: large;">{{openMenuItem.Price}}
+                                BYN</span>
+                            <span *ngIf="openMenuItem.PriceWithSales!=null"
+                                style="font-size: large;">{{openMenuItem.PriceWithSales}}
+                                BYN</span>&nbsp;
+                            <span *ngIf="openMenuItem.PriceWithSales!=null"
+                                style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}
+                                BYN</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

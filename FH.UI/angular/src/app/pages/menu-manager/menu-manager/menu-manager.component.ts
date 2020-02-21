@@ -48,7 +48,25 @@ export class MenuManagerComponent implements OnInit {
 
   editMenu: any;
   editMenuItem: any;
-  public openMenuItem: any;
+  openMenuItem = {
+    Id: 1,
+    Title: "Veritatis vel culpa",
+    Info: "Veritatis ipsa at v",
+    Note: "Id nihil accusamus a",
+    Price: 7,
+    Rate: 0,
+    PriceWithSales: 6,
+    IsActive: false,
+    MenuId: 1,
+    MenuTitle: "Ramen",
+    Photo: {
+      Value: "/Images/a5b3f3fb-a925-4982-a787-65c546bf0477.jpg",
+      Description: null,
+      Id: 1,
+      Number: 0
+    },
+    Feedbacks: null
+  };
 
   submittedMenu = false;
   submittedEditMenu = false;
@@ -113,8 +131,12 @@ export class MenuManagerComponent implements OnInit {
         this.isNotFound = (this.menus.length == 0 && !this.isEdit);
         this.menus.forEach(menu => {
           if (menu != null && menu.MenuItems != null) {
+            let index = 0;
             menu.MenuItems.forEach(item => {
-              this.lbAlbum.push({ src: environment.serverURL + item.Value });
+              this.openMenuItem = item;
+              item.Photo.Number = index;
+              index++;
+              this.lbAlbum.push({ src: environment.serverURL + item.Photo.Value, caption: item.Title });
             })
           }
         });
@@ -317,6 +339,8 @@ export class MenuManagerComponent implements OnInit {
 
   setCurrentMenuId(id) {
     this.currentMenuId = id;
+    console.log(id);
+
   }
 
   openModal(content, goal?: string, id?: any) {

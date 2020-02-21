@@ -63,6 +63,7 @@ export const AppRoutes: Routes = [
     path: 'dashboard-user', component: LayoutComponent, canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: DashboardUserComponent, canActivate: [AuthGuard] },
+      { path: 'menu/:id', component: MenuManagerComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},

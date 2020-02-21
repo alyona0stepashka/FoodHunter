@@ -100,7 +100,7 @@ export class LocationManagerComponent implements OnInit {
           this.lbAlbum = new Array();
           this.location.PhotoAlbum.forEach(element => {
 
-            this.lbAlbum.push({ src: environment.serverURL + element.Value });
+            this.lbAlbum.push({ src: environment.serverURL + element.Value, caption: element.Title });
           });
         },
         err => {

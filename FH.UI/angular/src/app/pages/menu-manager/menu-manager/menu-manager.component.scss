@@ -17,3 +17,11 @@
 textarea {
   resize: both;
 }
+
+li {
+  opacity: 0.5;
+}
+
+li:hover {
+  opacity: 1;
+}
