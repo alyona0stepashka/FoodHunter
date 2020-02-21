@@ -3,6 +3,7 @@
 
         <mat-tab *ngIf="isEdit">
             <ng-template mat-tab-label>
+                <!-- Todo [2020/02/21 AP] move onClick handler to the whole tab elelement - now it works on inner text only -->
                 <i class="fas fa-plus" (click)="setCurrentMenuId(0)"><span
                         style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;"></span></i>
             </ng-template>
@@ -150,6 +151,12 @@
                                         <td width="2%">
                                             <div class="item text-center col-md-12" style="padding: 0;">
                                                 <ul style="list-style:none; padding:0; margin:0;">
+                                                    <li>
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Edit"><i class="fas fa-pen"
+                                                                (click)="openModal(editMenuItem, 'editMenuItem', item.Id)"></i></button>
+                                                    </li>
                                                     <li>
                                                         <button type="submit" class="btn "
                                                             style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
@@ -345,5 +352,109 @@
                 </div>
             </div>
         </form>
+    </div>
+</ng-template>
+<!-- ///////////////////////////////// -->
+<ng-template #editMenuItem let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Edit your menu item info</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="menuItemForm" (ngSubmit)="onSubmitEditMenuItem()">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
+                            accept="image/*" (change)="uploadPhoto($event.target.files)"
+                            class="form-control btn btn-primary" placeholder="Photo">
+                        <img [src]="editItemPhotoPath" class="avatar"
+                            style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                        <div *ngIf="submittedMenuItem && f2.Photo.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Photo.errors.required">Menu item photo is required</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label><i class="fas fa-flag"></i>&nbsp;Title</label>
+                                <input Title="Title" type="text" formControlName="Title" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Title.errors }"
+                                    placeholder="Title" />
+                                <div *ngIf="submittedMenuItem && f2.Title.errors" class="invalid-feedback">
+                                    <div *ngIf="f2.Title.errors.required">Title is required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><i class="fas fa-dollar-sign"></i>&nbsp;Price (BYN)</label>
+                                <input pattern="\d+([.]\d+)?" Title="Price" type="text" formControlName="Price"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Price.errors }"
+                                    placeholder="Price" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><i class="fas fa-donate"></i>&nbsp;Discounted price (BYN)</label>
+                                <input pattern="\d+([.]\d+)?" Title="Discounted price" type="text"
+                                    formControlName="PriceWithSales" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submittedMenuItem && f2.PriceWithSales.errors }"
+                                    placeholder="Discounted price" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label><i class="far fa-comment-alt"></i>&nbsp;Describe Info </label>
+                        <textarea Title="Describe Info" type="text" formControlName="Info" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Info.errors }"
+                            placeholder="Any info about your company..."></textarea>
+                        <div *ngIf="submittedMenuItem && f2.Info.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Info.errors.required">Describe Info is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label><i class="far fa-sticky-note"></i>&nbsp;Note for clients (serving size, taste
+                            characteristics, etc.)</label>
+                        <textarea Title="Note" type="text" formControlName="Note" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Note.errors }" placeholder="Note">
+                        </textarea>
+                        <div *ngIf="submittedMenuItem && f2.Note.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Note.errors.required">Note is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><i class="far fa-eye"></i>&nbsp;Show in menu</label>&nbsp;
+                        <mat-slide-toggle checked (change)="toggleIsActive()"></mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button type="submit" (click)="onSubmitEditMenuItem()" class="btn btn-primary">Save Changes</button>
+        </div>
     </div>
 </ng-template>

@@ -34,6 +34,7 @@ export class MenuManagerComponent implements OnInit {
   submittedMenu = false;
   submittedEditMenu = false;
   submittedMenuItem = false;
+  submittedEditMenuItem = false;
   //firat tab form
 
   //my locationId & locationId from url
@@ -57,6 +58,11 @@ export class MenuManagerComponent implements OnInit {
   //crud menu
   editMenu: any;
   //crud menu
+
+  //crud menu items
+  editMenuItem: any;
+  editItemPhotoPath;
+  //crud menu items
 
   //work with images
   // TODO 21.02.2020 need to reset image after submit
@@ -100,7 +106,7 @@ export class MenuManagerComponent implements OnInit {
       IsActive: [this.IsActive, [Validators.required]],
       MenuId: ['', [Validators.required]],
       Note: ['', [Validators.required]],
-      Photo: ['', [Validators.required]]
+      Photo: [''/*, [Validators.required]*/]
     });
     this.loadLocationMenu();
   }
@@ -238,6 +244,33 @@ export class MenuManagerComponent implements OnInit {
     );
   }
 
+  onSubmitEditMenuItem() {
+    this.submittedEditMenu = true;
+    if (this.menuItemForm.invalid) {
+      return null;
+    }
+    this.menuService.updateMenuItem(this.menuItemForm).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationMenu();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
   deleteMenuItem(id) {
     this.menuService.deleteMenuItem(id).subscribe(
       (res: any) => {
@@ -283,6 +316,16 @@ export class MenuManagerComponent implements OnInit {
     if (goal == "editMenu") {
       this.editMenu = this.menus.find(m => m.Id == id);
       this.menuForm.patchValue({ Id: id, Title: this.editMenu.Title, Info: this.editMenu.Info, IconId: this.editMenu.Icon.Id });
+    }
+    if (goal == "editMenuItem") {
+      const editMenu = this.menus.find(m => m.Id == this.currentMenuId);
+      const editMenuItem = editMenu.MenuItems.find(m => m.Id == id);
+      this.menuItemForm.patchValue(
+        {
+          ...editMenuItem,
+          Photo: null
+        });
+      this.editItemPhotoPath = environment.serverURL + editMenuItem.Photo.Value;
     }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

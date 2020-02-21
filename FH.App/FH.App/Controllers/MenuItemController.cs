@@ -40,9 +40,9 @@ namespace FH.App.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        } 
+        }
 
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> CreateMenuItem([FromForm] CreateMenuItemVM menu)
         {
             try

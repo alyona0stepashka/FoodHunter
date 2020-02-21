@@ -14,7 +14,7 @@ namespace FH.BLL.VMs
         public string Title { get; set; } 
         public string Info { get; set; } 
         public string Note { get; set; } 
-        public decimal Price { get; set; } 
+        public decimal Price { get; set; }  
         public decimal? PriceWithSales { get; set; } 
         public bool IsActive { get; set; } 
         public int MenuId { get; set; } 

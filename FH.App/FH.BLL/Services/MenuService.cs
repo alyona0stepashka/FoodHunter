@@ -14,7 +14,7 @@ namespace FH.BLL.Services
     {
         private IUnitOfWork _db { get; set; }
         private readonly IFileService _fileService;
-        //private readonly 
+        //private readonly
         public MenuService(IUnitOfWork uow, IFileService fileService)
         {
             _db = uow;
@@ -30,7 +30,7 @@ namespace FH.BLL.Services
             }
 
             var retMenus = menus.Select(m =>new MenuPageVM(m)).ToList();
-            return retMenus; 
+            return retMenus;
         }
 
         public async Task<MenuPageVM> GetMenuPageAsync(int id)
@@ -105,7 +105,7 @@ namespace FH.BLL.Services
             item.Info = menu.Info;
             item.LocationId = menu.LocationId;
             item.Title = menu.Title;
-            item.IconId = menu.IconId; 
+            item.IconId = menu.IconId;
             var newItem = await _db.Menus.UpdateAsync(item);
             return new MenuPageVM(newItem);
         }
