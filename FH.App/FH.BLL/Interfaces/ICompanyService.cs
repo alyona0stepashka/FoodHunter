@@ -8,6 +8,7 @@ namespace FH.BLL.Interfaces
 {
     public interface ICompanyService
     {
+        List<CompanyPageVM> GetAllCompanies();
         Task<CompanyPageVM> GetCompanyPageAsync(int id);
         Task<CompanyPageVM> CreateCompanyAsync(CreateCompanyVM Company, string userId);
         Task DeleteCompanyAsync(int id);

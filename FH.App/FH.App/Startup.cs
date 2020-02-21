@@ -165,6 +165,7 @@ Example: 'Bearer 12345abcdef'",
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStaticService, StaticService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IMenuService, MenuService>();
         }
 
 

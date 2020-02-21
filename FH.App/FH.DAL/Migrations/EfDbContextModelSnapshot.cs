@@ -25,6 +25,8 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("Value");
 
                     b.HasKey("Id");
@@ -96,11 +98,15 @@ namespace FH.DAL.Migrations
 
                     b.Property<int>("Stars");
 
+                    b.Property<int>("UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
 
                     b.HasIndex("MenuItemId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Feedbacks");
                 });
@@ -142,17 +148,21 @@ namespace FH.DAL.Migrations
 
                     b.Property<int>("CompanyId");
 
-                    b.Property<decimal>("Latitude");
+                    b.Property<string>("Latitude");
 
-                    b.Property<decimal>("Longitude");
+                    b.Property<string>("Longitude");
 
                     b.Property<string>("Name");
+
+                    b.Property<int?>("TopFileId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("TopFileId");
 
                     b.ToTable("Locations");
                 });
@@ -219,7 +229,7 @@ namespace FH.DAL.Migrations
 
                     b.Property<decimal>("Price");
 
-                    b.Property<decimal>("PriceWithSales");
+                    b.Property<decimal?>("PriceWithSales");
 
                     b.Property<string>("Title");
 
@@ -643,8 +653,13 @@ namespace FH.DAL.Migrations
                         .HasForeignKey("LocationId");
 
                     b.HasOne("FH.Models.Models.MenuItem", "MenuItem")
-                        .WithMany()
+                        .WithMany("Feedbacks")
                         .HasForeignKey("MenuItemId");
+
+                    b.HasOne("FH.Models.Models.UserProfile", "User")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("FH.Models.Models.FileModel", b =>
@@ -654,7 +669,7 @@ namespace FH.DAL.Migrations
                         .HasForeignKey("FeedbackId");
 
                     b.HasOne("FH.Models.Models.Location", "Location")
-                        .WithMany()
+                        .WithMany("PhotoAlbum")
                         .HasForeignKey("LocationId");
                 });
 
@@ -668,6 +683,10 @@ namespace FH.DAL.Migrations
                         .WithMany("Locations")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FH.Models.Models.FileModel", "TopFile")
+                        .WithMany()
+                        .HasForeignKey("TopFileId");
                 });
 
             modelBuilder.Entity("FH.Models.Models.Manager", b =>

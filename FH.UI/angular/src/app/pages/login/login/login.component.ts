@@ -20,11 +20,18 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   submitted = false;
+  isManager;
+  isCurrentManager;
+
+
+  public isLogin = (localStorage.getItem('token') != null);
 
   ngOnInit() {
-    if (localStorage.getItem('token') != null) {
-      const token = jwt_decode(localStorage.getItem('token'));
-      (token.IsManager) ? this.router.navigateByUrl('/control-manager/dashboard') : this.router.navigateByUrl('/control-user/dashboard');
+    if (this.isLogin) {
+      this.isManager = localStorage.getItem('IsManager').toLowerCase();
+      this.isCurrentManager = localStorage.getItem('CurrentRole').toLowerCase();
+      //const token = jwt_decode(localStorage.getItem('token'));
+      ((this.isManager === 'true') && (this.isCurrentManager === 'true')) ? this.router.navigateByUrl('/dashboard-manager/dashboard') : this.router.navigateByUrl('/dashboard-user/dashboard');
     }
     this.loginForm = this.formBuilder.group({
       Email: ['', [Validators.required, Validators.email]],
@@ -47,6 +54,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', res.token);
         const token = jwt_decode(res.token);
         localStorage.setItem('IsManager', token.IsManager);
+        localStorage.setItem('MyLocationId', token.MyLocationId);
         localStorage.setItem('FullName', token.FullName);
         localStorage.setItem('Icon', token.Icon);
         let IsManager = (token.IsManager.toLowerCase() === 'true');

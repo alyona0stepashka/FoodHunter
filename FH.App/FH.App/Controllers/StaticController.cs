@@ -25,8 +25,38 @@ namespace FH.App.Controllers
         {
             try
             {
-                var sexes = _staticService.GetSexes();
-                return Ok(sexes);
+                var items = _staticService.GetSexes();
+                return Ok(items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("specification")]
+        public IActionResult GetSpecifications()
+        {
+            try
+            {
+                var items = _staticService.GetSpecifications();
+                return Ok(items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("icon")]
+        public IActionResult GetIcons()
+        {
+            try
+            {
+                var items = _staticService.GetIcons();
+                return Ok(items);
             }
             catch (Exception ex)
             {

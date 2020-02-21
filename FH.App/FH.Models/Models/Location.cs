@@ -11,9 +11,9 @@ namespace FH.Models.Models
     {
         public string Name { get; set; }
 
-        public decimal Longitude { get; set; }
+        public string Longitude { get; set; }
 
-        public decimal Latitude { get; set; }
+        public string Latitude { get; set; }
 
         public string Address { get; set; }
 
@@ -25,10 +25,15 @@ namespace FH.Models.Models
         public int CompanyId { get; set; } 
         public virtual Company Company { get; set; }
 
+        [ForeignKey("TopFile")]
+        public int? TopFileId { get; set; }
+        public virtual FileModel TopFile { get; set; }
+
         //-----------------------
         public virtual List<Manager> Managers { get; set; }
         public virtual List<Subscription> Subscriptions { get; set; }
         public virtual List<Menu> Menus { get; set; }
         public virtual List<Table> Tables { get; set; }
+        public virtual List<FileModel> PhotoAlbum { get; set; }
     }
 }

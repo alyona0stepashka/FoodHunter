@@ -50,6 +50,14 @@ namespace FH.DAL.DataContext
                 .WithMany(m => m.Orders)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Location>()
+                .HasOne(m => m.TopFile);
+               // .WithOne(m => m.Location);
+
+            modelBuilder.Entity<FileModel>()
+                .HasOne(m => m.Location)
+                .WithMany(m => m.PhotoAlbum);
         }
     }
 }

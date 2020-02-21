@@ -8,6 +8,8 @@ namespace FH.BLL.VMs
 {
     public class CompanyPageVM
     {
+        public int Id { get; set; }
+
         public string ContactInfo { get; set; }
 
         public string Vk { get; set; }
@@ -30,6 +32,7 @@ namespace FH.BLL.VMs
 
         public CompanyPageVM(Company c)
         {
+            Id = c.Id;
             ContactInfo = c.ContactInfo;
             Vk = c.Vk;
             Facebook = c.Facebook;
@@ -37,7 +40,7 @@ namespace FH.BLL.VMs
             Site = c.Site;
             Name = c.Name;
             Describe = c.Describe;
-            Specification = c.Specification.Value;
+            Specification = c.Specification?.Value;
             LogoPath = $"{c.File?.Path}{c.File?.Name}{c.File?.Extension}";
             Locations = c.Locations?.Select(m => new LocationPageVM(m)).ToList();
         }

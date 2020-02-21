@@ -12,4 +12,12 @@ export class StaticService {
   getSexes() {
     return this.http.get(environment.serverURL + '/api/static/sex');
   }
+
+  getSpecifications() {
+    return this.http.get(environment.serverURL + '/api/static/specification');
+  }
+
+  getIcons() {
+    return this.http.get(environment.serverURL + '/api/static/icon');
+  }
 }

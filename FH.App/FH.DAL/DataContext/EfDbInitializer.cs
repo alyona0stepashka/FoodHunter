@@ -16,7 +16,7 @@ namespace FH.DAL.DataContext
         public static async Task InitializeAsync(IUnitOfWork db, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //------------------------
-            var id1 = 0;
+            //var id1 = 0;
             if (!db.CompanySpecifications.GetAll().Any())
             {
                 var list = new List<CompanySpecification>()
@@ -29,6 +29,7 @@ namespace FH.DAL.DataContext
                     new CompanySpecification() {Value = "Teahouse"},
                     new CompanySpecification() {Value = "Kebab house"},
                     new CompanySpecification() {Value = "Dumpling house"},
+                    new CompanySpecification() {Value = "Noodle bar"},
                     new CompanySpecification() {Value = "Pizzeria"},
                     new CompanySpecification() {Value = "Coffee Shop"},
                     new CompanySpecification() {Value = "Cooking stores"},
@@ -37,12 +38,12 @@ namespace FH.DAL.DataContext
                 foreach (var item in list)
                 {
                     await db.CompanySpecifications.CreateAsync(item);
-                    id1 = item.Id;
+                    //id1 = item.Id;
                 }
             }
 
             //------------------------
-            var id2 = 0;
+            //var id2 = 0;
             if (!db.Cuisines.GetAll().Any())
             {
                 var list = new List<Cuisine>()
@@ -65,7 +66,7 @@ namespace FH.DAL.DataContext
                 foreach (var item in list)
                 {
                     await db.Cuisines.CreateAsync(item);
-                    id2 = item.Id;
+                    //id2 = item.Id;
                 }
             }
 
@@ -88,7 +89,7 @@ namespace FH.DAL.DataContext
             }
 
             //------------------------
-            var id4 = 0;
+            //var id4 = 0;
             if (!db.SubscriptionTypes.GetAll().Any())
             {
                 var list = new List<SubscriptionType>()
@@ -103,29 +104,27 @@ namespace FH.DAL.DataContext
                 foreach (var item in list)
                 {
                     await db.SubscriptionTypes.CreateAsync(item);
-                    id4 = item.Id;
+                    //id4 = item.Id;
                 }
             }
 
             //------------------------
-            var id5 = 0;
+            //var id5 = 0;
             if (!db.Icons.GetAll().Any())
             {
                 var list = new List<Icon>()
                 {
-                    new Icon() {Value = "Alcohol"},
-                    new Icon() {Value = "Vegan"},
-                    new Icon() {Value = "Main"},
-                    new Icon() {Value = "Pizza"},
-                    new Icon() {Value = "Drinks"},
-                    new Icon() {Value = "Spicy"},
-                    new Icon() {Value = "Male"},
-                    new Icon() {Value = "Female"}
+                    new Icon() {Value="fas fa-star", Description = "Main"},
+                    new Icon() {Value="fas fa-baby-carriage", Description = "For child"},
+                    new Icon() {Value="fab fa-stripe-s", Description = "Special"},
+                    new Icon() {Value="fas fa-wine-bottle", Description = "Contains alcohol"},
+                    new Icon() {Value="fas fa-leaf", Description = "Vegan"}, 
+                    new Icon() {Value="fas fa-pepper-hot", Description = "Spicy"} 
                 };
                 foreach (var item in list)
                 {
                     await db.Icons.CreateAsync(item);
-                    id5 = item.Id;
+                    //id5 = item.Id;
                 }
             }
 

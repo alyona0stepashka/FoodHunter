@@ -16,7 +16,7 @@ namespace FH.Models.Models
 
         public decimal Price { get; set; }
 
-        public decimal PriceWithSales { get; set; }
+        public decimal? PriceWithSales { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -27,5 +27,8 @@ namespace FH.Models.Models
         [ForeignKey("FileModel")]
         public int FileModelId { get; set; }
         public virtual FileModel FileModel { get; set; }
+
+        //------------------- 
+        public virtual List<Feedback> Feedbacks { get; set; }
     }
 }

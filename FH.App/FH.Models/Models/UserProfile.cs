@@ -40,6 +40,7 @@ namespace FH.Models.Models
 
         //---------------
         public virtual List<CuisineUser> CuisinePreference { get; set; }
+        public virtual List<Feedback> Feedbacks { get; set; }
 
     }
 }
