@@ -62,6 +62,26 @@ export class MenuManagerComponent implements OnInit {
   //crud menu items
   editMenuItem: any;
   editItemPhotoPath;
+  openMenuItem = {
+    Id: 1,
+    Title: "Veritatis vel culpa",
+    Info: "Veritatis ipsa at v",
+    Note: "Id nihil accusamus a",
+    Price: 7,
+    Rate: 0,
+    PriceWithSales: 6,
+    IsActive: false,
+    MenuId: 1,
+    MenuTitle: "Ramen",
+    Photo: {
+      Value: "/Images/a5b3f3fb-a925-4982-a787-65c546bf0477.jpg",
+      Description: null,
+      Id: 1,
+      Number: 0
+    },
+    Feedbacks: null
+  };
+  openItemPhotoPath;
   //crud menu items
 
   //work with images
@@ -326,6 +346,14 @@ export class MenuManagerComponent implements OnInit {
           Photo: null
         });
       this.editItemPhotoPath = environment.serverURL + editMenuItem.Photo.Value;
+    }
+    if (goal == "openMenuItem") {
+      console.log("id", id);
+      var menu = this.menus.find(m => m.Id == this.currentMenuId);
+      console.log("openMenu", menu);
+      this.openMenuItem = menu.MenuItems.find(m => m.Id == id);
+      console.log("openMenuItem", this.openMenuItem);
+      this.openItemPhotoPath = environment.serverURL + this.openMenuItem.Photo.Value;
     }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

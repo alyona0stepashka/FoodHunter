@@ -154,6 +154,13 @@
                                                     <li>
                                                         <button type="submit" class="btn "
                                                             style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Show details"
+                                                            (click)="openModal(openMenuItem, 'openMenuItem', item.Id)"><i
+                                                                class="fas fa-info-circle"></i></button>
+                                                    </li>
+                                                    <li>
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                             title="Edit"><i class="fas fa-pen"
                                                                 (click)="openModal(editMenuItem, 'editMenuItem', item.Id)"></i></button>
                                                     </li>
@@ -455,6 +462,43 @@
     <div class="modal-footer">
         <div class="form-group">
             <button type="submit" (click)="onSubmitEditMenuItem()" class="btn btn-primary">Save Changes</button>
+        </div>
+    </div>
+</ng-template>
+<!-- ////////////////////////////////////// -->
+<ng-template #openMenuItem let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{openMenuItem.Title}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="item text-center col-md-4">
+                <img style="max-height: 22rem; width: auto;" (click)="open(openMenuItem.Photo.Number)"
+                    src="{{openItemPhotoPath}}" />
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>{{openMenuItem.Title}}</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Price:&nbsp;&nbsp;</label>
+                        <span *ngIf="openMenuItem.PriceWithSales==null" style="font-size: large;">{{openMenuItem.Price}}
+                            BYN</span>
+                        <span *ngIf="openMenuItem.PriceWithSales!=null"
+                            style="font-size: large;">{{openMenuItem.PriceWithSales}}
+                            BYN</span>&nbsp;
+                        <span *ngIf="openMenuItem.PriceWithSales!=null"
+                            style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}
+                            BYN</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </ng-template>
