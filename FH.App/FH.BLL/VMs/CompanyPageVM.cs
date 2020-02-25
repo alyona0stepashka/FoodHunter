@@ -28,7 +28,7 @@ namespace FH.BLL.VMs
 
         public string LogoPath { get; set; }
 
-        public List<LocationPageVM> Locations { get; set; }
+        public List<LocationPageVM> Locations { get; set; } = new List<LocationPageVM>();
 
         public CompanyPageVM(Company c)
         {

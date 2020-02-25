@@ -36,8 +36,24 @@ export class LocationManagerComponent implements OnInit {
     private modalService: NgbModal) { }
 
   closeResult: string;
-  locationForm: FormGroup;
-  companyForm: FormGroup;
+  locationForm: FormGroup = this.formBuilder.group({
+    Name: ['', [Validators.required]],
+    CompanyId: ['', [Validators.required]],
+    Longitude: ['', [Validators.required]],
+    Latitude: ['', [Validators.required]],
+    Address: ['', [Validators.required]]
+  });
+  companyForm: FormGroup = this.formBuilder.group({
+    Name: ['', [Validators.required]],
+    ContactInfo: ['', [Validators.required]],
+    Vk: [''],
+    Facebook: [''],
+    Instagram: [''],
+    Site: [''],
+    Describe: ['', [Validators.required]],
+    Photo: [null, [Validators.required]],
+    SpecificationId: ['']
+  });
   submittedCompany = false;
   submitted = false;
   public companies = new Array();

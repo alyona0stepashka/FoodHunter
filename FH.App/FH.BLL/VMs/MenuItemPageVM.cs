@@ -20,7 +20,7 @@ namespace FH.BLL.VMs
         public int MenuId { get; set; }
         public string MenuTitle { get; set; }
         public Icon Photo { get; set; }
-        public List<FeedbackVM> Feedbacks { get; set; }
+        public List<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
 
         public MenuItemPageVM(MenuItem m)
         {

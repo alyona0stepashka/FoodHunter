@@ -39,6 +39,7 @@ import { LocationPageComponent } from './pages/location-page/location-page/locat
 import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NotFoundComponent } from './pages/404/not-found/not-found.component';
+import { TablesManagerComponent } from './pages/tables-manager/tables-manager.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -58,7 +59,8 @@ import { NotFoundComponent } from './pages/404/not-found/not-found.component';
     OopsComponent,
     NotFoundComponent,
     LocationPageComponent,
-    MenuManagerComponent
+    MenuManagerComponent,
+    TablesManagerComponent
     //AdminLayoutComponent
   ],
   imports: [

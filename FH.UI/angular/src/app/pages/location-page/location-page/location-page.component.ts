@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { LocationService } from 'app/services/location.service';
 import { ToastrService } from 'ngx-toastr';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
   selector: 'app-location-page',
@@ -15,10 +16,12 @@ export class LocationPageComponent implements OnInit {
     private toastr: ToastrService,
     private locationService: LocationService,
     private activateRoute: ActivatedRoute,
+    private lbLightbox: Lightbox,
     private router: Router) { }
 
   //logic vars
   serverUrl = environment.serverURL;
+  isNotFound = false;
   //logic vars
 
   //location tab
@@ -29,6 +32,7 @@ export class LocationPageComponent implements OnInit {
   //photos tab
   companyPhoto = '';
   topPhoto = './assets/img/header.jpg';
+  private lbAlbum: any[] = new Array();
   //photos tab
 
   async ngOnInit() {
@@ -36,12 +40,30 @@ export class LocationPageComponent implements OnInit {
     this.locationService.getLocation(this.locationId).subscribe(
       res => {
         this.locationInfo = res;
+        this.isNotFound = this.locationInfo == null;
         this.companyPhoto = this.serverUrl + this.locationInfo.CompanyPhoto;
+        let index = 0;
+        this.lbAlbum = new Array();
+        this.locationInfo.PhotoAlbum.forEach(element => {
+          element.Number = index;
+          index++;
+          this.lbAlbum.push({ src: environment.serverURL + element.Value });
+        });
       },
       err => {
         console.log(err);
+        this.isNotFound = true;
         this.toastr.error(err.error, 'Error');
       }
     );
+  }
+  open(index: number): void {
+    console.log("click-img", this.lbAlbum[index]);
+
+    this.lbLightbox.open(this.lbAlbum, index);
+  }
+
+  close(): void {
+    this.lbLightbox.close();
   }
 }

@@ -1,0 +1,153 @@
+<app-not-found *ngIf="isNotFound"></app-not-found>
+
+<div *ngIf="!isLocationExist && isEdit" class="col-md-12">
+    <div class="card-header">
+        <h5 style="opacity:0.7" class="card-title">Before this you have to register your business location <a
+                href="/#/dashboard-manager/location"><i>here</i></a></h5>
+    </div>
+</div>
+
+<!-- ////////////////////////////////////// -->
+<mat-tab-group *ngIf="isLocationExist" style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+
+    <mat-tab *ngIf="isEdit" style="background-color: #ffffff;">
+        <ng-template mat-tab-label>
+            <i class="fas fa-tasks"><span
+                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;"></span></i>
+        </ng-template>
+        <div>
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Tables Management
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <form [formGroup]="tableForm" (ngSubmit)="onSubmitTable()">
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </form>
+                            </tr>
+                            <ng-container *ngFor="let item of tables">
+                                <tr>
+                                    <td width="10%">
+                                        <div class="row">
+                                            <div class="col-md-12"><i>{{item.Number}}</i></div>
+                                        </div>
+                                    </td>
+                                    <td width="88%">
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <span style="white-space: normal;">{{item.Info}}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="2%">
+                                        <div class="item text-center col-md-12" style="padding: 0;">
+                                            <ul style="list-style:none; padding:0; margin:0;">
+                                                <li>
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Show booking"
+                                                        (click)="openModal(openTableBook, 'openTableBook', item.Id)"><i
+                                                            class="fas fa-info-circle"></i></button>
+                                                </li>
+                                                <li *ngIf="isEdit">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Edit"><i class="fas fa-pen"
+                                                            (click)="editTable(item.Id)"></i></button>
+                                                </li>
+                                                <li *ngIf="isEdit">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Delete" (click)="deleteTable(item.Id)"><i
+                                                            class="fas fa-ban"></i></button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <!-- ------------------------------------------>
+    <mat-tab>
+        <ng-template mat-tab-label><span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+                <b>Booking</b></span>
+        </ng-template>
+    </mat-tab>
+
+</mat-tab-group>
+<!-- ///////////////////////////// -->
+<ng-template #editTable let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your table info</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="tableForm" (ngSubmit)="onSubmitTable()">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Number</label>
+                        <input Title="Number" type="text" formControlName="Number" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.Number.errors }" placeholder="Number" />
+                        <div *ngIf="submitted && f.Number.errors" class="invalid-feedback">
+                            <div *ngIf="f.Number.errors.required">Number is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label>Info (size, placement & etc.)</label>
+                        <input Title="Info" type="text" formControlName="Info" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.Info.errors }" placeholder="Info" />
+                        <div *ngIf="submitted && f.Info.errors" class="invalid-feedback">
+                            <div *ngIf="f.Info.errors.required">Info is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" (click)="onSubmitTable()" class="btn btn-primary">Save
+                            changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<!-- ////////////////////////////////////////// -->

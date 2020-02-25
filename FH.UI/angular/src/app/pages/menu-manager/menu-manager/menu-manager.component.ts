@@ -33,8 +33,23 @@ export class MenuManagerComponent implements OnInit {
   //logic vars
 
   //firat tab form
-  menuForm: FormGroup;
-  menuItemForm: FormGroup;
+  menuForm: FormGroup = this.formBuilder.group({
+    Id: [''],
+    Title: ['', [Validators.required]],
+    Info: ['', [Validators.required]],
+    IconId: ['', [Validators.required]]
+  });
+  menuItemForm: FormGroup = this.formBuilder.group({
+    Id: [''],
+    Title: ['', [Validators.required]],
+    Info: ['', [Validators.required]],
+    Price: ['', [Validators.required]],
+    PriceWithSales: [''],
+    IsActive: [this.IsChecked, [Validators.required]],
+    MenuId: ['', [Validators.required]],
+    Note: ['', [Validators.required]],
+    Photo: [''/*, [Validators.required]*/]
+  });
   submittedMenu = false;
   submittedEditMenu = false;
   submittedMenuItem = false;

@@ -15,7 +15,7 @@ namespace FH.BLL.VMs
         public string Title { get; set; }
         public string Info { get; set; }
         public Icon Icon { get; set; }
-        public List<MenuItemPageVM> MenuItems { get; set; }
+        public List<MenuItemPageVM> MenuItems { get; set; } = new List<MenuItemPageVM>();
 
         public MenuPageVM(Menu m)
         {

@@ -13,6 +13,8 @@ namespace FH.Models.Models
 
         public DateTime EndTime { get; set; }
 
+        public bool IsActive { get; set; }
+
         [ForeignKey("Table")]
         public int TableId { get; set; }
         public virtual Table Table { get; set; }
