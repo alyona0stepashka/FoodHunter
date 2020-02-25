@@ -131,23 +131,6 @@ export class MenuManagerComponent implements OnInit {
     if (!this.isLocationExist && this.isEdit) {
       return;
     }
-    this.menuForm = this.formBuilder.group({
-      Id: [''],
-      Title: ['', [Validators.required]],
-      Info: ['', [Validators.required]],
-      IconId: ['', [Validators.required]]
-    });
-    this.menuItemForm = this.formBuilder.group({
-      Id: [''],
-      Title: ['', [Validators.required]],
-      Info: ['', [Validators.required]],
-      Price: ['', [Validators.required]],
-      PriceWithSales: [''],
-      IsActive: [this.IsChecked, [Validators.required]],
-      MenuId: ['', [Validators.required]],
-      Note: ['', [Validators.required]],
-      Photo: [''/*, [Validators.required]*/]
-    });
     this.loadLocationMenu();
   }
 

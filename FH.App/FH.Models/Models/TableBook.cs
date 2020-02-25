@@ -9,9 +9,13 @@ namespace FH.Models.Models
 {
     public class TableBook: BaseEntity
     {
-        public DateTime StarTime { get; set; }
+        public DateTime StartTime { get; set; }
+
+        public DateTime BookTime { get; set; }
 
         public DateTime EndTime { get; set; }
+
+        public bool IsConfirm { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -20,10 +24,10 @@ namespace FH.Models.Models
         public virtual Table Table { get; set; }
 
         [ForeignKey("Client")]
-        public string ClientId { get; set; }
-        public virtual IdentityUser Client { get; set; }
+        public int ClientId { get; set; }
+        public virtual UserProfile Client { get; set; }
 
         //-------------------------------
-        public virtual List<TableBook> TableBooks { get; set; }
+        //public virtual List<TableBook> TableBooks { get; set; }
     }
 }

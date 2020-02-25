@@ -4,14 +4,16 @@ using FH.DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FH.DAL.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    partial class EfDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200225104723_table_user")]
+    partial class table_user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,23 +353,23 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("BookTime");
-
-                    b.Property<int>("ClientId");
+                    b.Property<string>("ClientId");
 
                     b.Property<DateTime>("EndTime");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<bool>("IsConfirm");
+                    b.Property<DateTime>("StarTime");
 
-                    b.Property<DateTime>("StartTime");
+                    b.Property<int?>("TableBookId");
 
                     b.Property<int>("TableId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("TableBookId");
 
                     b.HasIndex("TableId");
 
@@ -783,10 +785,13 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.TableBook", b =>
                 {
-                    b.HasOne("FH.Models.Models.UserProfile", "Client")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("FH.Models.Models.TableBook")
+                        .WithMany("TableBooks")
+                        .HasForeignKey("TableBookId");
 
                     b.HasOne("FH.Models.Models.Table", "Table")
                         .WithMany("TableBooks")

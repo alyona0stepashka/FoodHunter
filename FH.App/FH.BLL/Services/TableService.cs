@@ -30,6 +30,34 @@ namespace FH.BLL.Services
             return ret;
         }
 
+        public List<TableBookVM> GetAllTableBooksByLocation(int id)
+        {
+            var tables = _db.TableBooks.GetAll().Where(m => m.Table.LocationId==id).ToList();
+            if (tables == null)
+            {
+                throw new Exception("Tables not found");
+            }
+            var ret = tables.Select(m => new TableBookVM(m)).ToList();
+            return ret;
+        }
+
+        public async Task<TableBookVM> CreateTableBookAsync(CreateTableBookVM table)
+        {
+            var dbTable = new TableBook
+            {
+                EndTime = table.EndTime,
+                StartTime = table.StarTime,
+                BookTime = table.BookTime,
+                IsConfirm = table.IsConfirm,
+                IsActive = table.IsActive,
+                TableId = table.TableId,
+                ClientId = table.ClientId
+            };
+            var tableNew = await _db.TableBooks.CreateAsync(dbTable);
+            var ret = new TableBookVM(tableNew);
+            return ret;
+        }
+
         public async Task<TableTabVM> CreateTableAsync(CreateTableVM table)
         {
             var dbTable = new Table
@@ -47,6 +75,7 @@ namespace FH.BLL.Services
         {
             await _db.Tables.DeleteAsync(id);
         }
+
         public async Task<TableTabVM> UpdateTableAsync(CreateTableVM table)
         {
             var item = await _db.Tables.GetByIdAsync(table.Id);
@@ -55,6 +84,33 @@ namespace FH.BLL.Services
             item.LocationId = table.LocationId; 
             var newItem = await _db.Tables.UpdateAsync(item);
             return new TableTabVM(newItem);
+        }
+
+        public async Task<TableBookVM> AcceptTableBookAsync(int id)
+        {
+            var item = await _db.TableBooks.GetByIdAsync(id);
+            item.IsConfirm = true;
+            item.IsActive = true;
+            var newItem = await _db.TableBooks.UpdateAsync(item);
+            return new TableBookVM(newItem);
+        }
+
+        public async Task<TableBookVM> DeclineTableBookAsync(int id)
+        {
+            var item = await _db.TableBooks.GetByIdAsync(id);
+            item.IsConfirm = false;
+            item.IsActive = true;
+            var newItem = await _db.TableBooks.UpdateAsync(item);
+            return new TableBookVM(newItem);
+        }
+
+        public async Task<TableBookVM> CancelTableBookAsync(int id)
+        {
+            var item = await _db.TableBooks.GetByIdAsync(id);
+            item.IsConfirm = false;
+            item.IsActive = false;
+            var newItem = await _db.TableBooks.UpdateAsync(item);
+            return new TableBookVM(newItem);
         }
     }
 }

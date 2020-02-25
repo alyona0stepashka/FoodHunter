@@ -18,47 +18,19 @@
         <div>
             <div class="card card-user">
                 <div class="card-header">
-                    <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Tables Management
-                    </h5>
+                    <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Tables Management <button
+                            title="Add new table" class="btn" style="padding: inherit;"
+                            (click)="openModal(newTable, 'newTable')">
+                            +
+                        </button></h5>
+
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
                         <tbody>
-                            <tr>
-                                <form [formGroup]="tableForm" (ngSubmit)="onSubmitTable()">
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </td>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Save</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </form>
-                            </tr>
                             <ng-container *ngFor="let item of tables">
                                 <tr>
-                                    <td width="10%">
+                                    <td width="10%" style="text-align: center;">
                                         <div class="row">
                                             <div class="col-md-12"><i>{{item.Number}}</i></div>
                                         </div>
@@ -73,18 +45,18 @@
                                     <td width="2%">
                                         <div class="item text-center col-md-12" style="padding: 0;">
                                             <ul style="list-style:none; padding:0; margin:0;">
-                                                <li>
+                                                <li *ngIf="isEdit">
                                                     <button type="submit" class="btn "
                                                         style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                        title="Show booking"
-                                                        (click)="openModal(openTableBook, 'openTableBook', item.Id)"><i
-                                                            class="fas fa-info-circle"></i></button>
+                                                        title="Show booking history"
+                                                        (click)="openModal(openTableBooks, 'openTableBooks', item.Id)"><i
+                                                            class="fas fa-history"></i></button>
                                                 </li>
                                                 <li *ngIf="isEdit">
                                                     <button type="submit" class="btn "
                                                         style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                         title="Edit"><i class="fas fa-pen"
-                                                            (click)="editTable(item.Id)"></i></button>
+                                                            (click)="openModal(newTable, 'editTable', item.Id)"></i></button>
                                                 </li>
                                                 <li *ngIf="isEdit">
                                                     <button type="submit" class="btn "
@@ -108,23 +80,86 @@
         <ng-template mat-tab-label><span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
                 <b>Booking</b></span>
         </ng-template>
+        <div>
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Booking Management <button
+                            title="Book table" class="btn" style="padding: inherit;"
+                            (click)="openModal(newBook, 'newBook')">
+                            +
+                        </button></h5>
+
+                </div>
+                <div class="card-body">
+                    <div *ngIf="tableBookingNow.length == 0" class="col-md-12 text-center">
+                        History is empty
+                    </div>
+                    <table *ngIf="tableBookingNow.length > 0" class="table table-striped">
+                        <tbody>
+                            <ng-container *ngFor="let book of tableBookingNow">
+                                <tr [style.background-color]="setHistoryColor(book)">
+                                    <td width="30%" style="text-align: center;">
+                                        <div class="row">
+                                            <div class="col-md-12"><i>{{book.BookTime}}</i></div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="white-space: normal;" class="col-md-12">
+                                                {{book.Client.FirstName}}&nbsp;{{book.Client.LastName}},{{book.Client.Age}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="50%" style="text-align: center;">
+                                        <div class="row">
+                                            <div class="col-md-12"><i>{{book.StartTime}}</i></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12"><i>~</i></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12"><i>{{book.EndTime}}</i></div>
+                                        </div>
+                                    </td>
+                                    <td width="20%">
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <i *ngIf="book.IsConfirm && book.IsActive" class="fas fa-calendar-check"
+                                                    title="Accepted by manager"></i>
+                                                <i *ngIf="!book.IsConfirm && book.IsActive"
+                                                    class="fas fa-calendar-times" title="Declined by manager"></i>
+                                                <i *ngIf="!book.IsConfirm && !book.IsActive"
+                                                    class="fas fa-calendar-minus" title="Canceled by client"></i>
+                                                <i *ngIf="!book.IsActive" class="fas fa-ban"
+                                                    title="Рas not been processed"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </mat-tab>
 
 </mat-tab-group>
 <!-- ///////////////////////////// -->
-<ng-template #editTable let-modal>
+<ng-template #newTable let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your table info</h4>
+        <h4 *ngIf="isEditTable" class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your
+            table info</h4>
+        <h4 *ngIf="!isEditTable" class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Add new
+            table</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <form [formGroup]="tableForm" (ngSubmit)="onSubmitTable()">
+        <form [formGroup]="tableForm">
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Number</label>
+                        <label>Number (unique value)</label>
                         <input Title="Number" type="text" formControlName="Number" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f.Number.errors }" placeholder="Number" />
                         <div *ngIf="submitted && f.Number.errors" class="invalid-feedback">
@@ -141,6 +176,10 @@
                             <div *ngIf="f.Info.errors.required">Info is required</div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <div class="form-group">
                         <button type="submit" (click)="onSubmitTable()" class="btn btn-primary">Save
                             changes</button>
@@ -148,6 +187,134 @@
                 </div>
             </div>
         </form>
+    </div>
+</ng-template>
+<!-- ///////////////////////////// -->
+<ng-template #newBook let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Book table</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="bookForm">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Start date</label>
+                        <input type="datetime-local" formControlName="StartTime" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.StartTime.errors }" placeholder="StartTime" />
+                        <div *ngIf="submitted && f2.StartTime.errors" class="invalid-feedback">
+                            <div *ngIf="f2.StartTime.errors.required">Start date is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>End date</label>
+                        <input type="datetime-local" formControlName="EndTime" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.EndTime.errors }" placeholder="EndTime" />
+                        <div *ngIf="submitted && f2.EndTime.errors" class="invalid-feedback">
+                            <div *ngIf="f2.EndTime.errors.required">End date is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <button (click)="pickFreeTables()" class="btn btn-primary">Show free tables</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <label>Free tables</label>
+                        <select formControlName="TableId" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.TableId.errors }" placeholder="Table">
+                            <option value="" selected disabled hidden>Choose a table...</option>
+                            <option *ngFor="let t of freeTables" value="t.Id">{{t.Number}} ({{t.Info}})</option>
+                        </select>
+                        <div *ngIf="submitted && f2.TableId.errors" class="invalid-feedback">
+                            <div *ngIf="f2.TableId.errors.required">Table is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Client ID</label>
+                        <input type="text" formControlName="ClientId" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.ClientId.errors }" placeholder="ClientId" />
+                        <div *ngIf="submitted && f2.ClientId.errors" class="invalid-feedback">
+                            <div *ngIf="f2.ClientId.errors.required">Client ID is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="submit" (click)="onSubmitBook()" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<!-- ///////////////////////////// -->
+<ng-template #openTableBooks let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="fas fa-history"></i>&nbsp;Table booking history</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="tableBookingHistory.length == 0" class="col-md-12 text-center">
+            History is empty
+        </div>
+        <table *ngIf="tableBookingHistory.length > 0" class="table table-striped">
+            <tbody>
+                <ng-container *ngFor="let book of tableBookingHistory">
+                    <tr [style.background-color]="setHistoryColor(book)">
+                        <td width="30%" style="text-align: center;">
+                            <div class="row">
+                                <div class="col-md-12"><i>{{book.BookTime}}</i></div>
+                            </div>
+                            <div class="row">
+                                <div style="white-space: normal;" class="col-md-12">
+                                    {{book.Client.FirstName}}&nbsp;{{book.Client.LastName}},{{book.Client.Age}}
+                                </div>
+                            </div>
+                        </td>
+                        <td width="50%" style="text-align: center;">
+                            <div class="row">
+                                <div class="col-md-12"><i>{{book.StartTime}}</i></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><i>~</i></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><i>{{book.EndTime}}</i></div>
+                            </div>
+                        </td>
+                        <td width="20%">
+                            <div class="row">
+                                <div class="item text-center col-md-12">
+                                    <i *ngIf="book.IsConfirm && book.IsActive" class="fas fa-calendar-check"
+                                        title="Accepted by manager"></i>
+                                    <i *ngIf="!book.IsConfirm && book.IsActive" class="fas fa-calendar-times"
+                                        title="Declined by manager"></i>
+                                    <i *ngIf="!book.IsConfirm && !book.IsActive" class="fas fa-calendar-minus"
+                                        title="Canceled by client"></i>
+                                    <i *ngIf="!book.IsActive" class="fas fa-ban" title="Рas not been processed"></i>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
     </div>
 </ng-template>
 <!-- ////////////////////////////////////////// -->

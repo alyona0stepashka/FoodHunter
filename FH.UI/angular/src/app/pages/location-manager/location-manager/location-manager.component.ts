@@ -77,24 +77,6 @@ export class LocationManagerComponent implements OnInit {
 
   ngOnInit() {
     this.loadLocation();
-    this.locationForm = this.formBuilder.group({
-      Name: ['', [Validators.required]],
-      CompanyId: ['', [Validators.required]],
-      Longitude: ['', [Validators.required]],
-      Latitude: ['', [Validators.required]],
-      Address: ['', [Validators.required]]
-    });
-    this.companyForm = this.formBuilder.group({
-      Name: ['', [Validators.required]],
-      ContactInfo: ['', [Validators.required]],
-      Vk: [''],
-      Facebook: [''],
-      Instagram: [''],
-      Site: [''],
-      Describe: ['', [Validators.required]],
-      Photo: [null, [Validators.required]],
-      SpecificationId: ['']
-    });
     this.loadStatic();
     this.loadMap();
   }

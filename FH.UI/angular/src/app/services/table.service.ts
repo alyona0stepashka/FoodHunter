@@ -22,6 +22,27 @@ export class TableService {
     return this.http.post(environment.serverURL + '/api/table', body);
   }
 
+  createTableBook(registerFormData: FormGroup) {
+    const body: FormData = new FormData();
+    body.append("StartTime", registerFormData.value.StartTime);
+    body.append("EndTime", registerFormData.value.EndTime);
+    body.append("TableId", registerFormData.value.TableId);
+    body.append("ClientId", registerFormData.value.ClientId);
+    return this.http.post(environment.serverURL + '/api/table/booking', body);
+  }
+
+  acceptBook(bookId) {
+    return this.http.get(environment.serverURL + '/api/table/' + bookId + '/booking/accept');
+  }
+
+  declineBook(bookId) {
+    return this.http.get(environment.serverURL + '/api/table/' + bookId + '/booking/decline');
+  }
+
+  cancelBook(bookId) {
+    return this.http.get(environment.serverURL + '/api/table/' + bookId + '/booking/cancel');
+  }
+
   deleteTable(tableId) {
     return this.http.delete(environment.serverURL + '/api/table/' + tableId);
   }

@@ -27,6 +27,82 @@ namespace FH.App.Controllers
         }
 
         [HttpGet]
+        [Route("{id}/booking")]
+        public IActionResult GetAllTableBooksByLocation(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    throw new Exception("locationId is missing");
+                }
+                var companyPage = _tableService.GetAllTableBooksByLocation(id);
+                return Ok(companyPage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/booking/accept")]
+        public IActionResult AcceptTableBook(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    throw new Exception("bookId is missing");
+                }
+                var companyPage = _tableService.AcceptTableBookAsync(id);
+                return Ok(companyPage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/booking/decline")]
+        public IActionResult DeclineTableBook(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    throw new Exception("bookId is missing");
+                }
+                var companyPage = _tableService.DeclineTableBookAsync(id);
+                return Ok(companyPage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/booking/cancel")]
+        public IActionResult CancelTableBook(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    throw new Exception("bookId is missing");
+                }
+                var companyPage = _tableService.CancelTableBookAsync(id);
+                return Ok(companyPage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("{id}")]
         public IActionResult GetAllTablesByLocation(int id)
         {
@@ -38,6 +114,24 @@ namespace FH.App.Controllers
                 }
                 var companyPage = _tableService.GetAllTablesByLocation(id);
                 return Ok(companyPage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTableBook([FromForm] CreateTableBookVM table)
+        {
+            try
+            {
+                if (table == null)
+                {
+                    throw new Exception("table object is missing");
+                }
+                var menuPage = await _tableService.CreateTableBookAsync(table);
+                return Ok(menuPage);
             }
             catch (Exception ex)
             {
