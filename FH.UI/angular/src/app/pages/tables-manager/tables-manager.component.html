@@ -1,6 +1,6 @@
 <app-not-found *ngIf="isNotFound"></app-not-found>
 
-<div *ngIf="!isLocationExist && isEdit" class="col-md-12">
+<div *ngIf="!isLocationExist && isEdit && !isNotFound" class="col-md-12">
     <div class="card-header">
         <h5 style="opacity:0.7" class="card-title">Before this you have to register your business location <a
                 href="/#/dashboard-manager/location"><i>here</i></a></h5>
@@ -8,7 +8,8 @@
 </div>
 
 <!-- ////////////////////////////////////// -->
-<mat-tab-group *ngIf="isLocationExist" style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+<mat-tab-group *ngIf="isLocationExist && !isNotFound"
+    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
 
     <mat-tab *ngIf="isEdit" style="background-color: #ffffff;">
         <ng-template mat-tab-label>
@@ -18,12 +19,14 @@
         <div>
             <div class="card card-user">
                 <div class="card-header">
-                    <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Tables Management <button
-                            title="Add new table" class="btn" style="padding: inherit;"
+                    <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Tables Management</h5>
+                    <h5 class="card-title" style="font-size: 1.3em;  margin-top: 0; margin-bottom: 0;">Total count:
+                        {{tables.length}}&nbsp;<button title="Add new table" class="btn" style="padding: inherit;"
                             (click)="openModal(newTable, 'newTable')">
                             +
                         </button></h5>
-
+                    <h5 class="card-title" style="font-size: 1.3em;  margin-top: 0; margin-bottom: 0;">Free table count:
+                        {{countFreeTablesNow()}}</h5>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
@@ -32,7 +35,7 @@
                                 <tr>
                                     <td width="10%" style="text-align: center;">
                                         <div class="row">
-                                            <div class="col-md-12"><i>{{item.Number}}</i></div>
+                                            <div class="col-md-12"><i>#{{item.Number}}</i></div>
                                         </div>
                                     </td>
                                     <td width="88%">
@@ -91,16 +94,24 @@
 
                 </div>
                 <div class="card-body">
-                    <div *ngIf="tableBookingNow.length == 0" class="col-md-12 text-center">
+                    <div *ngIf="tableBookingNow.length == 0" class="col-md-12 text-center"
+                        style="background-color: #79797917;">
                         History is empty
                     </div>
                     <table *ngIf="tableBookingNow.length > 0" class="table table-striped">
                         <tbody>
                             <ng-container *ngFor="let book of tableBookingNow">
-                                <tr [style.background-color]="setHistoryColor(book)">
+                                <tr [style.background-color]="setHistoryColor(book)" title="{{book.Comment}}">
                                     <td width="30%" style="text-align: center;">
                                         <div class="row">
-                                            <div class="col-md-12"><i>{{book.BookTime}}</i></div>
+                                            <div class="col-md-12">
+                                                <i>#{{book.TableNumber}}</i>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <i>{{this.datepipe.transform(book.BookTime, 'MMMM d, h:mm a')}}</i>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div style="white-space: normal;" class="col-md-12">
@@ -110,26 +121,31 @@
                                     </td>
                                     <td width="50%" style="text-align: center;">
                                         <div class="row">
-                                            <div class="col-md-12"><i>{{book.StartTime}}</i></div>
+                                            <div class="col-md-12">
+                                                <i>{{this.datepipe.transform(book.StartTime, 'MMMM d, h:mm a')}}</i>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12"><i>~</i></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12"><i>{{book.EndTime}}</i></div>
+                                            <div class="col-md-12">
+                                                <i>{{this.datepipe.transform(book.EndTime, 'MMMM d, h:mm a')}}</i></div>
                                         </div>
                                     </td>
                                     <td width="20%">
                                         <div class="row">
                                             <div class="item text-center col-md-12">
-                                                <i *ngIf="book.IsConfirm && book.IsActive" class="fas fa-calendar-check"
+                                                <i *ngIf="book.IsConfirm!=null && book.IsConfirm && book.IsActive"
+                                                    class="fas fa-calendar-check" style="color:#1b961f"
                                                     title="Accepted by manager"></i>
-                                                <i *ngIf="!book.IsConfirm && book.IsActive"
-                                                    class="fas fa-calendar-times" title="Declined by manager"></i>
-                                                <i *ngIf="!book.IsConfirm && !book.IsActive"
+                                                <i *ngIf="book.IsConfirm!=null && !book.IsConfirm && book.IsActive"
+                                                    style="color:#bd2323" class="fas fa-calendar-times"
+                                                    title="Declined by manager"></i>
+                                                <i *ngIf="book.IsConfirm!=null && !book.IsActive" style="color:#bd2323"
                                                     class="fas fa-calendar-minus" title="Canceled by client"></i>
-                                                <i *ngIf="!book.IsActive" class="fas fa-ban"
-                                                    title="Рas not been processed"></i>
+                                                <i *ngIf="book.IsConfirm==null" class="fas fa-exclamation"
+                                                    style="color:#1b2396c0" title="Have not been processed"></i>
                                             </div>
                                         </div>
                                     </td>
@@ -203,8 +219,11 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Start date</label>
-                        <input type="datetime-local" formControlName="StartTime" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f2.StartTime.errors }" placeholder="StartTime" />
+                        <dl-date-time-picker formControlName="StartTime" startView="day" maxView="year" minView="minute"
+                            minuteStep="20" [(ngModel)]="selectedStartDate">
+                        </dl-date-time-picker>
+                        <!-- <input type="datetime-local" formControlName="StartTime" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.StartTime.errors }" placeholder="StartTime" /> -->
                         <div *ngIf="submitted && f2.StartTime.errors" class="invalid-feedback">
                             <div *ngIf="f2.StartTime.errors.required">Start date is required</div>
                         </div>
@@ -213,17 +232,19 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>End date</label>
-                        <input type="datetime-local" formControlName="EndTime" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f2.EndTime.errors }" placeholder="EndTime" />
+
+                        <dl-date-time-picker formControlName="EndTime" startView="day" maxView="year" minView="minute"
+                            minuteStep="20" [(ngModel)]="selectedEndDate">
+                        </dl-date-time-picker>
+                        <!-- <input type="datetime-local" formControlName="EndTime" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.EndTime.errors }" placeholder="EndTime" /> -->
                         <div *ngIf="submitted && f2.EndTime.errors" class="invalid-feedback">
                             <div *ngIf="f2.EndTime.errors.required">End date is required</div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <button (click)="pickFreeTables()" class="btn btn-primary">Show free tables</button>
-                    </div>
+                <div class="col-md-2" style="margin-top: 0.5rem;">
+                    <button (click)="pickFreeTables()" class="btn btn-primary">Show free tables</button>
                 </div>
             </div>
             <div class="row">
@@ -233,7 +254,9 @@
                         <select formControlName="TableId" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f2.TableId.errors }" placeholder="Table">
                             <option value="" selected disabled hidden>Choose a table...</option>
-                            <option *ngFor="let t of freeTables" value="t.Id">{{t.Number}} ({{t.Info}})</option>
+                            <option *ngIf="freeTables.length==0" value="" selected disabled hidden>No one free table on
+                                picked time</option>
+                            <option *ngFor="let t of freeTables" value="{{t.Id}}">{{t.Number}} ({{t.Info}})</option>
                         </select>
                         <div *ngIf="submitted && f2.TableId.errors" class="invalid-feedback">
                             <div *ngIf="f2.TableId.errors.required">Table is required</div>
@@ -248,6 +271,15 @@
                         <div *ngIf="submitted && f2.ClientId.errors" class="invalid-feedback">
                             <div *ngIf="f2.ClientId.errors.required">Client ID is required</div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Comment</label>
+                        <input type="text" formControlName="Comment" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.Comment.errors }" placeholder="Comment" />
                     </div>
                 </div>
             </div>
@@ -270,51 +302,51 @@
         </button>
     </div>
     <div class="modal-body">
-        <div *ngIf="tableBookingHistory.length == 0" class="col-md-12 text-center">
+        <div *ngIf="tableBookingHistory.length == 0" class="col-md-12 text-center" style="background-color: #79797917;">
             History is empty
         </div>
         <table *ngIf="tableBookingHistory.length > 0" class="table table-striped">
             <tbody>
                 <ng-container *ngFor="let book of tableBookingHistory">
-                    <tr [style.background-color]="setHistoryColor(book)">
+                    <tr [style.background-color]="setHistoryColor(book)" title="{{book.Comment}">
                         <td width="30%" style="text-align: center;">
                             <div class="row">
-                                <div class="col-md-12"><i>{{book.BookTime}}</i></div>
+                                <div class="col-md-12"><i>{{this.datepipe.transform(book.BookTime, 'MMMM d, h:mm a')}}</i></div>
                             </div>
-                            <div class="row">
-                                <div style="white-space: normal;" class="col-md-12">
-                                    {{book.Client.FirstName}}&nbsp;{{book.Client.LastName}},{{book.Client.Age}}
-                                </div>
-                            </div>
-                        </td>
-                        <td width="50%" style="text-align: center;">
-                            <div class="row">
-                                <div class="col-md-12"><i>{{book.StartTime}}</i></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12"><i>~</i></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12"><i>{{book.EndTime}}</i></div>
-                            </div>
-                        </td>
-                        <td width="20%">
-                            <div class="row">
-                                <div class="item text-center col-md-12">
-                                    <i *ngIf="book.IsConfirm && book.IsActive" class="fas fa-calendar-check"
-                                        title="Accepted by manager"></i>
-                                    <i *ngIf="!book.IsConfirm && book.IsActive" class="fas fa-calendar-times"
-                                        title="Declined by manager"></i>
-                                    <i *ngIf="!book.IsConfirm && !book.IsActive" class="fas fa-calendar-minus"
-                                        title="Canceled by client"></i>
-                                    <i *ngIf="!book.IsActive" class="fas fa-ban" title="Рas not been processed"></i>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-container>
-            </tbody>
-        </table>
+                            <div class=" row">
+                        <div style="white-space: normal;" class="col-md-12">
+                            {{book.Client.FirstName}}&nbsp;{{book.Client.LastName}},{{book.Client.Age}}
+                        </div>
+    </div>
+    </td>
+    <td width="50%" style="text-align: center;">
+        <div class="row">
+            <div class="col-md-12"><i>{{this.datepipe.transform(book.StartTime, 'MMMM d, h:mm a')}}</i></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12"><i>~</i></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12"><i>{{this.datepipe.transform(book.EndTime, 'MMMM d, h:mm a')}}</i></div>
+        </div>
+    </td>
+    <td width="20%">
+        <div class="row">
+            <div class="item text-center col-md-12">
+                <i *ngIf="book.IsConfirm && book.IsActive" class="fas fa-calendar-check"
+                    title="Accepted by manager"></i>
+                <i *ngIf="!book.IsConfirm && book.IsActive" class="fas fa-calendar-times"
+                    title="Declined by manager"></i>
+                <i *ngIf="!book.IsConfirm && !book.IsActive" class="fas fa-calendar-minus"
+                    title="Canceled by client"></i>
+                <i *ngIf="book.IsConfirm==null" class="fas fa-ban" title="Рas not been processed"></i>
+            </div>
+        </div>
+    </td>
+    </tr>
+    </ng-container>
+    </tbody>
+    </table>
     </div>
 </ng-template>
 <!-- ////////////////////////////////////////// -->

@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 @Component({
   selector: 'app-tables-manager',
@@ -16,12 +19,16 @@ export class TablesManagerComponent implements OnInit {
     private tableService: TableService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
+    public datepipe: DatePipe,
     private activateRoute: ActivatedRoute,
     private modalService: NgbModal) { }
 
   //logic vars
   isNotFound = false;
   closeResult: string;
+  now = new Date();
+  selectedStartDate;
+  selectedEndDate;
   //logic vars
 
   //forms
@@ -33,9 +40,10 @@ export class TablesManagerComponent implements OnInit {
   submittedTable = false;
   bookForm: FormGroup = this.formBuilder.group({
     Id: [''],
-    StartTime: ['', [Validators.required]],
-    EndTime: ['', [Validators.required]],
+    StartTime: [this.selectedStartDate, [Validators.required]],
+    EndTime: [this.selectedEndDate, [Validators.required]],
     TableId: ['', [Validators.required]],
+    Comment: [''],
     ClientId: ['', [Validators.required]]
   });
   submittedBook = false;
@@ -93,11 +101,17 @@ export class TablesManagerComponent implements OnInit {
       res => {
         this.tables = res as [];
         this.isNotFound = (this.tables.length == 0 && !this.isEdit);
+        this.tableBookingNow = new Array();
         this.tables.forEach(e => {
+          console.log("books", e.TableBooks.length);
           if (e.TableBooks != null && e.TableBooks.length > 0) {
-            this.tableBookingNow.concat(e.TableBooks);
+            this.tableBookingNow = this.tableBookingNow.concat(e.TableBooks);
+            console.log("concat");
+
           }
         })
+        console.log("total books", this.tableBookingNow);
+
       },
       err => {
         this.isNotFound = true;
@@ -110,24 +124,68 @@ export class TablesManagerComponent implements OnInit {
   editTable(id: number) {
     this.isEditTable = true;
     const table = this.tables.find(m => m.Id == id);
-    this.tableForm.patchValue({ Id: id, Number: table.Number, Info: table.Info });
+    this.tableForm.patchValue({ Id: id, ...table });
+  }
+
+  compareDate(date1: Date, date2: Date): number {
+    let d1 = new Date(date1); let d2 = new Date(date2);
+    // Check if the dates are equal
+    let same = d1.getTime() === d2.getTime();
+    if (same) return 0;
+    // Check if the first is greater than second
+    if (d1 > d2) return 1;
+    // Check if the first is less than second
+    if (d1 < d2) return -1;
   }
 
   pickFreeTables() {
     this.freeTables = new Array();
-    const start = this.bookForm.value.StarTime;
-    const end = this.bookForm.value.EndTime;
+    const start = moment(new Date(this.selectedStartDate)).format("YYYY-MM-DD HH:mm:ss");
+    const end = moment(new Date(this.selectedEndDate)).format("YYYY-MM-DD HH:mm:ss");
+    console.log("start", start);
+    console.log("end", end);
+
     this.tables.forEach(t => {
-      let isFree = false;
+      let isFree = true;
+      // debugger;
       t.TableBooks.forEach(b => {
-        if ((start < b.StartTime && end < b.StartTime) || (start > b.EndTime && end > b.EndTime)) {
-          isFree = true;
+        let res1 = (this.compareDate(new Date(start), b.StartTime) == 0 || this.compareDate(new Date(start), b.StartTime) == 1); //0.1
+        let res2 = (this.compareDate(new Date(start), b.EndTime) == -1); //-1
+        let res3 = (this.compareDate(new Date(end), b.StartTime) == 1); //1
+        let res4 = (this.compareDate(new Date(end), b.EndTime) == 0 || this.compareDate(new Date(end), b.EndTime) == -1); //-1.0
+
+        if ((res1 && res2) || (res3 && res4)) {
+          isFree = false;
         }
       });
       if (isFree || t.TableBooks.length == 0) {
         this.freeTables.push(t);
       }
     })
+  }
+
+  countFreeTablesNow() {
+    this.freeTables = new Array();
+    const start = new Date();
+    const end = new Date();
+    this.tables.forEach(t => {
+      // debugger;
+      let isFree = true;
+      t.TableBooks.forEach(b => {
+        let res1 = (this.compareDate(new Date(start), b.StartTime) == 0 || this.compareDate(new Date(start), b.StartTime) == 1); //0.1
+        let res2 = (this.compareDate(new Date(start), b.EndTime) == -1); //-1
+        let res3 = (this.compareDate(new Date(end), b.StartTime) == 1); //1
+        let res4 = (this.compareDate(new Date(end), b.EndTime) == 0 || this.compareDate(new Date(end), b.EndTime) == -1); //-1.0
+
+        if ((res1 && res2) || (res3 && res4)) {
+          isFree = false;
+        }
+      });
+      if (isFree || t.TableBooks.length == 0) {
+        this.freeTables.push(t);
+      }
+    })
+    return this.freeTables.length;
   }
 
   deleteTable(id) {
@@ -209,7 +267,13 @@ export class TablesManagerComponent implements OnInit {
     if (this.bookForm.invalid) {
       return null;
     }
-    this.tableService.createTableBook(this.bookForm).subscribe(
+    let startTime = moment(new Date(this.selectedStartDate)).format("YYYY-MM-DD HH:mm:ss");
+    let endTime = moment(new Date(this.selectedEndDate)).format("YYYY-MM-DD HH:mm:ss");
+    console.log("strt-sbmt", moment(startTime).format("YYYY-MM-DD HH:mm:ss"));
+    console.log("end-sbmt", moment(endTime).format("YYYY-MM-DD HH:mm:ss"));
+
+    //this.bookForm.patchValue({ StartTime: moment(startTime).format("YYYY-MM-DD HH:mm:ss"), EndTime: moment(endTime).format("YYYY-MM-DD HH:mm:ss") });
+    this.tableService.createTableBook(this.bookForm, startTime, endTime).subscribe(
       (res: any) => {
         this.toastr.success(
           '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
@@ -262,6 +326,8 @@ export class TablesManagerComponent implements OnInit {
     }
     if (goal == "newBook") {
       this.bookForm.reset();
+      let now = new Date();
+      this.bookForm.patchValue({ StartTime: now, EndTime: now });
     }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

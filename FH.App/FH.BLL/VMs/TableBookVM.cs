@@ -14,9 +14,11 @@ namespace FH.BLL.VMs
         public DateTime StartTime { get; set; } 
         public DateTime EndTime { get; set; }
         public DateTime BookTime { get; set; }
+        public string Comment { get; set; }
         public bool IsActive { get; set; }
-        public bool IsConfirm { get; set; }
-        public TableTabVM Table { get; set; }
+        public bool? IsConfirm { get; set; } = null;
+        //        public TableTabVM Table { get; set; }
+        public int TableNumber { get; set; }
         public UserTabVM Client { get; set; }
 
         public TableBookVM(TableBook t)
@@ -26,8 +28,10 @@ namespace FH.BLL.VMs
             EndTime = t.EndTime;
             BookTime = t.BookTime;
             IsActive = t.IsActive;
+            Comment = t.Comment;
             IsConfirm = t.IsConfirm;
-            if (t.Table != null) {Table = new TableTabVM(t.Table); }
+            if (t.Table != null) {TableNumber = t.Table.Number;}
+            //if (t.Table != null) {Table = new TableTabVM(t.Table); }
             if (t.Client != null) { Client = new UserTabVM(t.Client); }
 
         }

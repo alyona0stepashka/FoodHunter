@@ -46,11 +46,12 @@ namespace FH.BLL.Services
             var dbTable = new TableBook
             {
                 EndTime = table.EndTime,
-                StartTime = table.StarTime,
+                StartTime = table.StartTime,
                 BookTime = table.BookTime,
-                IsConfirm = table.IsConfirm,
+                IsConfirm = null,
                 IsActive = table.IsActive,
                 TableId = table.TableId,
+                Comment = table.Comment,
                 ClientId = table.ClientId
             };
             var tableNew = await _db.TableBooks.CreateAsync(dbTable);
@@ -106,8 +107,7 @@ namespace FH.BLL.Services
 
         public async Task<TableBookVM> CancelTableBookAsync(int id)
         {
-            var item = await _db.TableBooks.GetByIdAsync(id);
-            item.IsConfirm = false;
+            var item = await _db.TableBooks.GetByIdAsync(id); 
             item.IsActive = false;
             var newItem = await _db.TableBooks.UpdateAsync(item);
             return new TableBookVM(newItem);

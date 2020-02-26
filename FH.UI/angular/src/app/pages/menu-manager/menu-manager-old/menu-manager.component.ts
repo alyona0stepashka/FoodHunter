@@ -39,7 +39,7 @@ export class MenuManagerComponent implements OnInit {
     Info: ['', [Validators.required]],
     Price: ['', [Validators.required]],
     PriceWithSales: [''],
-    IsActive: [this.IsActive, [Validators.required]],
+    IsActive: [true, [Validators.required]],
     MenuId: ['', [Validators.required]],
     Note: ['', [Validators.required]],
     Photo: ['', [Validators.required]],

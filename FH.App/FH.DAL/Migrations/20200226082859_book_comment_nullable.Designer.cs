@@ -4,14 +4,16 @@ using FH.DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FH.DAL.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    partial class EfDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200226082859_book_comment_nullable")]
+    partial class book_comment_nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,7 +363,7 @@ namespace FH.DAL.Migrations
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<bool?>("IsConfirm");
+                    b.Property<bool>("IsConfirm");
 
                     b.Property<DateTime>("StartTime");
 

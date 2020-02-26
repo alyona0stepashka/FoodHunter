@@ -122,6 +122,7 @@ namespace FH.App.Controllers
         }
 
         [HttpPost]
+        [Route("booking")]
         public async Task<IActionResult> CreateTableBook([FromForm] CreateTableBookVM table)
         {
             try

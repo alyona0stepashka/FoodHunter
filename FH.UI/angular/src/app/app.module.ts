@@ -13,6 +13,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 
+import { DlDateTimeDateModule, DlDateTimePickerModule } from 'angular-bootstrap-datetimepicker';
+
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import { GalleryModule } from '@ngx-gallery/core';
@@ -64,6 +66,8 @@ import { TablesManagerComponent } from './pages/tables-manager/tables-manager.co
     //AdminLayoutComponent
   ],
   imports: [
+    DlDateTimeDateModule,  // <--- Determines the data type of the model
+    DlDateTimePickerModule,
     MatTabsModule,
     MatSlideToggleModule,
     BrowserModule,

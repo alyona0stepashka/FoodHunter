@@ -22,11 +22,17 @@ export class TableService {
     return this.http.post(environment.serverURL + '/api/table', body);
   }
 
-  createTableBook(registerFormData: FormGroup) {
+  createTableBook(registerFormData: FormGroup, startDate, endDate) {
     const body: FormData = new FormData();
-    body.append("StartTime", registerFormData.value.StartTime);
-    body.append("EndTime", registerFormData.value.EndTime);
+    console.log("in_service-start-date", startDate);
+    console.log("in_service-end-date", endDate);
+
+    body.append("StartTime", startDate);
+    body.append("EndTime", endDate);
     body.append("TableId", registerFormData.value.TableId);
+    if (registerFormData.value.Comment != '' && registerFormData.value.Comment != null) {
+      body.append("Comment", registerFormData.value.Comment);
+    }
     body.append("ClientId", registerFormData.value.ClientId);
     return this.http.post(environment.serverURL + '/api/table/booking', body);
   }

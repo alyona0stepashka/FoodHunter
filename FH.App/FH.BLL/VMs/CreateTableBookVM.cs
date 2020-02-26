@@ -11,11 +11,12 @@ namespace FH.BLL.VMs
     public class CreateTableBookVM
     {
         public int Id { get; set; }
-        public DateTime StarTime { get; set; } 
+        public DateTime StartTime { get; set; } 
         public DateTime EndTime { get; set; }
-        public DateTime BookTime { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsConfirm { get; set; }
+        public DateTime BookTime { get; set; } = DateTime.Now;
+        public bool IsActive { get; set; } = true;
+        public bool? IsConfirm { get; set; } = false;
+        public string Comment { get; set; } = "";
         public int TableId { get; set; } 
         public int ClientId { get; set; }  
     }

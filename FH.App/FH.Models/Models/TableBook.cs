@@ -15,7 +15,9 @@ namespace FH.Models.Models
 
         public DateTime EndTime { get; set; }
 
-        public bool IsConfirm { get; set; }
+        public bool? IsConfirm { get; set; }
+
+        public string Comment { get; set; }
 
         public bool IsActive { get; set; }
 
