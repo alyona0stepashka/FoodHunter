@@ -117,7 +117,8 @@ namespace FH.BLL.Services
                 var icon = $"{profile?.File?.Path}{profile?.File?.Name}{profile?.File?.Extension}";
                 var fullName = $"{profile?.FirstName} {profile?.LastName}";
                 var myLocation = _db.Locations.GetAll().FirstOrDefault(m => m.AdminId == user.Id);
-                var myLocationId = myLocation?.Id ?? 0; 
+                var myLocationId = myLocation?.Id ?? 0;
+                var profileId = profile?.Id;
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -127,6 +128,7 @@ namespace FH.BLL.Services
                         new Claim("IsManager", isManager.ToString()),
                         new Claim("Icon", icon),
                         new Claim("MyLocationId", myLocationId.ToString()),
+                        new Claim("ProfileId", profileId.ToString()),
                         new Claim("FullName", fullName)
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),

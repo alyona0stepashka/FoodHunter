@@ -12,7 +12,7 @@
                     <div class="item col-md-12" style="margin-top: 1rem;" title="{{locationInfo.Rate}}">
                         <ngb-rating max="5" [(rate)]="locationInfo.Rate" [readonly]="true">
                         </ngb-rating>
-                        <i *ngIf="locationInfo.Feedbacks!=null">({{locationInfo.Feedbacks.lenght}})</i>
+                        <i *ngIf="locationInfo.Feedbacks!=null">({{locationInfo.Feedbacks.length}})</i>
                         <i *ngIf="locationInfo.Feedbacks==null">(0)</i>
                     </div>
                 </div>
@@ -73,6 +73,7 @@
                             <ng-template mat-tab-label><span
                                     style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">Tables</span>
                             </ng-template>
+                            <app-tables-manager></app-tables-manager>
                         </mat-tab>
                         <!-- ------------------------------------------>
                         <mat-tab>

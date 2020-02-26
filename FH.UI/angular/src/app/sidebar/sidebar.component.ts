@@ -14,25 +14,6 @@ export class RouteInfo {
 
 export var ROUTES: RouteInfo[] = [];
 
-const ROUTES_WELCOME: RouteInfo[] = [
-    { path: '/welcome/login', title: 'Login', icon: 'nc-key-25', class: '', onclick: {}, childItems: [] },
-    { path: '/welcome/register', title: 'Register', icon: 'nc-simple-add', onclick: {}, class: '', childItems: [] },
-    { path: '/welcome/about-us', title: 'About Us', icon: 'nc-briefcase-24', onclick: {}, class: '', childItems: [] },
-    { path: '/welcome/contact-us', title: 'Contact Us', icon: 'nc-send', onclick: {}, class: '', childItems: [] }
-];
-
-const ROUTES_MANAGER: RouteInfo[] = [
-    { path: '/dashboard-manager/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
-    { path: '/dashboard-manager/location', title: 'Location', icon: 'nc-bank', onclick: {}, class: '', childItems: [] },
-    { path: '/dashboard-manager/menu/0', title: 'Menu', icon: 'nc-book-bookmark', onclick: {}, class: '', childItems: [] },
-    { path: '/dashboard-manager/table/0', title: 'Tables', icon: 'nc-caps-small', onclick: {}, class: '', childItems: [] }
-];
-
-const ROUTES_USER: RouteInfo[] = [
-    { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
-    { path: '/welcome/contact-us', title: 'Contact Us2', icon: 'nc-send', class: '', onclick: {}, childItems: [] }
-];
-
 @Component({
     moduleId: module.id,
     selector: 'sidebar-cmp',
@@ -41,6 +22,30 @@ const ROUTES_USER: RouteInfo[] = [
 })
 
 export class SidebarComponent implements OnInit {
+    locationId = localStorage.getItem('MyLocationId');
+
+    ROUTES_WELCOME: RouteInfo[] = [
+        { path: '/welcome/login', title: 'Login', icon: 'nc-key-25', class: '', onclick: {}, childItems: [] },
+        { path: '/welcome/register', title: 'Register', icon: 'nc-simple-add', onclick: {}, class: '', childItems: [] },
+        { path: '/welcome/about-us', title: 'About Us', icon: 'nc-briefcase-24', onclick: {}, class: '', childItems: [] },
+        { path: '/welcome/contact-us', title: 'Contact Us', icon: 'nc-send', onclick: {}, class: '', childItems: [] }
+    ];
+
+    ROUTES_MANAGER: RouteInfo[] = [
+        { path: '/dashboard-manager/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
+        {
+            path: '/dashboard-manager/location', title: 'Location', icon: 'nc-bank', onclick: {}, class: '', childItems: [
+                { path: '/dashboard-manager/location', title: 'Management', icon: 'M', class: '', onclick: {}, childItems: [] },
+                { path: '/dashboard-manager/location/' + this.locationId, title: 'Page', icon: 'P', class: '', onclick: {}, childItems: [] }]
+        },
+        { path: '/dashboard-manager/menu/0', title: 'Menu', icon: 'nc-book-bookmark', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-manager/table/0', title: 'Tables', icon: 'nc-caps-small', onclick: {}, class: '', childItems: [] }
+    ];
+
+    ROUTES_USER: RouteInfo[] = [
+        { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
+        { path: '/welcome/contact-us', title: 'Contact Us2', icon: 'nc-send', class: '', onclick: {}, childItems: [] }
+    ];
 
     constructor(private router: Router) { }
 
@@ -69,9 +74,9 @@ export class SidebarComponent implements OnInit {
         this.fullName = localStorage.getItem('FullName');
         this.icon = environment.serverURL + localStorage.getItem('Icon');
 
-        ROUTES = ROUTES_WELCOME.filter(menuItem => menuItem);
+        ROUTES = this.ROUTES_WELCOME.filter(menuItem => menuItem);
         if (this.isLogin) {
-            (localStorage.getItem('CurrentRole')) ? ROUTES = ROUTES_MANAGER.filter(menuItem => menuItem) : ROUTES = ROUTES_USER.filter(menuItem => menuItem);
+            (localStorage.getItem('CurrentRole')) ? ROUTES = this.ROUTES_MANAGER.filter(menuItem => menuItem) : ROUTES = this.ROUTES_USER.filter(menuItem => menuItem);
             ROUTES.concat(this.userItems.filter(menuItem => menuItem));
         }
         this.menuItems = ROUTES.filter(menuItem => menuItem);

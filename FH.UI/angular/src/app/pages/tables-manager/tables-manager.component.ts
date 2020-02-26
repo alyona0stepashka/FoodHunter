@@ -6,7 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
-import { Moment } from 'moment';
 
 @Component({
   selector: 'app-tables-manager',
@@ -51,6 +50,7 @@ export class TablesManagerComponent implements OnInit {
 
   //params
   locationId = localStorage.getItem("MyLocationId");
+  clientId = localStorage.getItem("ClientId");
   welcomeLocationId;
   isLocationExist = (this.locationId != null && this.locationId != '0');
   //params
@@ -67,6 +67,7 @@ export class TablesManagerComponent implements OnInit {
   tableBookingHistory = new Array();
   tableBookingNow = new Array();
   freeTables = new Array();
+  freeTablesNow = new Array();
   //server list
 
   //crud tables
@@ -107,11 +108,10 @@ export class TablesManagerComponent implements OnInit {
           if (e.TableBooks != null && e.TableBooks.length > 0) {
             this.tableBookingNow = this.tableBookingNow.concat(e.TableBooks);
             console.log("concat");
-
           }
         })
         console.log("total books", this.tableBookingNow);
-
+        this.countFreeTablesNow();
       },
       err => {
         this.isNotFound = true;
@@ -165,7 +165,7 @@ export class TablesManagerComponent implements OnInit {
   }
 
   countFreeTablesNow() {
-    this.freeTables = new Array();
+    this.freeTablesNow = new Array();
     const start = new Date();
     const end = new Date();
     this.tables.forEach(t => {
@@ -182,10 +182,10 @@ export class TablesManagerComponent implements OnInit {
         }
       });
       if (isFree || t.TableBooks.length == 0) {
-        this.freeTables.push(t);
+        this.freeTablesNow.push(t);
       }
     })
-    return this.freeTables.length;
+    return this.freeTablesNow.length;
   }
 
   deleteTable(id) {
@@ -269,11 +269,53 @@ export class TablesManagerComponent implements OnInit {
     }
     let startTime = moment(new Date(this.selectedStartDate)).format("YYYY-MM-DD HH:mm:ss");
     let endTime = moment(new Date(this.selectedEndDate)).format("YYYY-MM-DD HH:mm:ss");
-    console.log("strt-sbmt", moment(startTime).format("YYYY-MM-DD HH:mm:ss"));
-    console.log("end-sbmt", moment(endTime).format("YYYY-MM-DD HH:mm:ss"));
-
-    //this.bookForm.patchValue({ StartTime: moment(startTime).format("YYYY-MM-DD HH:mm:ss"), EndTime: moment(endTime).format("YYYY-MM-DD HH:mm:ss") });
     this.tableService.createTableBook(this.bookForm, startTime, endTime).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationTables();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
+  acceptBook(id) {
+    this.tableService.acceptBook(id).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationTables();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
+  declineBook(id) {
+    this.tableService.declineBook(id).subscribe(
       (res: any) => {
         this.toastr.success(
           '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
@@ -329,6 +371,11 @@ export class TablesManagerComponent implements OnInit {
       let now = new Date();
       this.bookForm.patchValue({ StartTime: now, EndTime: now });
     }
+    if (goal == "newBookUser") {
+      this.bookForm.reset();
+      let now = new Date();
+      this.bookForm.patchValue({ StartTime: now, EndTime: now, ClientId: this.clientId });
+    }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -337,6 +384,10 @@ export class TablesManagerComponent implements OnInit {
   }
 
   private getDismissReason(reason: any): string {
+
+    this.tableForm.reset();
+    this.bookForm.reset();
+
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {

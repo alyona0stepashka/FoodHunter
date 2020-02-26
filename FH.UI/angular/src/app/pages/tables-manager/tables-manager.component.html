@@ -7,26 +7,28 @@
     </div>
 </div>
 
-<!-- ////////////////////////////////////// -->
+<!-- -------------Table management--------------------- -->
 <mat-tab-group *ngIf="isLocationExist && !isNotFound"
     style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
 
-    <mat-tab *ngIf="isEdit" style="background-color: #ffffff;">
+    <mat-tab style="background-color: #ffffff;">
         <ng-template mat-tab-label>
             <i class="fas fa-tasks"><span
                     style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;"></span></i>
         </ng-template>
         <div>
-            <div class="card card-user">
+            <div class="card card-user" style="min-height: auto;">
                 <div class="card-header">
                     <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Tables Management</h5>
-                    <h5 class="card-title" style="font-size: 1.3em;  margin-top: 0; margin-bottom: 0;">Total count:
-                        {{tables.length}}&nbsp;<button title="Add new table" class="btn" style="padding: inherit;"
+                    <h5 class="card-title" style="font-size: 1.3em;  margin-top: 0; margin-bottom: 0;">Tables:
+                        {{tables.length}}&nbsp;<i *ngIf="isEdit" title="Add new table"
+                            style="padding: inherit; cursor: pointer;" class="fas fa-plus"
                             (click)="openModal(newTable, 'newTable')">
-                            +
-                        </button></h5>
-                    <h5 class="card-title" style="font-size: 1.3em;  margin-top: 0; margin-bottom: 0;">Free table count:
-                        {{countFreeTablesNow()}}</h5>
+                        </i></h5>
+                    <h5 class="card-title" style="font-size: 1.3em;  margin-top: 0; margin-bottom: 0;">Free tables:
+                        {{freeTablesNow.length}}&nbsp;<i *ngIf="isEdit" title="Refresh" class="fas fa-sync-alt"
+                            style="padding: inherit; cursor: pointer; " (click)="countFreeTablesNow()">
+                        </i></h5>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
@@ -78,19 +80,20 @@
             </div>
         </div>
     </mat-tab>
-    <!-- ------------------------------------------>
+    <!-- ----------------Booking Management-------------------------->
     <mat-tab>
         <ng-template mat-tab-label><span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
                 <b>Booking</b></span>
         </ng-template>
         <div>
-            <div class="card card-user">
+            <div class="card card-user" style="min-height: auto;">
                 <div class="card-header">
-                    <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Booking Management <button
-                            title="Book table" class="btn" style="padding: inherit;"
-                            (click)="openModal(newBook, 'newBook')">
-                            +
-                        </button></h5>
+                    <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Booking Management&nbsp;<i
+                            *ngIf="isEdit" title="Book table" style="padding: inherit; cursor: pointer;"
+                            class="fas fa-plus" (click)="openModal(newBook, 'newBook')">
+                        </i><i *ngIf="!isEdit" title="Book table" style="padding: inherit; cursor: pointer;"
+                            class="fas fa-plus" (click)="openModal(newBookUser, 'newBookUser')">
+                        </i></h5>
 
                 </div>
                 <div class="card-body">
@@ -105,7 +108,9 @@
                                     <td width="30%" style="text-align: center;">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <i>#{{book.TableNumber}}</i>
+                                                <i>Table #{{book.TableNumber}}</i>&nbsp;
+                                                <i *ngIf="book.IsConfirm==null" class="fas fa-exclamation"
+                                                    style="color:#a51e1ec0" title="Have not been processed"></i>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -133,7 +138,7 @@
                                                 <i>{{this.datepipe.transform(book.EndTime, 'MMMM d, h:mm a')}}</i></div>
                                         </div>
                                     </td>
-                                    <td width="20%">
+                                    <td width="20%" *ngIf="isEdit">
                                         <div class="row">
                                             <div class="item text-center col-md-12">
                                                 <i *ngIf="book.IsConfirm!=null && book.IsConfirm && book.IsActive"
@@ -144,8 +149,16 @@
                                                     title="Declined by manager"></i>
                                                 <i *ngIf="book.IsConfirm!=null && !book.IsActive" style="color:#bd2323"
                                                     class="fas fa-calendar-minus" title="Canceled by client"></i>
-                                                <i *ngIf="book.IsConfirm==null" class="fas fa-exclamation"
-                                                    style="color:#1b2396c0" title="Have not been processed"></i>
+                                                <button *ngIf="book.IsConfirm==null && isEdit" type="submit"
+                                                    class="btn "
+                                                    style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                    title="Accept"><i class="fas fa-check"
+                                                        (click)="acceptBook(book.Id)"></i></button>
+                                                <button *ngIf="book.IsConfirm==null && isEdit" type="submit"
+                                                    class="btn "
+                                                    style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                    title="Decline"><i class="fas fa-ban"
+                                                        (click)="declineBook(book.Id)"></i></button>
                                             </div>
                                         </div>
                                     </td>
@@ -159,7 +172,7 @@
     </mat-tab>
 
 </mat-tab-group>
-<!-- ///////////////////////////// -->
+<!-- --------------new table modal---------- -->
 <ng-template #newTable let-modal>
     <div class="modal-header">
         <h4 *ngIf="isEditTable" class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your
@@ -205,7 +218,7 @@
         </form>
     </div>
 </ng-template>
-<!-- ///////////////////////////// -->
+<!-- ---------new book modal---------------- -->
 <ng-template #newBook let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Book table</h4>
@@ -232,7 +245,6 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>End date</label>
-
                         <dl-date-time-picker formControlName="EndTime" startView="day" maxView="year" minView="minute"
                             minuteStep="20" [(ngModel)]="selectedEndDate">
                         </dl-date-time-picker>
@@ -244,7 +256,7 @@
                     </div>
                 </div>
                 <div class="col-md-2" style="margin-top: 0.5rem;">
-                    <button (click)="pickFreeTables()" class="btn btn-primary">Show free tables</button>
+                    <button (click)="pickFreeTables()" class="btn btn-primary">Update free tables</button>
                 </div>
             </div>
             <div class="row">
@@ -253,10 +265,11 @@
                         <label>Free tables</label>
                         <select formControlName="TableId" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f2.TableId.errors }" placeholder="Table">
-                            <option value="" selected disabled hidden>Choose a table...</option>
+                            <!-- <option *ngIf="freeTables.length!=0" value="" selected disabled hidden>Choose a table...
+                            </option>
                             <option *ngIf="freeTables.length==0" value="" selected disabled hidden>No one free table on
-                                picked time</option>
-                            <option *ngFor="let t of freeTables" value="{{t.Id}}">{{t.Number}} ({{t.Info}})</option>
+                                picked time</option> -->
+                            <option *ngFor="let t of freeTables" value="{{t.Id}}">#{{t.Number}} ({{t.Info}})</option>
                         </select>
                         <div *ngIf="submitted && f2.TableId.errors" class="invalid-feedback">
                             <div *ngIf="f2.TableId.errors.required">Table is required</div>
@@ -293,7 +306,95 @@
         </form>
     </div>
 </ng-template>
-<!-- ///////////////////////////// -->
+<!-- ---------new book user modal---------------- -->
+<ng-template #newBookUser let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Book table</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="bookForm">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Start date</label>
+                        <dl-date-time-picker formControlName="StartTime" startView="day" maxView="year" minView="minute"
+                            minuteStep="20" [(ngModel)]="selectedStartDate">
+                        </dl-date-time-picker>
+                        <!-- <input type="datetime-local" formControlName="StartTime" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.StartTime.errors }" placeholder="StartTime" /> -->
+                        <div *ngIf="submitted && f2.StartTime.errors" class="invalid-feedback">
+                            <div *ngIf="f2.StartTime.errors.required">Start date is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>End date</label>
+                        <dl-date-time-picker formControlName="EndTime" startView="day" maxView="year" minView="minute"
+                            minuteStep="20" [(ngModel)]="selectedEndDate">
+                        </dl-date-time-picker>
+                        <!-- <input type="datetime-local" formControlName="EndTime" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.EndTime.errors }" placeholder="EndTime" /> -->
+                        <div *ngIf="submitted && f2.EndTime.errors" class="invalid-feedback">
+                            <div *ngIf="f2.EndTime.errors.required">End date is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-top: 0.5rem;">
+                    <button (click)="pickFreeTables()" class="btn btn-primary">Update free tables</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <label>Free tables</label>
+                        <select formControlName="TableId" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.TableId.errors }" placeholder="Table">
+                            <!-- <option *ngIf="freeTables.length!=0" value="" selected disabled hidden>Choose a table...
+                            </option>
+                            <option *ngIf="freeTables.length==0" value="" selected disabled hidden>No one free table on
+                                picked time</option> -->
+                            <option *ngFor="let t of freeTables" value="{{t.Id}}">#{{t.Number}} ({{t.Info}})</option>
+                        </select>
+                        <div *ngIf="submitted && f2.TableId.errors" class="invalid-feedback">
+                            <div *ngIf="f2.TableId.errors.required">Table is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Client ID</label>
+                        <input type="text" disabled formControlName="ClientId" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.ClientId.errors }" placeholder="ClientId" />
+                        <div *ngIf="submitted && f2.ClientId.errors" class="invalid-feedback">
+                            <div *ngIf="f2.ClientId.errors.required">Client ID is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Comment</label>
+                        <input type="text" formControlName="Comment" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f2.Comment.errors }" placeholder="Comment" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="submit" (click)="onSubmitBook()" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<!-- ------boking history modal------------- -->
 <ng-template #openTableBooks let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title"><i class="fas fa-history"></i>&nbsp;Table booking history</h4>
