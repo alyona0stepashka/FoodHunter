@@ -39,12 +39,13 @@ export class SidebarComponent implements OnInit {
                 { path: '/dashboard-manager/location/' + this.locationId, title: 'Page', icon: 'P', class: '', onclick: {}, childItems: [] }]
         },
         { path: '/dashboard-manager/menu/0', title: 'Menu', icon: 'nc-book-bookmark', onclick: {}, class: '', childItems: [] },
-        { path: '/dashboard-manager/table/0', title: 'Tables', icon: 'nc-caps-small', onclick: {}, class: '', childItems: [] }
+        { path: '/dashboard-manager/table/0', title: 'Tables', icon: 'nc-caps-small', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] }
     ];
 
     ROUTES_USER: RouteInfo[] = [
         { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
-        { path: '/welcome/contact-us', title: 'Contact Us2', icon: 'nc-send', class: '', onclick: {}, childItems: [] }
+        { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] }
     ];
 
     constructor(private router: Router) { }
@@ -76,7 +77,7 @@ export class SidebarComponent implements OnInit {
 
         ROUTES = this.ROUTES_WELCOME.filter(menuItem => menuItem);
         if (this.isLogin) {
-            (localStorage.getItem('CurrentRole')) ? ROUTES = this.ROUTES_MANAGER.filter(menuItem => menuItem) : ROUTES = this.ROUTES_USER.filter(menuItem => menuItem);
+            (!this.isCurrentUser ? ROUTES = this.ROUTES_MANAGER.filter(menuItem => menuItem) : ROUTES = this.ROUTES_USER.filter(menuItem => menuItem));
             ROUTES.concat(this.userItems.filter(menuItem => menuItem));
         }
         this.menuItems = ROUTES.filter(menuItem => menuItem);

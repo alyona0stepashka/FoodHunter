@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { TableService } from 'app/services/table.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterEvent, NavigationEnd, ParamMap, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tables-manager',
@@ -60,6 +61,7 @@ export class TablesManagerComponent implements OnInit {
   isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
   isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
   isEdit = (this.isLocationExist && this.isManager && !this.isCurrentUser);
+  isMy = false;
   //bool vars for role access
 
   //server list
@@ -89,8 +91,15 @@ export class TablesManagerComponent implements OnInit {
       this.isEdit = true;
     }
     else {
-      this.isEdit = false;
+      if (this.welcomeLocationId == 'my') {
+        this.isMy = true;
+        this.welcomeLocationId = this.locationId;
+      }
+      else {
+        this.isEdit = false;
+      }
     }
+
     if (!this.isLocationExist && this.isEdit) {
       return;
     }
@@ -98,27 +107,42 @@ export class TablesManagerComponent implements OnInit {
   }
 
   loadLocationTables() {
-    this.tableService.getAllTablesByLocation(this.welcomeLocationId).subscribe(
-      res => {
-        this.tables = res as [];
-        this.isNotFound = (this.tables.length == 0 && !this.isEdit);
-        this.tableBookingNow = new Array();
-        this.tables.forEach(e => {
-          console.log("books", e.TableBooks.length);
-          if (e.TableBooks != null && e.TableBooks.length > 0) {
-            this.tableBookingNow = this.tableBookingNow.concat(e.TableBooks);
-            console.log("concat");
-          }
-        })
-        console.log("total books", this.tableBookingNow);
-        this.countFreeTablesNow();
-      },
-      err => {
-        this.isNotFound = true;
-        console.log(err);
-        this.toastr.error(err.error, 'Error');
-      }
-    );
+    if (this.isMy) {
+      this.tableService.getMyTableBooks().subscribe(
+        res => {
+          this.tableBookingNow = res as [];
+          console.log("my-total-books", this.tableBookingNow);
+        },
+        err => {
+          this.isNotFound = true;
+          console.log(err);
+          this.toastr.error(err.error, 'Error');
+        }
+      );
+    }
+    else {
+      this.tableService.getAllTablesByLocation(this.welcomeLocationId).subscribe(
+        res => {
+          this.tables = res as [];
+          this.isNotFound = (this.tables.length == 0 && !this.isEdit);
+          this.tableBookingNow = new Array();
+          this.tables.forEach(e => {
+            console.log("books", e.TableBooks.length);
+            if (e.TableBooks != null && e.TableBooks.length > 0) {
+              this.tableBookingNow = this.tableBookingNow.concat(e.TableBooks);
+              console.log("concat");
+            }
+          })
+          console.log("total books", this.tableBookingNow);
+          this.countFreeTablesNow();
+        },
+        err => {
+          this.isNotFound = true;
+          console.log(err);
+          this.toastr.error(err.error, 'Error');
+        }
+      );
+    }
   }
 
   editTable(id: number) {
@@ -270,6 +294,29 @@ export class TablesManagerComponent implements OnInit {
     let startTime = moment(new Date(this.selectedStartDate)).format("YYYY-MM-DD HH:mm:ss");
     let endTime = moment(new Date(this.selectedEndDate)).format("YYYY-MM-DD HH:mm:ss");
     this.tableService.createTableBook(this.bookForm, startTime, endTime).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationTables();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
+  cancelBook(id) {
+    this.tableService.cancelBook(id).subscribe(
       (res: any) => {
         this.toastr.success(
           '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',

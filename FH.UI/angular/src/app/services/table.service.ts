@@ -10,6 +10,10 @@ export class TableService {
 
   constructor(private http: HttpClient) { }
 
+  getMyTableBooks() {
+    return this.http.get(environment.serverURL + '/api/table/my');
+  }
+
   getAllTablesByLocation(locationId) {
     return this.http.get(environment.serverURL + '/api/table/' + locationId);
   }

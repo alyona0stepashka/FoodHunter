@@ -1,6 +1,6 @@
 <app-not-found *ngIf="isNotFound"></app-not-found>
 
-<div *ngIf="!isLocationExist && isEdit && !isNotFound" class="col-md-12">
+<div *ngIf="!isLocationExist && isEdit && !isNotFound && !isMy" class="col-md-12">
     <div class="card-header">
         <h5 style="opacity:0.7" class="card-title">Before this you have to register your business location <a
                 href="/#/dashboard-manager/location"><i>here</i></a></h5>
@@ -8,10 +8,9 @@
 </div>
 
 <!-- -------------Table management--------------------- -->
-<mat-tab-group *ngIf="isLocationExist && !isNotFound"
-    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+<mat-tab-group *ngIf="!isNotFound" style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
 
-    <mat-tab style="background-color: #ffffff;">
+    <mat-tab *ngIf="!isMy" style="background-color: #ffffff;">
         <ng-template mat-tab-label>
             <i class="fas fa-tasks"><span
                     style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;"></span></i>
@@ -89,9 +88,9 @@
             <div class="card card-user" style="min-height: auto;">
                 <div class="card-header">
                     <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Booking Management&nbsp;<i
-                            *ngIf="isEdit" title="Book table" style="padding: inherit; cursor: pointer;"
+                            *ngIf="isEdit && !isMy" title="Book table" style="padding: inherit; cursor: pointer;"
                             class="fas fa-plus" (click)="openModal(newBook, 'newBook')">
-                        </i><i *ngIf="!isEdit" title="Book table" style="padding: inherit; cursor: pointer;"
+                        </i><i *ngIf="!isEdit && !isMy" title="Book table" style="padding: inherit; cursor: pointer;"
                             class="fas fa-plus" (click)="openModal(newBookUser, 'newBookUser')">
                         </i></h5>
 
@@ -108,9 +107,12 @@
                                     <td width="30%" style="text-align: center;">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <i>Table #{{book.TableNumber}}</i>&nbsp;
-                                                <i *ngIf="book.IsConfirm==null" class="fas fa-exclamation"
-                                                    style="color:#a51e1ec0" title="Have not been processed"></i>
+                                                <i *ngIf="isMy">{{book.LocationName}} (Table
+                                                    #{{book.TableNumber}})</i>&nbsp;
+                                                <i *ngIf="!isMy">Table #{{book.TableNumber}}</i>&nbsp;
+                                                <i *ngIf="book.IsConfirm==null && book.IsActive"
+                                                    class="fas fa-exclamation" style="color:#a51e1ec0"
+                                                    title="Have not been processed"></i>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -147,18 +149,23 @@
                                                 <i *ngIf="book.IsConfirm!=null && !book.IsConfirm && book.IsActive"
                                                     style="color:#bd2323" class="fas fa-calendar-times"
                                                     title="Declined by manager"></i>
-                                                <i *ngIf="book.IsConfirm!=null && !book.IsActive" style="color:#bd2323"
+                                                <i *ngIf="!book.IsActive" style="color:#bd2323"
                                                     class="fas fa-calendar-minus" title="Canceled by client"></i>
-                                                <button *ngIf="book.IsConfirm==null && isEdit" type="submit"
-                                                    class="btn "
+                                                <button *ngIf="book.IsConfirm==null && book.IsActive && isEdit && !isMy"
+                                                    type="submit" class="btn "
                                                     style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                     title="Accept"><i class="fas fa-check"
                                                         (click)="acceptBook(book.Id)"></i></button>
-                                                <button *ngIf="book.IsConfirm==null && isEdit" type="submit"
-                                                    class="btn "
+                                                <button *ngIf="book.IsConfirm==null && book.IsActive && isEdit && !isMy"
+                                                    type="submit" class="btn "
                                                     style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                     title="Decline"><i class="fas fa-ban"
                                                         (click)="declineBook(book.Id)"></i></button>
+                                                <button *ngIf="book.IsConfirm==null && book.IsActive && isMy"
+                                                    type="submit" class="btn "
+                                                    style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                    title="Cancel"><i class="fas fa-ban"
+                                                        (click)="cancelBook(book.Id)"></i></button>
                                             </div>
                                         </div>
                                     </td>

@@ -4,3 +4,7 @@
 input {
   background: #ffffffdb;
 }
+
+.card-user .card-boby {
+  min-height: auto;
+}

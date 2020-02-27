@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="form-group">
-                            <label>Company</label>&nbsp;&nbsp;&nbsp;<a *ngIf="!isEdit" href="javascript:void(0)"
+                            <label>Company</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
                                 (click)="openModal(newCompany)" title="Register your company if it is not yet">+ new</a>
                             <select formControlName="CompanyId" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && f.CompanyId.errors }" placeholder="Company">
@@ -70,8 +70,8 @@
                     </div>
                     <div class="col-md-5">
                         <div class="form-group">
-                            <label>Your coordinates (Lon/Lat)</label>&nbsp;&nbsp;&nbsp;<a *ngIf="!isEdit"
-                                href="javascript:void(0)" (click)="openModal(findCoordinates)">&oplus;
+                            <label>Your coordinates (Lon/Lat)</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
+                                (click)="openModal(findCoordinates)">&oplus;
                                 find now</a>
                             <div class="row">
                                 <div class="col-md-6">

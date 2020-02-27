@@ -27,6 +27,21 @@ namespace FH.App.Controllers
         }
 
         [HttpGet]
+        [Route("my")]
+        public IActionResult GetMyTableBooks()
+        {
+            try
+            {
+                var companyPage = _tableService.GetMyTableBooks(User.Claims.First(c => c.Type == "UserID").Value);
+                return Ok(companyPage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("{id}/booking")]
         public IActionResult GetAllTableBooksByLocation(int id)
         {

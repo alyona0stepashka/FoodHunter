@@ -13,7 +13,8 @@ namespace FH.BLL.VMs
         public int Id { get; set; }
         public int Number { get; set; } 
         public string Info { get; set; } 
-        public int LocationId { get; set; }  
+        public int LocationId { get; set; }
+//        public string Status { get; set; }
         //public Location Location { get; set; } 
         public List<TableBookVM> TableBooks { get; set; } = new List<TableBookVM>();
         //public List<Order> Orders { get; set; }
@@ -24,9 +25,11 @@ namespace FH.BLL.VMs
             Number = table.Number;
             Info = table.Info;
             LocationId = table.LocationId;
+//            Status = "";
             if (table.TableBooks != null && table.TableBooks.Any())
             {
                 TableBooks = table.TableBooks.Select(m=> new TableBookVM(m)).OrderBy(m=>m.StartTime).ToList();
+                //Status = table.TableBooks.Select(m=>m.)
             }
         }
     }

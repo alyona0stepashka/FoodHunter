@@ -19,6 +19,17 @@ namespace FH.BLL.Services
             _db = uow;
         }
 
+        public List<TableBookVM> GetMyTableBooks(string id)
+        {
+            var tables = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == id)?.TableBooks;
+            if (tables == null)
+            {
+                throw new Exception("TableBooks not found");
+            }
+            var ret = tables.Select(m => new TableBookVM(m)).ToList();
+            return ret;
+        }
+
         public List<TableTabVM> GetAllTablesByLocation(int id)
         {
             var tables = _db.Tables.GetAll().Where(m => m.LocationId == id).ToList();

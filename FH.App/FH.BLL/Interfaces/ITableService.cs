@@ -9,6 +9,7 @@ namespace FH.BLL.Interfaces
 {
     public interface ITableService
     {
+        List<TableBookVM> GetMyTableBooks(string id);
         List<TableTabVM> GetAllTablesByLocation(int id);
         List<TableBookVM> GetAllTableBooksByLocation(int id);
         Task<TableTabVM> CreateTableAsync(CreateTableVM table);

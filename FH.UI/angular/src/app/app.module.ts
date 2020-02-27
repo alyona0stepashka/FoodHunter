@@ -79,7 +79,8 @@ import { TablesManagerComponent } from './pages/tables-manager/tables-manager.co
     ReactiveFormsModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(AppRoutes, {
-      useHash: true
+      useHash: true,
+      onSameUrlNavigation: 'reload'
     }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCpVhQiwAllg1RAFaxMWSpQruuGARy0Y1k'
