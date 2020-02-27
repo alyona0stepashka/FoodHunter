@@ -40,12 +40,14 @@ export class SidebarComponent implements OnInit {
         },
         { path: '/dashboard-manager/menu/0', title: 'Menu', icon: 'nc-book-bookmark', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-manager/table/0', title: 'Tables', icon: 'nc-caps-small', onclick: {}, class: '', childItems: [] },
-        { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] }
+        { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-user/search', title: 'Search', icon: 'nc-zoom-split', onclick: {}, class: '', childItems: [] },
     ];
 
     ROUTES_USER: RouteInfo[] = [
         { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
-        { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] }
+        { path: '/dashboard-user/search', title: 'Search', icon: 'nc-zoom-split', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] },
     ];
 
     constructor(private router: Router) { }

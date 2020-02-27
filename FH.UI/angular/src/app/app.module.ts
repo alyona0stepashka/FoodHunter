@@ -42,6 +42,7 @@ import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-man
 import { BrowserModule } from '@angular/platform-browser';
 import { NotFoundComponent } from './pages/404/not-found/not-found.component';
 import { TablesManagerComponent } from './pages/tables-manager/tables-manager.component';
+import { LocationSearchComponent } from './pages/location-search/location-search.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -62,7 +63,8 @@ import { TablesManagerComponent } from './pages/tables-manager/tables-manager.co
     NotFoundComponent,
     LocationPageComponent,
     MenuManagerComponent,
-    TablesManagerComponent
+    TablesManagerComponent,
+    LocationSearchComponent
     //AdminLayoutComponent
   ],
   imports: [

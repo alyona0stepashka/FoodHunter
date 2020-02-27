@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FH.BLL.Interfaces;
+using FH.BLL.VMs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,25 @@ namespace FH.App.Controllers
         public StaticController(IStaticService staticService)
         {
             _staticService = staticService;
+        }
+
+        [HttpPost]
+        [Route("search")]
+        public IActionResult GetSearchResult(SearchQueryVM search)
+        {
+            try
+            {
+                if (search == null)
+                {
+                    throw new Exception("search is missing");
+                }
+                var items = _staticService.GetSearchResult(search);
+                return Ok(items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
