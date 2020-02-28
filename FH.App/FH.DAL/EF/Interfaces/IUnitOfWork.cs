@@ -22,6 +22,7 @@ namespace FH.DAL.EF.Interfaces
         IRepository<Subscription> Subscriptions { get; }
         IRepository<Order> Orders { get; }
         IRepository<OrderItem> OrderItems { get; }
+        IRepository<OrderUser> OrderUsers { get; }
         IRepository<Sex> Sexes { get; }
         IRepository<Icon> Icons { get; }
         IRepository<Cuisine> Cuisines { get; }

@@ -248,13 +248,15 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("EndDate");
+                    b.Property<DateTime?>("EndDate");
 
                     b.Property<bool>("IsActive");
 
                     b.Property<int>("LocationId");
 
                     b.Property<DateTime>("StartDate");
+
+                    b.Property<string>("Status");
 
                     b.Property<int>("TableId");
 
@@ -278,6 +280,8 @@ namespace FH.DAL.Migrations
 
                     b.Property<double>("Count");
 
+                    b.Property<int>("MenuItemId");
+
                     b.Property<int>("OrderId");
 
                     b.Property<decimal>("PricePerItem");
@@ -289,6 +293,8 @@ namespace FH.DAL.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MenuItemId");
 
                     b.HasIndex("OrderId");
 
@@ -455,6 +461,25 @@ namespace FH.DAL.Migrations
                     b.HasIndex("UserProfileId");
 
                     b.ToTable("CuisineUsers");
+                });
+
+            modelBuilder.Entity("FH.Models.StaticModels.OrderUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OrderId");
+
+                    b.Property<int>("UserProfileId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.ToTable("OrderUsers");
                 });
 
             modelBuilder.Entity("FH.Models.StaticModels.SubscriptionType", b =>
@@ -747,6 +772,11 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.OrderItem", b =>
                 {
+                    b.HasOne("FH.Models.Models.MenuItem", "MenuItem")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("FH.Models.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
@@ -821,6 +851,19 @@ namespace FH.DAL.Migrations
 
                     b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
                         .WithMany("CuisinePreference")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("FH.Models.StaticModels.OrderUser", b =>
+                {
+                    b.HasOne("FH.Models.Models.Order", "Order")
+                        .WithMany("OrderUsers")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
+                        .WithMany("OrderUsers")
                         .HasForeignKey("UserProfileId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

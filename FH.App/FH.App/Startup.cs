@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.IO; 
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
+using FH.BLL.Hubs;
 using FH.BLL.Infrastructure;
 using FH.BLL.Interfaces;
 using FH.BLL.Services;
@@ -76,7 +76,7 @@ namespace FH.App
                     });
             });
 
-            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
+            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"]);
 
             services.AddAuthentication(x =>
             {
@@ -87,7 +87,7 @@ namespace FH.App
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = false;
-                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -165,6 +165,7 @@ Example: 'Bearer 12345abcdef'",
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStaticService, StaticService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<ITableService, TableService>();
         }
@@ -183,6 +184,10 @@ Example: 'Bearer 12345abcdef'",
 
             app.UseCors("MyAllowSpecificOrigins");
             app.UseHttpsRedirection();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<OrderHub>("/hub");
+            });
             app.UseMvc();
 
             app.UseDefaultFiles();

@@ -24,6 +24,7 @@ namespace FH.DAL.DataContext
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<SubscriptionType> SubscriptionTypes { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderUser> OrderUsers { get; set; }
         public DbSet<Icon> Icons { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Table> Tables { get; set; }

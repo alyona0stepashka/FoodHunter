@@ -81,6 +81,7 @@ export class MenuManagerComponent implements OnInit {
   //crud menu items
   editMenuItem: any;
   editItemPhotoPath;
+  openedItem: any;
   openMenuItem = {
     Id: 1,
     Title: "Veritatis vel culpa",
@@ -380,7 +381,9 @@ export class MenuManagerComponent implements OnInit {
       console.log("id", id);
       var menu = this.menus.find(m => m.Id == this.currentMenuId);
       console.log("openMenu", menu);
-      this.openMenuItem = menu.MenuItems.find(m => m.Id == id);
+      var item = menu.MenuItems.find(m => m.Id == id);
+      this.openedItem = item;
+      this.openMenuItem = { ...item };
       console.log("openMenuItem", this.openMenuItem);
       this.openItemPhotoPath = environment.serverURL + this.openMenuItem.Photo.Value;
     }

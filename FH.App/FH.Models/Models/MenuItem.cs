@@ -30,5 +30,6 @@ namespace FH.Models.Models
 
         //------------------- 
         public virtual List<Feedback> Feedbacks { get; set; }
+        public virtual List<OrderItem> OrderItems { get; set; }
     }
 }
