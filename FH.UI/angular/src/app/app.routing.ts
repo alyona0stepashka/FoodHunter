@@ -14,6 +14,7 @@ import { LocationPageComponent } from './pages/location-page/location-page/locat
 import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
 import { TablesManagerComponent } from './pages/tables-manager/tables-manager.component';
 import { LocationSearchComponent } from './pages/location-search/location-search.component';
+import { OrderManagerComponent } from './pages/order-manager/order-manager.component';
 
 export const AppRoutes: Routes = [
   //   {

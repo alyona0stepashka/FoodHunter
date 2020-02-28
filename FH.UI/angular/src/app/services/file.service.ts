@@ -20,11 +20,11 @@ export class FileService {
     return this.http.post(environment.serverURL + '/api/file/location/album/' + locationId, formData);
   }
 
-  uploadLocationTopPhoto(fileToUpload: File, locationId: string) {
-    const formData: FormData = new FormData();
-    formData.append('Photo', fileToUpload);
-    return this.http.post(environment.serverURL + '/api/file/location/top/' + locationId, formData);
-  }
+  // uploadLocationTopPhoto(fileToUpload: File, locationId: string) {
+  //   const formData: FormData = new FormData();
+  //   formData.append('Photo', fileToUpload);
+  //   return this.http.post(environment.serverURL + '/api/file/location/top/' + locationId, formData);
+  // }
 
   deleteLocationAlbumPhoto(id: number) {
     return this.http.delete(environment.serverURL + '/api/file/location/album/' + id);
