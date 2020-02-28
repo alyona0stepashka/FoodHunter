@@ -173,19 +173,43 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("LocationId");
+                    b.Property<int?>("LocationId");
 
                     b.Property<int>("UserProfileId");
-
-                    b.Property<DateTime>("WorkBegin");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("UserProfileId");
+                    b.HasIndex("UserProfileId")
+                        .IsUnique();
 
                     b.ToTable("Managers");
+                });
+
+            modelBuilder.Entity("FH.Models.Models.ManagerCall", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CallTime");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("OrderId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ManagerCalls");
                 });
 
             modelBuilder.Entity("FH.Models.Models.Menu", b =>
@@ -722,12 +746,24 @@ namespace FH.DAL.Migrations
                 {
                     b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("Managers")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("UserProfileId")
+                        .WithOne("Manager")
+                        .HasForeignKey("FH.Models.Models.Manager", "UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("FH.Models.Models.ManagerCall", b =>
+                {
+                    b.HasOne("FH.Models.Models.Order", "Order")
+                        .WithMany("ManagerCalls")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FH.Models.Models.UserProfile", "User")
+                        .WithMany("ManagerCalls")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

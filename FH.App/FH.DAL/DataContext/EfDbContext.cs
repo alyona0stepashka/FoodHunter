@@ -26,6 +26,7 @@ namespace FH.DAL.DataContext
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderUser> OrderUsers { get; set; }
         public DbSet<Icon> Icons { get; set; }
+        public DbSet<ManagerCall> ManagerCalls { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<TableBook> TableBooks { get; set; }
@@ -55,10 +56,14 @@ namespace FH.DAL.DataContext
             modelBuilder.Entity<Location>()
                 .HasOne(m => m.TopFile);
                // .WithOne(m => m.Location);
-
+               
             modelBuilder.Entity<FileModel>()
                 .HasOne(m => m.Location)
                 .WithMany(m => m.PhotoAlbum);
+
+            modelBuilder.Entity<Manager>()
+                .HasOne(m => m.UserProfile)
+                .WithOne(m => m.Manager);
         }
     }
 }

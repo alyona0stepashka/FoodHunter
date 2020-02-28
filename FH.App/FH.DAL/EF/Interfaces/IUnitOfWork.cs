@@ -26,6 +26,7 @@ namespace FH.DAL.EF.Interfaces
         IRepository<Sex> Sexes { get; }
         IRepository<Icon> Icons { get; }
         IRepository<Cuisine> Cuisines { get; }
+        IRepository<ManagerCall> ManagerCalls { get; }
         IRepository<CompanySpecification> CompanySpecifications { get; }
         IRepository<SubscriptionType> SubscriptionTypes { get; }
         IRepository<Table> Tables { get; }

@@ -31,5 +31,6 @@ namespace FH.Models.Models
         //----------------------------- 
         public virtual List<OrderItem> OrderItems { get; set; }
         public virtual List<OrderUser> OrderUsers { get; set; }
+        public virtual List<ManagerCall> ManagerCalls { get; set; }
     }
 }
