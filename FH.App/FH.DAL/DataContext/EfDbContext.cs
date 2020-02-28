@@ -1,4 +1,5 @@
-﻿using FH.Models.EnumModels;
+﻿using System.Linq;
+using FH.Models.EnumModels;
 using FH.Models.Models;
 using FH.Models.StaticModels;
 using Microsoft.AspNetCore.Identity;
@@ -41,29 +42,113 @@ namespace FH.DAL.DataContext
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MenuItem>()
-                .HasOne(m=>m.Menu)
-                .WithMany(m=>m.MenuItems)
-                .IsRequired()
+            //            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            //            {
+            //                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            //            }
+
+            modelBuilder.Entity<Company>().HasOne(m => m.Specification).WithMany(m => m.Companies).HasForeignKey(m=>m.SpecificationId)
+                .OnDelete(DeleteBehavior.Restrict); 
+            modelBuilder.Entity<Company>().HasOne(m => m.File).WithOne(m => m.Company)
+                .OnDelete(DeleteBehavior.Restrict);
+            //            modelBuilder.Entity<Company>().HasOne(m => m.Admin).WithOne(m => m.Company)
+            //                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Feedback>().HasOne(m => m.Location).WithMany(m => m.Feedbacks).HasForeignKey(m => m.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Feedback>().HasOne(m => m.MenuItem).WithMany(m => m.Feedbacks).HasForeignKey(m => m.MenuItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Feedback>().HasOne(m => m.User).WithMany(m => m.Feedbacks).HasForeignKey(m => m.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Order>()
-                .HasOne(m => m.Table)
-                .WithMany(m => m.Orders)
-                .IsRequired()
+
+            modelBuilder.Entity<FileModel>().HasOne(m => m.Feedback).WithMany(m => m.Photos).HasForeignKey(m => m.FeedbackId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<FileModel>().HasOne(m => m.Location).WithMany(m => m.PhotoAlbum).HasForeignKey(m => m.LocationId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+
+//            modelBuilder.Entity<Location>().HasOne(m => m.Admin).WithMany(m => m.Location)
+//                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Location>().HasOne(m => m.Company).WithMany(m => m.Locations).HasForeignKey(m => m.CompanyId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+
+
+            modelBuilder.Entity<Manager>().HasOne(m => m.Location).WithMany(m => m.Managers).HasForeignKey(m => m.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Manager>().HasOne(m => m.UserProfile).WithOne(m => m.Manager)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Location>()
-                .HasOne(m => m.TopFile);
-               // .WithOne(m => m.Location);
-               
-            modelBuilder.Entity<FileModel>()
-                .HasOne(m => m.Location)
-                .WithMany(m => m.PhotoAlbum);
 
-            modelBuilder.Entity<Manager>()
-                .HasOne(m => m.UserProfile)
-                .WithOne(m => m.Manager);
+            modelBuilder.Entity<ManagerCall>().HasOne(m => m.Order).WithMany(m => m.ManagerCalls).HasForeignKey(m => m.OrderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Menu>().HasOne(m => m.Location).WithMany(m => m.Menus).HasForeignKey(m => m.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Menu>().HasOne(m => m.Icon).WithMany(m => m.Menus).HasForeignKey(m => m.IconId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<MenuItem>().HasOne(m => m.Menu).WithMany(m => m.MenuItems).HasForeignKey(m => m.MenuId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<MenuItem>().HasOne(m => m.FileModel).WithMany(m => m.MenuItems).HasForeignKey(m => m.FileModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Order>().HasOne(m => m.Manager).WithMany(m => m.Orders).HasForeignKey(m => m.ManagerId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Order>().HasOne(m => m.Table).WithMany(m => m.Orders).HasForeignKey(m => m.TableId)
+                .OnDelete(DeleteBehavior.Restrict);
+//            modelBuilder.Entity<Order>().HasOne(m => m.Location).WithMany(m => m.Orders)
+//                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<OrderItem>().HasOne(m => m.Order).WithMany(m => m.OrderItems).HasForeignKey(m => m.OrderId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<OrderItem>().HasOne(m => m.MenuItem).WithMany(m => m.OrderItems).HasForeignKey(m => m.MenuItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<OrderItem>().HasOne(m => m.User).WithMany(m => m.OrderItems).HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Subscription>().HasOne(m => m.SubscriptionType).WithMany(m => m.Subscriptions).HasForeignKey(m => m.SubscriptionTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Subscription>().HasOne(m => m.Location).WithMany(m => m.Subscriptions).HasForeignKey(m => m.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+            //            modelBuilder.Entity<Subscription>().HasOne(m => m.User).WithMany(m => m.Subscriptions)
+            //                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Table>().HasOne(m => m.Location).WithMany(m => m.Tables).HasForeignKey(m => m.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<TableBook>().HasOne(m => m.Table).WithMany(m => m.TableBooks).HasForeignKey(m => m.TableId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TableBook>().HasOne(m => m.Client).WithMany(m => m.TableBooks).HasForeignKey(m => m.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<UserProfile>().HasOne(m => m.File).WithOne(m => m.UserProfile)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserProfile>().HasOne(m => m.Sex).WithMany(m => m.Users).HasForeignKey(m => m.SexId)
+                .OnDelete(DeleteBehavior.Restrict);
+            //            modelBuilder.Entity<UserProfile>().HasOne(m => m.User).WithMany(m => m.OrderItems)
+            //                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<CuisineUser>().HasOne(m => m.Cuisine).WithMany(m => m.CuisineUsers).HasForeignKey(m => m.CuisineId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<CuisineUser>().HasOne(m => m.UserProfile).WithMany(m => m.CuisineUsers).HasForeignKey(m => m.UserProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<OrderUser>().HasOne(m => m.Order).WithMany(m => m.OrderUsers).HasForeignKey(m => m.OrderId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<OrderUser>().HasOne(m => m.UserProfile).WithMany(m => m.OrderUsers).HasForeignKey(m => m.UserProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

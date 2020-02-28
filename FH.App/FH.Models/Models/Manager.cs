@@ -14,9 +14,10 @@ namespace FH.Models.Models
         public virtual Location Location { get; set; }
 
         [ForeignKey("UserProfile")]
-        public int UserProfileId { get; set; }
+        public int? UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }
 
         //-------------------------
+        public virtual List<Order> Orders { get; set; }
     }
 }

@@ -22,17 +22,18 @@ namespace FH.Models.Models
         public virtual IdentityUser Admin { get; set; }
 
         [ForeignKey("Company")]
-        public int CompanyId { get; set; } 
+        public int? CompanyId { get; set; } 
         public virtual Company Company { get; set; }
 
-        [ForeignKey("TopFile")]
-        public int? TopFileId { get; set; }
-        public virtual FileModel TopFile { get; set; }
+//        [ForeignKey("TopFile")]
+//        public int? TopFileId { get; set; }
+//        public virtual FileModel TopFile { get; set; }
 
         //-----------------------
         public virtual List<Manager> Managers { get; set; }
         public virtual List<Subscription> Subscriptions { get; set; }
         public virtual List<Menu> Menus { get; set; }
+        public virtual List<Order> Orders { get; set; }
         public virtual List<Feedback> Feedbacks { get; set; }
         public virtual List<Table> Tables { get; set; }
         public virtual List<FileModel> PhotoAlbum { get; set; }

@@ -38,13 +38,14 @@ namespace FH.Models.Models
         public string UserId { get; set; }
         public virtual IdentityUser User { get; set; }
 
-        //---------------
-        public virtual List<CuisineUser> CuisinePreference { get; set; }
+        //--------------- 
         public virtual List<Feedback> Feedbacks { get; set; }
         public virtual List<TableBook> TableBooks { get; set; }
         public virtual List<OrderUser> OrderUsers { get; set; }
         public virtual List<ManagerCall> ManagerCalls { get; set; }
+        public virtual List<OrderItem> OrderItems { get; set; }
         public virtual Manager Manager { get; set; }
+        public List<CuisineUser> CuisineUsers { get; set; }
 
     }
 }

@@ -41,7 +41,7 @@ namespace FH.BLL.Services
         {
             var file = await _fileService.CreateFileDbAsync(photo);
             var location = await _db.Locations.GetByIdAsync(locationId);
-            location.TopFileId = file.Id;
+            //location.TopFileId = file.Id;
             await _db.Locations.UpdateAsync(location);
             return file;
         }

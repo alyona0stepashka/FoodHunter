@@ -8,5 +8,7 @@ namespace FH.Models.EnumModels
     public class Sex : BaseEntity
     {
         public string Value { get; set; }
+        //------------------------------
+        public List<UserProfile> Users { get; set; }
     }
 }
