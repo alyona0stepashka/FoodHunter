@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit {
       (res: any) => {
         localStorage.setItem('token', res.token);
         const token = jwt_decode(res.token);
+        localStorage.setItem('ClientId', token.ProfileId);
         localStorage.setItem('IsManager', token.IsManager);
         localStorage.setItem('MyLocationId', token.MyLocationId);
         localStorage.setItem('FullName', token.FullName);

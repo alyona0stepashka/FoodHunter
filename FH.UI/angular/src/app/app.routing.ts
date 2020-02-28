@@ -10,9 +10,10 @@ import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-m
 import { ForbiddenComponent } from './pages/forbidden/403/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
 import { OopsComponent } from './pages/500/oops.component';
-// import { OopsComponent } from './pages/500/oops.component';
 import { LocationPageComponent } from './pages/location-page/location-page/location-page.component';
 import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
+import { TablesManagerComponent } from './pages/tables-manager/tables-manager.component';
+import { LocationSearchComponent } from './pages/location-search/location-search.component';
 
 export const AppRoutes: Routes = [
   //   {
@@ -53,6 +54,8 @@ export const AppRoutes: Routes = [
       { path: 'location', component: LocationManagerComponent, canActivate: [AuthGuard] },
       { path: 'location/:id', component: LocationPageComponent, canActivate: [AuthGuard] },
       { path: 'menu/:id', component: MenuManagerComponent, canActivate: [AuthGuard] },
+      { path: 'table/:id', component: TablesManagerComponent, canActivate: [AuthGuard] },
+      { path: 'search', component: LocationSearchComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},
@@ -63,6 +66,8 @@ export const AppRoutes: Routes = [
       { path: 'dashboard', component: DashboardUserComponent, canActivate: [AuthGuard] },
       { path: 'location/:id', component: LocationPageComponent, canActivate: [AuthGuard] },
       { path: 'menu/:id', component: MenuManagerComponent, canActivate: [AuthGuard] },
+      { path: 'table/:id', component: TablesManagerComponent, canActivate: [AuthGuard] },
+      { path: 'search', component: LocationSearchComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},

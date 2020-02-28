@@ -13,6 +13,7 @@ namespace FH.BLL.VMs
         public string Name { get; set; }
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
+        public decimal Rate { get; set; }
         public string Address { get; set; }
         public string TopPhoto { get; set; }
         public List<Icon> PhotoAlbum { get; set; } = new List<Icon>();
@@ -24,14 +25,20 @@ namespace FH.BLL.VMs
         public string Facebook { get; set; }
         public string Instagram { get; set; }
         public string Site { get; set; }
-        //public List<Menu> Menus { get; set; }
+        public List<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
 
         public LocationPageVM(Location location)
         {
+            Rate = 0;
             if (location.PhotoAlbum != null && location.PhotoAlbum.Any())
             {
                 PhotoAlbum = location.PhotoAlbum?.Select(m => new Icon(m.Id, $"{m.Path}{m.Name}{m.Extension}")).ToList();
-            } 
+            }
+            if (location.Feedbacks != null && location.Feedbacks.Any())
+            {
+                Feedbacks = location.Feedbacks?.Select(m => new FeedbackVM(m)).ToList(); 
+                Rate = location.Feedbacks.Sum(e => e.Stars) / location.Feedbacks.Count;
+            }
             Name = location.Name;
             TopPhoto = $"{location.TopFile?.Path}{location.TopFile?.Name}{location.TopFile?.Extension}";
             Address = location.Address;

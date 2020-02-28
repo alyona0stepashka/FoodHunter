@@ -351,21 +351,25 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClientId");
+                    b.Property<DateTime>("BookTime");
+
+                    b.Property<int>("ClientId");
+
+                    b.Property<string>("Comment");
 
                     b.Property<DateTime>("EndTime");
 
-                    b.Property<DateTime>("StarTime");
+                    b.Property<bool>("IsActive");
 
-                    b.Property<int?>("TableBookId");
+                    b.Property<bool?>("IsConfirm");
+
+                    b.Property<DateTime>("StartTime");
 
                     b.Property<int>("TableId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("TableBookId");
 
                     b.HasIndex("TableId");
 
@@ -649,7 +653,7 @@ namespace FH.DAL.Migrations
             modelBuilder.Entity("FH.Models.Models.Feedback", b =>
                 {
                     b.HasOne("FH.Models.Models.Location", "Location")
-                        .WithMany()
+                        .WithMany("Feedbacks")
                         .HasForeignKey("LocationId");
 
                     b.HasOne("FH.Models.Models.MenuItem", "MenuItem")
@@ -781,13 +785,10 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.TableBook", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId");
-
-                    b.HasOne("FH.Models.Models.TableBook")
+                    b.HasOne("FH.Models.Models.UserProfile", "Client")
                         .WithMany("TableBooks")
-                        .HasForeignKey("TableBookId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("FH.Models.Models.Table", "Table")
                         .WithMany("TableBooks")

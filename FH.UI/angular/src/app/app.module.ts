@@ -13,6 +13,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 
+import { DlDateTimeDateModule, DlDateTimePickerModule } from 'angular-bootstrap-datetimepicker';
+
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import { GalleryModule } from '@ngx-gallery/core';
@@ -39,6 +41,8 @@ import { LocationPageComponent } from './pages/location-page/location-page/locat
 import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-manager.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NotFoundComponent } from './pages/404/not-found/not-found.component';
+import { TablesManagerComponent } from './pages/tables-manager/tables-manager.component';
+import { LocationSearchComponent } from './pages/location-search/location-search.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -58,10 +62,14 @@ import { NotFoundComponent } from './pages/404/not-found/not-found.component';
     OopsComponent,
     NotFoundComponent,
     LocationPageComponent,
-    MenuManagerComponent
+    MenuManagerComponent,
+    TablesManagerComponent,
+    LocationSearchComponent
     //AdminLayoutComponent
   ],
   imports: [
+    DlDateTimeDateModule,  // <--- Determines the data type of the model
+    DlDateTimePickerModule,
     MatTabsModule,
     MatSlideToggleModule,
     BrowserModule,
@@ -73,7 +81,8 @@ import { NotFoundComponent } from './pages/404/not-found/not-found.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(AppRoutes, {
-      useHash: true
+      useHash: true,
+      onSameUrlNavigation: 'reload'
     }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCpVhQiwAllg1RAFaxMWSpQruuGARy0Y1k'

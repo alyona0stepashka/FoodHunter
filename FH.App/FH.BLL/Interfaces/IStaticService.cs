@@ -11,6 +11,7 @@ namespace FH.BLL.Interfaces
 {
     public interface IStaticService
     {
+        List<SearchTabVM> GetSearchResult(SearchQueryVM search);
         List<Sex> GetSexes();
         List<Icon> GetIcons();
         List<CompanySpecification> GetSpecifications();

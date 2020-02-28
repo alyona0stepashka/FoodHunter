@@ -14,7 +14,7 @@ namespace FH.BLL.VMs
 
         public int? SexId { get; set; }
 
-        public List<int> CuisinePreference { get; set; }
+        public List<int> CuisinePreference { get; set; } = new List<int>();
 
         public DateTime? DateBirth { get; set; }
 

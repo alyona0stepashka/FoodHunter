@@ -27,8 +27,24 @@ export class MenuManagerComponent implements OnInit {
     private modalService: NgbModal) { }
 
   closeResult: string;
-  menuForm: FormGroup;
-  menuItemForm: FormGroup;
+  menuForm: FormGroup = this.formBuilder.group({
+    Id: [''],
+    Title: ['', [Validators.required]],
+    Info: ['', [Validators.required]],
+    IconId: ['', [Validators.required]]
+  });
+  menuItemForm: FormGroup = this.formBuilder.group({
+    Id: [''],
+    Title: ['', [Validators.required]],
+    Info: ['', [Validators.required]],
+    Price: ['', [Validators.required]],
+    PriceWithSales: [''],
+    IsActive: [true, [Validators.required]],
+    MenuId: ['', [Validators.required]],
+    Note: ['', [Validators.required]],
+    Photo: ['', [Validators.required]],
+    // IconId: ['']
+  });
   public isLogin = (localStorage.getItem('token') != null);
   public locationId = localStorage.getItem("MyLocationId");
   public welcomeLocationId;

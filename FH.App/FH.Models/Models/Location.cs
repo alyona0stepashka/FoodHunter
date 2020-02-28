@@ -33,6 +33,7 @@ namespace FH.Models.Models
         public virtual List<Manager> Managers { get; set; }
         public virtual List<Subscription> Subscriptions { get; set; }
         public virtual List<Menu> Menus { get; set; }
+        public virtual List<Feedback> Feedbacks { get; set; }
         public virtual List<Table> Tables { get; set; }
         public virtual List<FileModel> PhotoAlbum { get; set; }
     }
