@@ -76,6 +76,12 @@ namespace FH.App
                     });
             });
 
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+            });
+
+
             var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"]);
 
             services.AddAuthentication(x =>
