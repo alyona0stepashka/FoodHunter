@@ -8,6 +8,6 @@ namespace FH.Models.StaticModels
     {
         public string Value { get; set; }
         //---------------------
-        public List<CuisineUser> CuisineUsers { get; set; }
+        public virtual List<CuisineUser> CuisineUsers { get; set; }
     }
 }

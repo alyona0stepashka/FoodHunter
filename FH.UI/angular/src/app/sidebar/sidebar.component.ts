@@ -23,6 +23,8 @@ export var ROUTES: RouteInfo[] = [];
 
 export class SidebarComponent implements OnInit {
     locationId = localStorage.getItem('MyLocationId');
+    // currentOrderId = localStorage.getItem('CurrentOrderId');
+    currentOrderId = '0';
 
     ROUTES_WELCOME: RouteInfo[] = [
         { path: '/welcome/login', title: 'Login', icon: 'nc-key-25', class: '', onclick: {}, childItems: [] },
@@ -42,17 +44,20 @@ export class SidebarComponent implements OnInit {
         { path: '/dashboard-manager/table/0', title: 'Tables', icon: 'nc-caps-small', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-user/search', title: 'Search', icon: 'nc-zoom-split', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-user/order/' + this.currentOrderId, title: 'Current Order', icon: 'nc-paper', onclick: {}, class: '', childItems: [] },
     ];
 
     ROUTES_USER: RouteInfo[] = [
         { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-user/search', title: 'Search', icon: 'nc-zoom-split', onclick: {}, class: '', childItems: [] },
-        { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-user/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-user/order/' + this.currentOrderId, title: 'Current Order', icon: 'nc-paper', onclick: {}, class: '', childItems: [] },
     ];
 
     constructor(private router: Router) { }
 
     isLogin = (localStorage.getItem('token') != null);
+    isOrder = (localStorage.getItem('CurrentOrderId') != null);
     isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
     isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
     fullName = localStorage.getItem('FullName');

@@ -9,6 +9,6 @@ namespace FH.Models.EnumModels
     {
         public string Value { get; set; }
         //------------------------------
-        public List<UserProfile> Users { get; set; }
+        public virtual List<UserProfile> Users { get; set; }
     }
 }

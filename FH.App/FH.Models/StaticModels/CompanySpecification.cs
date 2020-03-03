@@ -12,6 +12,6 @@ namespace FH.Models.StaticModels
         public string AdditionalInfo { get; set; }
 
         //--------------------------
-        public List<Company> Companies{ get; set; }
+        public virtual List<Company> Companies{ get; set; }
     }
 }

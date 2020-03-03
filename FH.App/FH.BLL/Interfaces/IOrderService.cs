@@ -20,6 +20,7 @@ namespace FH.BLL.Interfaces
         Task<OrderItemVM> CreateNewOrderItem(CreateOrderItemVM vm);
         Task<OrderItemVM> UpdateNewOrderItem(CreateOrderItemVM vm);
         Task<OrderItemVM> GetOrderItemByIdAsync(int id);
+        Task<OrderPageVM> GetCurrentOrder(string userId);
         Task DeleteOrderItem(int id);
     }
 }

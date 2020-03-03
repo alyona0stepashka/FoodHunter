@@ -14,12 +14,12 @@ namespace FH.BLL.VMs
         public string Info { get; set; }
         public string Note { get; set; }
         public decimal Price { get; set; }
-        public int Rate { get; set; }
         public decimal? PriceWithSales { get; set; }
         public bool IsActive { get; set; }
         public int MenuId { get; set; }
         public string MenuTitle { get; set; }
         public Icon Photo { get; set; }
+        public int Rate { get; set; }
         public List<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
 
         public MenuItemPageVM(MenuItem m)

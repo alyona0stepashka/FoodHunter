@@ -11,7 +11,7 @@ namespace FH.Models.EnumModels
         public string Description { get; set; }
 
         //-------------------
-        public List<Menu> Menus { get; set; }
+        public virtual List<Menu> Menus { get; set; }
 
         public Icon(int id, string val)
         {

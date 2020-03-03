@@ -46,7 +46,7 @@ namespace FH.App.Controllers
         [HttpGet]
         [Route("history")]
         [Authorize]
-        public async Task<IActionResult> GetOrderHistory(int id)
+        public async Task<IActionResult> GetOrderHistory()
         {
             try
             {
@@ -57,6 +57,27 @@ namespace FH.App.Controllers
                     throw new Exception("Orders not found by id.");
                 }
                 return Ok(orderList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("current")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentOrder()
+        {
+            try
+            {
+                var meId = User.Claims.First(c => c.Type == "UserID").Value;
+                var order = await _orderService.GetCurrentOrder(meId);
+                if (order == null)
+                {
+                    throw new Exception("Orders not found");
+                }
+                return Ok(order);
             }
             catch (Exception ex)
             {

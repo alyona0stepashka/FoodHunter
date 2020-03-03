@@ -29,5 +29,4 @@ export class FileService {
   deleteLocationAlbumPhoto(id: number) {
     return this.http.delete(environment.serverURL + '/api/file/location/album/' + id);
   }
-
 }

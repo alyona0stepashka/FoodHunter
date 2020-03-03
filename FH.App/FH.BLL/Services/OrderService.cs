@@ -117,6 +117,13 @@ namespace FH.BLL.Services
             return new OrderPageVM(order);
         }
 
+        public async Task<OrderPageVM> GetCurrentOrder(string userId)
+        {
+            var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
+            var order = _db.OrderUsers.GetAll().FirstOrDefault(m => m.UserProfileId == myId && m.Order.IsActive).Order;  
+            return new OrderPageVM(order);
+        }
+
         public List<OrderTabVM> GetAllMyOrders(string userId)
         {
             var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;

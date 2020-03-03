@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'app/services/user.service';
 import * as jwt_decode from "jwt-decode";
 import * as colors from '../../../shared/fixedplugin/fixedplugin.component';
+import { OrderService } from 'app/services/order.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import * as colors from '../../../shared/fixedplugin/fixedplugin.component';
 export class LoginComponent implements OnInit {
 
   constructor(private router: Router,
+    private orderService: OrderService,
     private service: UserService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService) { }
@@ -60,6 +62,16 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('Icon', token.Icon);
         let IsManager = (token.IsManager.toLowerCase() === 'true');
         (IsManager) ? localStorage.setItem('CurrentRole', "true") : localStorage.setItem('CurrentRole', "false");
+
+        this.orderService.getCurrentOrder().subscribe(
+          (res: any) => {
+            localStorage.setItem('CurrentOrderId', (res.Id == null) ? '0' : res.Id);
+          },
+          err => {
+            console.log(err);
+            this.toastr.error(err.error, 'Error');
+          }
+        );
         //window.location.reload();
         (IsManager) ? this.router.navigateByUrl('/dashboard-manager/dashboard') : this.router.navigateByUrl('/dashboard-user/dashboard');
         // true = manager, false = user
