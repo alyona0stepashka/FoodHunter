@@ -253,10 +253,10 @@ namespace FH.BLL.Hubs
         {
             try
             {
-                var item = _orderService.GetOrderItemByIdAsync(orderItemId);
-                    await _orderService.DeleteOrderItem(orderItemId);
+                var item = await _orderService.GetOrderItemByIdAsync(orderItemId);
+                await _orderService.DeleteOrderItem(orderItemId);
                 var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId));
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("AddOrderItem", item);
+                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("RemoveOrderItem", item);
             }
             catch (Exception e)
             {
