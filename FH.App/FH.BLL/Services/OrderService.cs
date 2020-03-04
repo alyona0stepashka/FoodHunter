@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FH.BLL.Hubs;
+//using FH.App.Hubs;
 using FH.BLL.Infrastructure;
 using FH.BLL.Interfaces;
 using FH.BLL.VMs;
@@ -17,12 +17,12 @@ namespace FH.BLL.Services
     public class OrderService : IOrderService
     {
         private IUnitOfWork _db { get; set; } 
-        private readonly IHubContext<OrderHub> _hub;
+        //private readonly IHubContext<OrderHub> _hub;
         //private readonly 
-        public OrderService(IUnitOfWork uow, IHubContext<OrderHub> hub)
+        public OrderService(IUnitOfWork uow/*, IHubContext<OrderHub> hub*/)
         {
             _db = uow;
-            _hub = hub;
+           // _hub = hub;
         }
 
         public async Task<OrderPageVM> CreateNewOrder(CreateOrderVM vm, string userId)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO; 
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks; 
-using FH.BLL.Hubs;
+﻿using FH.App.Hubs;
 using FH.BLL.Infrastructure;
 using FH.BLL.Interfaces;
 using FH.BLL.Services;
@@ -22,6 +16,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 //using Microsoft.OData.Edm;
 
 namespace FH.App
