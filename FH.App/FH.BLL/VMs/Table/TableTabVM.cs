@@ -14,6 +14,7 @@ namespace FH.BLL.VMs
         public int Number { get; set; } 
         public string Info { get; set; } 
         public int LocationId { get; set; }
+        public bool IsHaveOrderNow { get; set; }
 //        public string Status { get; set; }
         //public Location Location { get; set; } 
         public List<TableBookVM> TableBooks { get; set; } = new List<TableBookVM>();
@@ -21,6 +22,7 @@ namespace FH.BLL.VMs
 
         public TableTabVM(Table table)
         {
+            IsHaveOrderNow = table.Orders.Any(m=>m.IsActive);
             Id = table.Id;
             Number = table.Number;
             Info = table.Info;

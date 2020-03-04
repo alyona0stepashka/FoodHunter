@@ -40,7 +40,7 @@ namespace FH.BLL.VMs
         public SearchTabVM(Company l)
         {
             ObjId = l.Id;
-            ObjType = "location";
+            ObjType = "company";
             Title = l.Name;
             Address = l.Specification.Value;
             Rate = 0;

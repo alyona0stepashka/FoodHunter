@@ -107,7 +107,11 @@ namespace FH.BLL.Services
 
         public async Task<OrderPageVM> GetOrderByIdAsync(int orderId, string userId)
         {
-            var order = await _db.Orders.GetByIdAsync(orderId); 
+            var order = await _db.Orders.GetByIdAsync(orderId);
+            if (order==null)
+            {
+                throw new Exception("Order is not found");
+            }
 
             var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
             if (!_db.OrderUsers.GetAll().Any(m => m.OrderId == order.Id && m.UserProfileId == myId)) 
@@ -120,8 +124,12 @@ namespace FH.BLL.Services
         public async Task<OrderPageVM> GetCurrentOrder(string userId)
         {
             var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
-            var order = _db.OrderUsers.GetAll().FirstOrDefault(m => m.UserProfileId == myId && m.Order.IsActive).Order;  
-            return new OrderPageVM(order);
+            var orderUs = _db.OrderUsers.GetAll().FirstOrDefault(m => m.UserProfileId == myId && m.Order.IsActive);
+            if (orderUs == null)
+            {
+                throw new Exception("You are not assign to any active order.");
+            }
+            return new OrderPageVM(orderUs.Order);
         }
 
         public List<OrderTabVM> GetAllMyOrders(string userId)

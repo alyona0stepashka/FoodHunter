@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FH.BLL.Interfaces;
+using FH.BLL.VMs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -29,13 +30,23 @@ namespace FH.App.Controllers
         {
             try
             {
+                OrderPageVM order;
                 var meId = User.Claims.First(c => c.Type == "UserID").Value;
-                var orderList = await _orderService.GetOrderByIdAsync(id, meId);
-                if (orderList == null)
+                if (id == 0)
+                { 
+                    order = await _orderService.GetCurrentOrder(meId);
+                    if (order == null)
+                    {
+                        throw new Exception("Orders not found");
+                    }
+                    return Ok(order);
+                }
+                order = await _orderService.GetOrderByIdAsync(id, meId);
+                if (order == null)
                 {
                     throw new Exception("Order not found by id.");
                 }
-                return Ok(orderList);
+                return Ok(order);
             }
             catch (Exception ex)
             {

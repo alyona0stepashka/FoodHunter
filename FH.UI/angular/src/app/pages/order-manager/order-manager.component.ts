@@ -70,7 +70,7 @@ export class OrderManagerComponent implements OnInit {
     this.isEdit = (this.isManager && !this.isCurrentUser);
 
     if (this.welcomeOrderId == '0') {
-      this.welcomeOrderId = this.orderId;
+      //this.welcomeOrderId = this.orderId;
       this.isEdit = false;
     }
     this.loadOrder();

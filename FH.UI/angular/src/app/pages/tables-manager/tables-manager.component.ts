@@ -145,6 +145,30 @@ export class TablesManagerComponent implements OnInit {
     }
   }
 
+  startOrder(tableId) {
+    this.tableService.getAllTablesByLocation(this.welcomeLocationId).subscribe(
+      res => {
+        this.tables = res as [];
+        this.isNotFound = (this.tables.length == 0 && !this.isEdit);
+        this.tableBookingNow = new Array();
+        this.tables.forEach(e => {
+          console.log("books", e.TableBooks.length);
+          if (e.TableBooks != null && e.TableBooks.length > 0) {
+            this.tableBookingNow = this.tableBookingNow.concat(e.TableBooks);
+            console.log("concat");
+          }
+        })
+        console.log("total books", this.tableBookingNow);
+        this.countFreeTablesNow();
+      },
+      err => {
+        this.isNotFound = true;
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
   editTable(id: number) {
     this.isEditTable = true;
     const table = this.tables.find(m => m.Id == id);
@@ -203,10 +227,12 @@ export class TablesManagerComponent implements OnInit {
 
         if ((res1 && res2) || (res3 && res4)) {
           isFree = false;
+          t.IsFree = false;
         }
       });
       if (isFree || t.TableBooks.length == 0) {
         this.freeTablesNow.push(t);
+        t.IsFree = true;
       }
     })
     return this.freeTablesNow.length;

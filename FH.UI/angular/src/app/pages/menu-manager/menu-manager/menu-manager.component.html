@@ -1,5 +1,14 @@
 <div *ngIf="!isNotFound">
-    <mat-tab-group *ngIf="isLocationExist" style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+
+    <div *ngIf="!isLocationExist && isEdit" class="col-md-12">
+        <div class="card-header">
+            <h5 style="opacity:0.7" class="card-title">Before this you have to register your business location <a
+                    href="/#/dashboard-manager/location"><i>here</i></a></h5>
+        </div>
+    </div>
+
+    <!-- //////////////////////////////////// -->
+    <mat-tab-group style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
 
         <mat-tab *ngIf="isEdit">
             <ng-template mat-tab-label>
@@ -186,15 +195,6 @@
 
     </mat-tab-group>
     <!-- ///////////////////////////// -->
-
-    <div *ngIf="!isLocationExist && isEdit" class="col-md-12">
-        <div class="card-header">
-            <h5 style="opacity:0.7" class="card-title">Before this you have to register your business location <a
-                    href="/#/dashboard-manager/location"><i>here</i></a></h5>
-        </div>
-    </div>
-
-    <!-- //////////////////////////////////// -->
 
     <ng-template #newMenuItem let-modal>
         <div class="modal-header">

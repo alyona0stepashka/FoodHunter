@@ -72,6 +72,7 @@ namespace FH.App
                         builder.WithOrigins("http://localhost:4200")
 
                             .AllowAnyHeader()
+                            .AllowCredentials()
                             .AllowAnyMethod();
                     });
             });
@@ -190,16 +191,16 @@ Example: 'Bearer 12345abcdef'",
 
             app.UseCors("MyAllowSpecificOrigins");
             app.UseHttpsRedirection();
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<OrderHub>("/hub");
-            });
             app.UseMvc();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<OrderHub>("/hub");
+            });  
             //app.UseMvc(routeBuilder =>
             //{
             //    routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());

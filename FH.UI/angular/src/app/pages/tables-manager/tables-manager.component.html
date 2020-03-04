@@ -68,6 +68,13 @@
                                                         title="Delete" (click)="deleteTable(item.Id)"><i
                                                             class="fas fa-ban"></i></button>
                                                 </li>
+                                                <li *ngIf="!isEdit && item.IsFree && !item.IsHaveOrderNow">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Start order session with this table"
+                                                        (click)="startOrder(item.Id)"><i
+                                                            class="fas fa-sign-in-alt"></i></button>
+                                                </li>
                                             </ul>
                                         </div>
                                     </td>
