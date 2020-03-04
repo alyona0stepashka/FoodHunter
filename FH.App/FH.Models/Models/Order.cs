@@ -10,7 +10,7 @@ namespace FH.Models.Models
     public class Order: BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid WelcomeCode { get; set; }
+        public Guid WelcomeCode { get; set; } = Guid.NewGuid();
 
         public bool IsActive { get; set; }
 

@@ -33,11 +33,14 @@ namespace FH.BLL.VMs
             EndDate = o.EndDate;
             TableId = o.TableId.Value;
             TableNumber = o.Table?.Number.ToString();
-            LocationId = o.Table.LocationId.Value;
+            LocationId = (int)o.Table?.LocationId.Value;
             LocationName = o.Table.Location?.Name;
             CompanyName = o.Table.Location?.Company?.Name;
             Address = o.Table.Location?.Address;
-            Manager = new UserTabVM(o.Manager?.UserProfile);
+            if (o.Manager != null)
+            {
+                Manager = new UserTabVM(o.Manager?.UserProfile); 
+            }
             if (o.OrderUsers != null && o.OrderUsers.Any())
             {
                 Clients = o.OrderUsers.Select(m => new OrderPageTabVM(m)).ToList();

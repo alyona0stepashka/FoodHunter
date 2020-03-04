@@ -3,11 +3,13 @@ import { MenuService } from 'app/services/menu.service';
 import { StaticService } from 'app/services/static.service';
 import { FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Lightbox } from 'ngx-lightbox';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'environments/environment';
 import { OrderService } from 'app/services/order.service';
+import { DatePipe } from '@angular/common';
+import { SignalRService } from 'app/services/signal-r.service';
 
 @Component({
   selector: 'app-order-manager',
@@ -17,11 +19,14 @@ import { OrderService } from 'app/services/order.service';
 export class OrderManagerComponent implements OnInit {
 
   constructor(
+    public signalRService: SignalRService,
+    private router: Router,
     private orderService: OrderService,
     private menuService: MenuService,
     private staticService: StaticService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
+    public datepipe: DatePipe,
     private activateRoute: ActivatedRoute,
     private lbLightbox: Lightbox,
     private modalService: NgbModal) { }
@@ -51,6 +56,7 @@ export class OrderManagerComponent implements OnInit {
   //server lists
   openedItem: any;
   openItemPhotoPath;
+  managerCallMessage = '';
   //crud menu items
 
   //work with images
@@ -89,41 +95,57 @@ export class OrderManagerComponent implements OnInit {
       res => {
         this.order = res;
         this.isNotFound = (res == null);
+        this.isOrderExist = (res != null);
       },
       err => {
         this.isNotFound = true;
+        this.isOrderExist = true;
         console.log(err);
         this.toastr.error(err.error, 'Error');
       }
     );
   }
 
+  redirectLocation(locId) {
+    this.router.navigateByUrl('/dashboard-user/location/' + locId);
+  }
+
   deleteOrderItem(id) {
-    // TODO: SignalR Remove order item
-    this.orderService.deleteOrderItem(id).subscribe(
-      (res: any) => {
-        this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
-          "",
-          {
-            timeOut: 4000,
-            closeButton: true,
-            enableHtml: true,
-            toastClass: "alert alert-success alert-with-icon"
-          }
-        );
-        this.loadOrder();
-        this.modalService.dismissAll();
-      },
-      err => {
-        console.log(err);
-        this.toastr.error(err.error, 'Error');
-      }
-    );
+    this.signalRService.hubConnection.invoke('RemoveOrderItem', id)
+      .catch(err => console.error(err));
+  }
+
+  callManager() {
+    console.log("callManager", this.managerCallMessage);
+
+    this.signalRService.hubConnection.invoke('CallManager', this.order.Id, this.managerCallMessage, null)
+      .catch(err => console.error(err));
+    this.managerCallMessage = '';
+    this.modalService.dismissAll();
   }
 
   setCurrentClientId(id) {
     this.currentClientId = id;
     console.log(id);
+  }
+  openModal(content, goal?: string, id?: any) {
+    // if (goal == "callManager") {
+    //   this.callManager();
+    // }
+    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }

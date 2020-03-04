@@ -1,5 +1,134 @@
 <!-- <div *ngIf="!isNotFound"> -->
+<div class="row" style="background-color: #ffc5653b;">
+    <div class="col-md-6">
+        <div class="item text-left col-md-12" style="margin-top: 0.5rem; margin-bottom: 0.5rem; color: #54524e;">
+            <span style="white-space: normal; font-size: large; font-weight: bolder;"><i
+                    class="fas fa-user-plus"></i>&nbsp;Welcome Code:
+                {{order.WelcomeCode}}</span><br>
+            <span style="white-space: normal; opacity: 0.7;">{{order.CompanyName}}</span><br>
+            <i title="Open location page" (click)="redirectLocation(order.LocationId)" style="cursor: pointer;"
+                class="fas fa-external-link-alt"></i>&nbsp;<span
+                style="white-space: normal; opacity: 0.7;">{{order.LocationName}},&nbsp;{{order.Address}}&nbsp;(Table#{{order.TableNumber}})</span>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="item text-right col-md-12">
+            <span style="white-space: normal; font-size: small; opacity: 0.5;">started at:
+                {{this.datepipe.transform(order.StartDate, 'MMMM d, h:mm a')}}</span>
+            <span *ngIf="!order.IsActive" style="white-space: normal; font-size: small; opacity: 0.5;">ended at:
+                {{this.datepipe.transform(order.EndDate, 'MMMM d, h:mm a')}}</span>
+            <span *ngIf="order.Manager!=null" style="white-space: normal; font-size: small; opacity: 0.5;"><i
+                    class="fas fa-concierge-bell"></i>&nbsp;{{order.Manager}} serves you</span>
+        </div>
+    </div>
+</div>
 <mat-tab-group *ngIf="isOrderExist" style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+    <!-- ----------------FIRST TAB------------------- -->
+    <mat-tab *ngFor="let client of order.Clients" (click)="setCurrentUser(0)">
+        <ng-template mat-tab-label>
+            <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                <i class="fas fa-concierge-bell"></i>&nbsp;Service
+            </span>
+        </ng-template>
+        <div>
+            <div class="card card-user" style="min-height: auto;">
+                <!-- <div class="card-header">
+                        <h5 class="card-title" style="font-size: 1.3em;">Payment:&nbsp;{{client}}</h5>
+                    </div> -->
+                <div class="card-body">
+                    <div *ngIf="order.IsActive" class="row">
+                        <div class="col-md-12">
+                            <label class="card-title" style="font-size: 1.3em;">Order actions:&nbsp;</label>
+                            <button title="Call manager" class="btn" style="padding: inherit;"
+                                (click)="openModal(openCallManager, 'openCallManager', null)">
+                                <i class="fas fa-comment-dots"></i>
+                            </button>
+                            <button title="Add new order item" class="btn" style="padding: inherit;"
+                                (click)="openModal(addOrderItem, 'addOrderItem', null)">
+                                <i class="fas fa-calendar-plus"></i>
+                            </button>
+                            <button title="Delete menu" class="btn" style="padding: inherit;"
+                                (click)="deleteMenu(menu.Id)">
+                                <i class="far fa-trash-alt"></i>
+                            </button></div>
+                    </div><br>
+                    <table class="table table-striped">
+                        <tbody>
+                            <ng-container *ngFor="let item of client.OrderItems">
+                                <tr>
+                                    <td width="10%">
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <img style="max-height: 8rem; width: auto; cursor: pointer;"
+                                                    (click)="open(item.Photo.Number)"
+                                                    src="{{serverUrl}}{{item.Photo.Value}}" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="item text-center col-md-12" style="margin-top: 1rem;"
+                                                title="{{item.Rate}}">
+                                                <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true">
+                                                </ngb-rating>
+                                                <i *ngIf="item.Feedbacks!=null">({{item.Feedbacks.length}})</i>
+                                                <i *ngIf="item.Feedbacks==null">(0)</i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="68%">
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <span style="white-space: normal;">{{item.Title}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <span style="white-space: normal;">Status: {{item.Status}}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="20%">
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <span style="font-size: large;">{{item.PricePerItem}} BYN X
+                                                    {{item.Count}}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="2%">
+                                        <div class="item text-center col-md-12" style="padding: 0;">
+                                            <ul style="list-style:none; padding:0; margin:0;">
+                                                <li>
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Show details"
+                                                        (click)="openModal(openOrderItem, 'openOrderItem', item.Id)"><i
+                                                            class="fas fa-info-circle"></i></button>
+                                                </li>
+                                                <li *ngIf="isEdit">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Edit"><i class="fas fa-pen"
+                                                            (click)="openModal(editOrderItem, 'editOrderItem', item.Id)"></i></button>
+                                                </li>
+                                                <li *ngIf="isEdit">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Remove" (click)="deleteOrderItem(item.Id)"><i
+                                                            class="fas fa-ban"></i></button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <!-- -----------------------CLIENT-TAB---------------------------- -->
     <mat-tab *ngFor="let client of order.Clients">
         <ng-template mat-tab-label>
             <i (click)="setCurrentUser(client.User)">
@@ -10,26 +139,10 @@
         </ng-template>
         <div>
             <div class="card card-user" style="min-height: auto;">
-                <!-- <div class="card-header">
-                        <h5 class="card-title" style="font-size: 1.3em;">{{menu.Info}}</h5>
-                    </div> -->
+                <div class="card-header">
+                    <!-- <h5 class="card-title" style="font-size: 1.3em;">Payment:&nbsp;{{client.OrderItems.}}</h5> -->
+                </div>
                 <div class="card-body">
-                    <!-- <div *ngIf="isEdit" class="row">
-                            <div class="col-md-12">
-                                <label class="card-title" style="font-size: 1.3em;">Menu actions:&nbsp;</label>
-                                <button title="Add new menu item" class="btn" style="padding: inherit;"
-                                    (click)="openModal(newMenuItem, 'newMenuItem', menu.Id)">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <button title="Edit menu" class="btn" style="padding: inherit;"
-                                    (click)="openModal(editMenu, 'editMenu', menu.Id)">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button title="Delete menu" class="btn" style="padding: inherit;"
-                                    (click)="deleteMenu(menu.Id)">
-                                    <i class="far fa-trash-alt"></i>
-                                </button></div>
-                        </div><br> -->
                     <table class="table table-striped">
                         <tbody>
                             <ng-container *ngFor="let item of client.OrderItems">
@@ -107,7 +220,33 @@
     </mat-tab>
 
 </mat-tab-group>
-<!-- </div> -->
+<!-- ----------CALL-MANAGER--------- -->
+<ng-template #openCallManager let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;"><i
+                class="fas fa-comment-dots"></i>&nbsp;Call waiter&nbsp;&nbsp;
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12" style="margin-top: 1rem;">
+                    <textarea autofocus Title="Comment" style="border-left-width: 0; border-right-width: 0;" type="text"
+                        class="form-control" [(ngModel)]="managerCallMessage" placeholder="Comment...">
+                        </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button (click)="callManager()" class="btn btn-primary">Send</button>
+        </div>
+    </div>
+</ng-template>
 <!-- ///////////////////////////// -->
 
 <div *ngIf="!isOrderExist" class="col-md-12">

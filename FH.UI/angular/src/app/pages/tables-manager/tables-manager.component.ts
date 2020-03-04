@@ -7,6 +7,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
+import { SignalRService } from 'app/services/signal-r.service';
 
 @Component({
   selector: 'app-tables-manager',
@@ -16,6 +17,7 @@ import { Subject } from 'rxjs';
 export class TablesManagerComponent implements OnInit {
 
   constructor(
+    public signalRService: SignalRService,
     private tableService: TableService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -146,27 +148,13 @@ export class TablesManagerComponent implements OnInit {
   }
 
   startOrder(tableId) {
-    this.tableService.getAllTablesByLocation(this.welcomeLocationId).subscribe(
-      res => {
-        this.tables = res as [];
-        this.isNotFound = (this.tables.length == 0 && !this.isEdit);
-        this.tableBookingNow = new Array();
-        this.tables.forEach(e => {
-          console.log("books", e.TableBooks.length);
-          if (e.TableBooks != null && e.TableBooks.length > 0) {
-            this.tableBookingNow = this.tableBookingNow.concat(e.TableBooks);
-            console.log("concat");
-          }
-        })
-        console.log("total books", this.tableBookingNow);
-        this.countFreeTablesNow();
-      },
-      err => {
-        this.isNotFound = true;
-        console.log(err);
-        this.toastr.error(err.error, 'Error');
-      }
-    );
+    const body = {
+      IsActive: true,
+      StartDate: new Date(),
+      TableId: tableId,
+    }
+    this.signalRService.hubConnection.invoke('StartSession', body, null)
+      .catch(err => console.error(err));
   }
 
   editTable(id: number) {
@@ -230,7 +218,7 @@ export class TablesManagerComponent implements OnInit {
           t.IsFree = false;
         }
       });
-      if (isFree || t.TableBooks.length == 0) {
+      if ((isFree || t.TableBooks.length == 0) && !t.IsHaveOrderNow) {
         this.freeTablesNow.push(t);
         t.IsFree = true;
       }
