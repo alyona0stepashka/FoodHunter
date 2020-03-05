@@ -25,7 +25,7 @@
 </div>
 <mat-tab-group *ngIf="isOrderExist" style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
     <!-- ----------------FIRST TAB------------------- -->
-    <mat-tab *ngFor="let client of order.Clients" (click)="setCurrentUser(0)">
+    <mat-tab>
         <ng-template mat-tab-label>
             <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
                 <i class="fas fa-concierge-bell"></i>&nbsp;Service
@@ -40,90 +40,41 @@
                     <div *ngIf="order.IsActive" class="row">
                         <div class="col-md-12">
                             <label class="card-title" style="font-size: 1.3em;">Order actions:&nbsp;</label>
-                            <button title="Call manager" class="btn" style="padding: inherit;"
-                                (click)="openModal(openCallManager, 'openCallManager', null)">
-                                <i class="fas fa-comment-dots"></i>
-                            </button>
                             <button title="Add new order item" class="btn" style="padding: inherit;"
                                 (click)="openModal(addOrderItem, 'addOrderItem', null)">
                                 <i class="fas fa-calendar-plus"></i>
                             </button>
-                            <button title="Delete menu" class="btn" style="padding: inherit;"
-                                (click)="deleteMenu(menu.Id)">
-                                <i class="far fa-trash-alt"></i>
-                            </button></div>
+                            <button title="Call manager" class="btn" style="padding: inherit;"
+                                (click)="openModal(openCallManager, 'openCallManager', null)">
+                                <i class="fas fa-comment-dots"></i>
+                            </button>
+                            <button *ngIf="isManager" title="Cancel this order-session" class="btn"
+                                style="padding: inherit;" (click)="leaveSession()">
+                                <i class="fas fa-door-open"></i>
+                            </button>
+                        </div>
                     </div><br>
-                    <table class="table table-striped">
-                        <tbody>
-                            <ng-container *ngFor="let item of client.OrderItems">
-                                <tr>
-                                    <td width="10%">
-                                        <div class="row">
-                                            <div class="item text-center col-md-12">
-                                                <img style="max-height: 8rem; width: auto; cursor: pointer;"
-                                                    (click)="open(item.Photo.Number)"
-                                                    src="{{serverUrl}}{{item.Photo.Value}}" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="item text-center col-md-12" style="margin-top: 1rem;"
-                                                title="{{item.Rate}}">
-                                                <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true">
-                                                </ngb-rating>
-                                                <i *ngIf="item.Feedbacks!=null">({{item.Feedbacks.length}})</i>
-                                                <i *ngIf="item.Feedbacks==null">(0)</i>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td width="68%">
-                                        <div class="row">
-                                            <div class="item text-center col-md-12">
-                                                <span style="white-space: normal;">{{item.Title}}</span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="item text-center col-md-12">
-                                                <span style="white-space: normal;">Status: {{item.Status}}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td width="20%">
-                                        <div class="row">
-                                            <div class="item text-center col-md-12">
-                                                <span style="font-size: large;">{{item.PricePerItem}} BYN X
-                                                    {{item.Count}}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td width="2%">
-                                        <div class="item text-center col-md-12" style="padding: 0;">
-                                            <ul style="list-style:none; padding:0; margin:0;">
-                                                <li>
-                                                    <button type="submit" class="btn "
-                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                        title="Show details"
-                                                        (click)="openModal(openOrderItem, 'openOrderItem', item.Id)"><i
-                                                            class="fas fa-info-circle"></i></button>
-                                                </li>
-                                                <li *ngIf="isEdit">
-                                                    <button type="submit" class="btn "
-                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                        title="Edit"><i class="fas fa-pen"
-                                                            (click)="openModal(editOrderItem, 'editOrderItem', item.Id)"></i></button>
-                                                </li>
-                                                <li *ngIf="isEdit">
-                                                    <button type="submit" class="btn "
-                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                        title="Remove" (click)="deleteOrderItem(item.Id)"><i
-                                                            class="fas fa-ban"></i></button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </ng-container>
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div *ngFor="let call of order.ManagerCalls"
+                                class="alert alert-danger alert-with-icon alert-dismissible fade show"
+                                data-notify="container">
+                                <button type="button" aria-hidden="true" class="close" data-dismiss="alert"
+                                    aria-label="Close">
+                                    <i class="nc-icon nc-simple-remove"></i>
+                                </button>
+                                <span data-notify="icon" class="nc-icon nc-bell-55"></span>
+                                <span data-notify="message"><i
+                                        style="white-space: normal; font-style: normal; font-size: smaller;">[Waiter
+                                        call
+                                        at
+                                        {{this.datepipe.transform(call.CallTime, 'MMMM d, h:mm a')}}]&nbsp;&nbsp;</i>{{call.Comment}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -131,19 +82,22 @@
     <!-- -----------------------CLIENT-TAB---------------------------- -->
     <mat-tab *ngFor="let client of order.Clients">
         <ng-template mat-tab-label>
-            <i (click)="setCurrentUser(client.User)">
-                <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
-                    {{client.User.FirstName}}&nbsp;{{client.User.LastName}},&nbsp;{{client.User.Age}}
-                </span>
-            </i>
+            <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                {{client.User.FirstName}}&nbsp;{{client.User.LastName}},&nbsp;{{client.User.Age}}
+            </span>
         </ng-template>
         <div>
             <div class="card card-user" style="min-height: auto;">
                 <div class="card-header">
                     <!-- <h5 class="card-title" style="font-size: 1.3em;">Payment:&nbsp;{{client.OrderItems.}}</h5> -->
                 </div>
+                <div *ngIf="client.OrderItems==null || client.OrderItems.length==0" class="col-md-12">
+                    <div class="card-header">
+                        <h5 style="opacity:0.7" class="card-title">There is no order items yet</h5>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <table class="table table-striped">
+                    <table *ngIf="client.OrderItems.length>0" class="table table-striped">
                         <tbody>
                             <ng-container *ngFor="let item of client.OrderItems">
                                 <tr>
@@ -234,7 +188,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-12" style="margin-top: 1rem;">
-                    <textarea autofocus Title="Comment" style="border-left-width: 0; border-right-width: 0;" type="text"
+                    <textarea Title="Comment" style="border-left-width: 0; border-right-width: 0;" type="text"
                         class="form-control" [(ngModel)]="managerCallMessage" placeholder="Comment...">
                         </textarea>
                 </div>

@@ -16,7 +16,7 @@ namespace FH.BLL.VMs
         public OrderPageTabVM(OrderUser o)
         {
             User = new UserTabVM(o.UserProfile);
-            OrderItems = o.Order.OrderItems.Where(m => m.UserId == User.UserProfileId).Select(m=>new OrderItemVM(m)).ToList();
+            OrderItems = o.Order.OrderItems.Where(m => m.UserId == User.UserProfileId).Select(m=>new OrderItemVM(m)).ToList(); 
         }
     }
 }

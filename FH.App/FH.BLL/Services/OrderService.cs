@@ -121,7 +121,7 @@ namespace FH.BLL.Services
             return new OrderPageVM(order);
         }
 
-        public async Task<OrderPageVM> GetCurrentOrder(string userId)
+        public OrderPageVM GetCurrentOrder(string userId)
         {
             var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
             var orderUs = _db.OrderUsers.GetAll().FirstOrDefault(m => m.UserProfileId == myId && m.Order.IsActive);

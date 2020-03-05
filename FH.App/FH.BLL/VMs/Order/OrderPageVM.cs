@@ -21,7 +21,7 @@ namespace FH.BLL.VMs
         public string CompanyName { get; set; }
         public string Address { get; set; }
         public List<OrderPageTabVM> Clients { get; set; } = new List<OrderPageTabVM>();
-//        public List<UserTabVM> Users { get; set; } = new List<UserTabVM>();
+        public List<ManagerCallVM> ManagerCalls { get; set; }  = new List<ManagerCallVM>();
         public UserTabVM Manager { get; set; }
 
         public OrderPageVM(Order o)
@@ -44,6 +44,10 @@ namespace FH.BLL.VMs
             if (o.OrderUsers != null && o.OrderUsers.Any())
             {
                 Clients = o.OrderUsers.Select(m => new OrderPageTabVM(m)).ToList();
+            }
+            if (o.ManagerCalls != null && o.ManagerCalls.Any())
+            {
+                ManagerCalls = o.ManagerCalls.Select(m => new ManagerCallVM(m)).OrderBy(m=>m.CallTime).Reverse().ToList();
             }
         }
     }

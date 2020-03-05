@@ -21,7 +21,7 @@ namespace FH.BLL.VMs
             IsActive = m.IsActive;
             CallTime = m.CallTime;
             Comment = m.Comment;
-            OrderId = m.Id;
+            OrderId = m.OrderId.Value;
         }
 
         public ManagerCallVM()

@@ -29,7 +29,8 @@ export class OrderManagerComponent implements OnInit {
     public datepipe: DatePipe,
     private activateRoute: ActivatedRoute,
     private lbLightbox: Lightbox,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal) {
+  }
 
 
   //logic vars
@@ -80,6 +81,7 @@ export class OrderManagerComponent implements OnInit {
       this.isEdit = false;
     }
     this.loadOrder();
+    this.callManagerListener();
   }
 
   open(index: number): void {
@@ -106,6 +108,14 @@ export class OrderManagerComponent implements OnInit {
     );
   }
 
+  callManagerListener() {
+    this.signalRService.hubConnection.on('CallManager', (data) => {
+      // this.order.ManagerCalls.push(data);
+      this.loadOrder();
+      console.log("call-manager-listener", data);
+    });
+  }
+
   redirectLocation(locId) {
     this.router.navigateByUrl('/dashboard-user/location/' + locId);
   }
@@ -115,9 +125,19 @@ export class OrderManagerComponent implements OnInit {
       .catch(err => console.error(err));
   }
 
-  callManager() {
-    console.log("callManager", this.managerCallMessage);
+  cancelSession() {
+    this.signalRService.hubConnection.invoke('CancelSession', this.order.Id, null)
+      .then(res => { location.reload(); })
+      .catch(err => console.error(err));
+  }
 
+  // leaveSession() {
+  //   this.signalRService.hubConnection.invoke('ExitClientFromSession', this.order.Id, null)
+  //     .then(res => { location.reload(); })
+  //     .catch(err => console.error(err));
+  // }
+
+  callManager() {
     this.signalRService.hubConnection.invoke('CallManager', this.order.Id, this.managerCallMessage, null)
       .catch(err => console.error(err));
     this.managerCallMessage = '';

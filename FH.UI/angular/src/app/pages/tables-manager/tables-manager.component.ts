@@ -113,6 +113,7 @@ export class TablesManagerComponent implements OnInit {
       this.tableService.getMyTableBooks().subscribe(
         res => {
           this.tableBookingNow = res as [];
+          this.countFreeTablesNow();
           console.log("my-total-books", this.tableBookingNow);
         },
         err => {
@@ -154,6 +155,7 @@ export class TablesManagerComponent implements OnInit {
       TableId: tableId,
     }
     this.signalRService.hubConnection.invoke('StartSession', body, null)
+      .then(res => { })
       .catch(err => console.error(err));
   }
 

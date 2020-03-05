@@ -14,24 +14,19 @@ namespace FH.BLL.VMs
         public int Number { get; set; } 
         public string Info { get; set; } 
         public int LocationId { get; set; }
-        public bool IsHaveOrderNow { get; set; }
-//        public string Status { get; set; }
-        //public Location Location { get; set; } 
-        public List<TableBookVM> TableBooks { get; set; } = new List<TableBookVM>();
-        //public List<Order> Orders { get; set; }
+        public bool IsHaveOrderNow { get; set; } 
+        public List<TableBookVM> TableBooks { get; set; } = new List<TableBookVM>(); 
 
         public TableTabVM(Table table)
         {
-            IsHaveOrderNow = table.Orders.Any(m=>m.IsActive);
+            IsHaveOrderNow = table.Orders?.Any(m => m.IsActive) ?? false;
             Id = table.Id;
             Number = table.Number;
             Info = table.Info;
-            LocationId = table.LocationId.Value;
-//            Status = "";
+            if (table.LocationId != null) LocationId = table.LocationId.Value; 
             if (table.TableBooks != null && table.TableBooks.Any())
             {
-                TableBooks = table.TableBooks.Select(m=> new TableBookVM(m)).OrderBy(m=>m.StartTime).ToList();
-                //Status = table.TableBooks.Select(m=>m.)
+                TableBooks = table.TableBooks.Select(m=> new TableBookVM(m)).OrderBy(m=>m.StartTime).ToList(); 
             }
         }
     }

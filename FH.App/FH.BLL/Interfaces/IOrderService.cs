@@ -19,8 +19,8 @@ namespace FH.BLL.Interfaces
         Task<ManagerCallVM> AcceptManagerCall(int callId);
         Task<OrderItemVM> CreateNewOrderItem(CreateOrderItemVM vm);
         Task<OrderItemVM> UpdateNewOrderItem(CreateOrderItemVM vm);
-        Task<OrderItemVM> GetOrderItemByIdAsync(int id);
-        Task<OrderPageVM> GetCurrentOrder(string userId);
+        Task<OrderItemVM> GetOrderItemByIdAsync(int id); 
+        OrderPageVM GetCurrentOrder(string userId);
         Task DeleteOrderItem(int id);
     }
 }
