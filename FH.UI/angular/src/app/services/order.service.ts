@@ -10,8 +10,16 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  getCurrentOrder() {
-    return this.http.get(environment.serverURL + '/api/order/current');
+  getAllOrdersByLocation() {
+    return this.http.get(environment.serverURL + '/api/order/location');
+  }
+
+  getAllActiveOrdersByLocation() {
+    return this.http.get(environment.serverURL + '/api/order/location/active');
+  }
+
+  getAllNoManagersOrdersByLocation() {
+    return this.http.get(environment.serverURL + '/api/order/location/managers/none');
   }
 
   getOrderById(id) {

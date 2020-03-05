@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
         let IsManager = (token.IsManager.toLowerCase() === 'true');
         (IsManager) ? localStorage.setItem('CurrentRole', "true") : localStorage.setItem('CurrentRole', "false");
 
-        this.orderService.getCurrentOrder().subscribe(
+        this.orderService.getOrderById(0).subscribe(
           (res: any) => {
             localStorage.setItem('CurrentOrderId', (res.Id == null) ? '0' : res.Id);
           },

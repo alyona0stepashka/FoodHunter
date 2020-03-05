@@ -140,6 +140,39 @@ namespace FH.BLL.Services
             return orders;
         }
 
+        public List<OrderTabVM> GetAllActiveLocationOrders(string userId)
+        {
+            var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId);
+            if (manager == null)
+            {
+                return new List<OrderTabVM>();
+            }
+            var orders = manager.Location.Orders.Where(m=>m.IsActive).Select(m => new OrderTabVM(m)).ToList();
+            return orders;
+        }
+
+        public List<OrderTabVM> GetAllNoManagersLocationOrders(string userId)
+        {
+            var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId);
+            if (manager == null)
+            {
+                return new List<OrderTabVM>();
+            }
+            var orders = manager.Location.Orders.Where(m => m.ManagerId==null).Select(m => new OrderTabVM(m)).ToList();
+            return orders;
+        }
+
+        public List<OrderTabVM> GetAllLocationOrders(string userId)
+        {
+            var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId);
+            if (manager == null)
+            {
+                return new List<OrderTabVM>();
+            }
+            var orders = manager.Location.Orders.Select(m => new OrderTabVM(m)).ToList();
+            return orders;
+        }
+
         public async Task<ManagerCallVM> CreateNewManagerCall(ManagerCallVM vm)
         {
             var dbCall = new ManagerCall

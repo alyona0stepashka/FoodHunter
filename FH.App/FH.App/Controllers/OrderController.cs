@@ -24,6 +24,69 @@ namespace FH.App.Controllers
         }
 
         [HttpGet]
+        [Route("location")]
+        [Authorize]
+        public IActionResult GetAllOrdersByLocationAsync()
+        {
+            try
+            {
+                var meId = User.Claims.First(c => c.Type == "UserID").Value;
+                var orderList = _orderService.GetAllLocationOrders(meId);
+                if (orderList == null)
+                {
+                    throw new Exception("Orders not found by id.");
+                }
+                return Ok(orderList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("location/active")]
+        [Authorize]
+        public IActionResult GetAllActiveOrdersByLocationAsync()
+        {
+            try
+            {
+                var meId = User.Claims.First(c => c.Type == "UserID").Value;
+                var orderList = _orderService.GetAllActiveLocationOrders(meId);
+                if (orderList == null)
+                {
+                    throw new Exception("Orders not found by id.");
+                }
+                return Ok(orderList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("location/managers/none")]
+        [Authorize]
+        public IActionResult GetAllNoManagersOrdersByLocationAsync()
+        {
+            try
+            {
+                var meId = User.Claims.First(c => c.Type == "UserID").Value;
+                var orderList = _orderService.GetAllNoManagersLocationOrders(meId);
+                if (orderList == null)
+                {
+                    throw new Exception("Orders not found by id.");
+                }
+                return Ok(orderList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("{id}")]
         [Authorize]
         public async Task<IActionResult> GetOrderByIdAsync(int id)
@@ -73,27 +136,6 @@ namespace FH.App.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        [HttpGet]
-        [Route("current")]
-        [Authorize]
-        public IActionResult GetCurrentOrder()
-        {
-            try
-            {
-                var meId = User.Claims.First(c => c.Type == "UserID").Value;
-                var order = _orderService.GetCurrentOrder(meId);
-                if (order == null)
-                {
-                    throw new Exception("Orders not found");
-                }
-                return Ok(order);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        } 
     }
 }

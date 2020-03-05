@@ -40,16 +40,16 @@
                     <div *ngIf="order.IsActive" class="row">
                         <div class="col-md-12">
                             <label class="card-title" style="font-size: 1.3em;">Order actions:&nbsp;</label>
-                            <button title="Add new order item" class="btn" style="padding: inherit;"
+                            <!-- <button title="Add new order item" class="btn" style="padding: inherit;"
                                 (click)="openModal(addOrderItem, 'addOrderItem', null)">
                                 <i class="fas fa-calendar-plus"></i>
-                            </button>
+                            </button> -->
                             <button title="Call manager" class="btn" style="padding: inherit;"
                                 (click)="openModal(openCallManager, 'openCallManager', null)">
                                 <i class="fas fa-comment-dots"></i>
                             </button>
                             <button *ngIf="isManager" title="Cancel this order-session" class="btn"
-                                style="padding: inherit;" (click)="leaveSession()">
+                                style="padding: inherit;" (click)="cancelSession()">
                                 <i class="fas fa-door-open"></i>
                             </button>
                         </div>
@@ -201,6 +201,33 @@
         </div>
     </div>
 </ng-template>
+<!-- -------------ADD-ORDER-ITEM----------- -->
+<!-- <ng-template #openCallManager let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;"><i
+                class="fas fa-comment-dots"></i>&nbsp;Order some menu position&nbsp;&nbsp;
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12" style="margin-top: 1rem;">
+                    <textarea Title="Comment" style="border-left-width: 0; border-right-width: 0;" type="text"
+                        class="form-control" [(ngModel)]="managerCallMessage" placeholder="Comment...">
+                        </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button (click)="callManager()" class="btn btn-primary">Send</button>
+        </div>
+    </div>
+</ng-template> -->
 <!-- ///////////////////////////// -->
 
 <div *ngIf="!isOrderExist" class="col-md-12">
