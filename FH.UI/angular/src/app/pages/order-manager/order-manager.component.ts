@@ -52,13 +52,15 @@ export class OrderManagerComponent implements OnInit {
   isEdit = (this.isManager && !this.isCurrentUser);
   //bool vars for role access
 
-  //server lists
+  //crud items
   order: any;
-  //server lists
   openedItem: any;
   openItemPhotoPath;
   managerCallMessage = '';
-  //crud menu items
+  check = new Array();
+  clientTotal: any;
+  statuses = ["In start progress", "Cooked in the kitchen", "Ready to serve", "Served on client table", "Paid"];
+  //crud items
 
   //work with images
   serverUrl = environment.serverURL;
@@ -96,6 +98,14 @@ export class OrderManagerComponent implements OnInit {
     this.orderService.getOrderById(this.welcomeOrderId).subscribe(
       res => {
         this.order = res;
+        let i = 0;
+        this.order.Clients.forEach(client => {
+          client.OrderItems.forEach(item => {
+            item.Photo.Number = i;
+            i++;
+            this.lbAlbum.push({ src: environment.serverURL + item.Photo.Value, caption: item.Title });
+          });
+        });
         this.isNotFound = (res == null);
         this.isOrderExist = (res != null);
       },
@@ -144,14 +154,43 @@ export class OrderManagerComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+  onChangeStatus(event: any, itemId: number) {
+    console.log("value-status", event.target.value);
+
+    this.signalRService.hubConnection.invoke('ChangeOrderItemStatus', itemId, event.target.value)
+      .then(res => { location.reload(); })
+      .catch(err => console.error(err));
+  }
+
   setCurrentClientId(id) {
     this.currentClientId = id;
     console.log(id);
   }
+
+  getClientTotal(clientId: number) {
+    if (clientId == 0) {
+      clientId = parseInt(localStorage.getItem("ClientId"), 10);
+    }
+    let items = this.order.Clients.find(function (m) {
+      return m.User.UserProfileId == clientId;
+    }).OrderItems;
+    console.log("items-sum", items);
+
+    let sum = 0;
+    items.forEach(e => {
+      sum += e.PricePerItem * e.Count;
+    });
+
+    this.clientTotal = {};
+    this.clientTotal.Items = items;
+    this.clientTotal.Sum = sum;
+    console.log("clientTotal", this.clientTotal);
+  }
+
   openModal(content, goal?: string, id?: any) {
-    // if (goal == "callManager") {
-    //   this.callManager();
-    // }
+    if (goal == "showCheck") {
+      this.getClientTotal(0);
+    }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {

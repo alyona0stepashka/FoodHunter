@@ -7,6 +7,7 @@ import { environment } from 'environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Lightbox } from 'ngx-lightbox';
+import { SignalRService } from 'app/services/signal-r.service';
 
 @Component({
   selector: 'app-menu-manager',
@@ -16,6 +17,7 @@ import { Lightbox } from 'ngx-lightbox';
 export class MenuManagerComponent implements OnInit {
 
   constructor(
+    public signalRService: SignalRService,
     private menuService: MenuService,
     private staticService: StaticService,
     private formBuilder: FormBuilder,
@@ -74,9 +76,17 @@ export class MenuManagerComponent implements OnInit {
   icons = new Array();
   //server lists
 
-  //crud menu
+  //crud
   editMenu: any;
-  //crud menu
+  orderItem = {
+    Count: 1,
+    PricePerItem: 1,
+    Title: "",
+    OrderId: 0,
+    UserProfileId: '1',
+    MenuItemId: '0'
+  }
+  //crud
 
   //crud menu items
   editMenuItem: any;
@@ -345,6 +355,31 @@ export class MenuManagerComponent implements OnInit {
   setCurrentMenuId(id) {
     this.currentMenuId = id;
     console.log(id);
+  }
+
+  onOrderItem(item) {
+    this.orderItem.MenuItemId = item.Id;
+    this.orderItem.PricePerItem = item.PriceWithSales;
+    if (item.PriceWithSales == null || item.PriceWithSales == 0) {
+      this.orderItem.PricePerItem = item.Price;
+    }
+    this.orderItem.Title = item.Title;
+    this.orderItem.UserProfileId = localStorage.getItem('ClientId');
+    this.orderItem.OrderId = 0;
+    this.signalRService.hubConnection.invoke('AddOrderItem', this.orderItem)
+      .then(res => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+      })
+      .catch(err => console.error(err));
   }
 
   uploadPhoto(file: FileList) {

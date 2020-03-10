@@ -20,6 +20,11 @@
                 {{this.datepipe.transform(order.EndDate, 'MMMM d, h:mm a')}}</span>
             <span *ngIf="order.Manager!=null" style="white-space: normal; font-size: small; opacity: 0.5;"><i
                     class="fas fa-concierge-bell"></i>&nbsp;{{order.Manager}} serves you</span>
+            <span *ngIf="order.Manager==null && isManager" style="white-space: normal; font-size: small; opacity: 0.5;">
+                <button title="Call manager" class="btn" style="padding: inherit;"
+                    (click)="openModal(openCallManager, 'openCallManager', null)">
+                    <i class="fas fa-comment-dots"></i>
+                </button></span>
         </div>
     </div>
 </div>
@@ -33,20 +38,17 @@
         </ng-template>
         <div>
             <div class="card card-user" style="min-height: auto;">
-                <!-- <div class="card-header">
-                        <h5 class="card-title" style="font-size: 1.3em;">Payment:&nbsp;{{client}}</h5>
-                    </div> -->
                 <div class="card-body">
                     <div *ngIf="order.IsActive" class="row">
                         <div class="col-md-12">
                             <label class="card-title" style="font-size: 1.3em;">Order actions:&nbsp;</label>
-                            <!-- <button title="Add new order item" class="btn" style="padding: inherit;"
-                                (click)="openModal(addOrderItem, 'addOrderItem', null)">
-                                <i class="fas fa-calendar-plus"></i>
-                            </button> -->
                             <button title="Call manager" class="btn" style="padding: inherit;"
                                 (click)="openModal(openCallManager, 'openCallManager', null)">
                                 <i class="fas fa-comment-dots"></i>
+                            </button>
+                            <button title="Open my check" class="btn" style="padding: inherit;"
+                                (click)="openModal(showCheck, 'showCheck', null)">
+                                <i class="fas fa-cash-register"></i>
                             </button>
                             <button *ngIf="isManager" title="Cancel this order-session" class="btn"
                                 style="padding: inherit;" (click)="cancelSession()">
@@ -125,16 +127,26 @@
                                                 <span style="white-space: normal;">{{item.Title}}</span>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div *ngIf="!isManager" class="row">
                                             <div class="item text-center col-md-12">
                                                 <span style="white-space: normal;">Status: {{item.Status}}</span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="isManager" class="row">
+                                            <div class="item text-center col-md-12">
+                                                <select [(ngModel)]="item.Status" formControlName="IconId"
+                                                    class="form-control" (change)="onChangeStatus($event, item.Id)">
+                                                    <option *ngFor="let status of statuses" value="{{status}}">
+                                                        {{status}}</option>
+                                                    <!-- [selected]="item.Status==status"> -->
+                                                </select>
                                             </div>
                                         </div>
                                     </td>
                                     <td width="20%">
                                         <div class="row">
                                             <div class="item text-center col-md-12">
-                                                <span style="font-size: large;">{{item.PricePerItem}} BYN X
+                                                <span style="font-size: large;">{{item.PricePerItem}} BYN x
                                                     {{item.Count}}</span>
                                             </div>
                                         </div>
@@ -149,13 +161,20 @@
                                                         (click)="openModal(openOrderItem, 'openOrderItem', item.Id)"><i
                                                             class="fas fa-info-circle"></i></button>
                                                 </li>
-                                                <li *ngIf="isEdit">
+                                                <li *ngIf="!isManager">
                                                     <button type="submit" class="btn "
                                                         style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                        title="Edit"><i class="fas fa-pen"
-                                                            (click)="openModal(editOrderItem, 'editOrderItem', item.Id)"></i></button>
+                                                        title="Show details"
+                                                        (click)="openModal(openOrderItem, 'openOrderItem', item.Id)"><i
+                                                            class="fas fa-info-circle"></i></button>
                                                 </li>
-                                                <li *ngIf="isEdit">
+                                                <li *ngIf="isEdit && isManager">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Add feedback"><i class="fas fa-comment-medical"
+                                                            (click)="openModal(addFeedback, 'addFeedback', item.Id)"></i></button>
+                                                </li>
+                                                <li *ngIf="isEdit && isManager">
                                                     <button type="submit" class="btn "
                                                         style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                         title="Remove" (click)="deleteOrderItem(item.Id)"><i
@@ -172,7 +191,6 @@
             </div>
         </div>
     </mat-tab>
-
 </mat-tab-group>
 <!-- ----------CALL-MANAGER--------- -->
 <ng-template #openCallManager let-modal>
@@ -201,35 +219,35 @@
         </div>
     </div>
 </ng-template>
-<!-- -------------ADD-ORDER-ITEM----------- -->
-<!-- <ng-template #openCallManager let-modal>
+<!-- -------------SHOW-CURRENT-CHECK----------- -->
+<ng-template #showCheck let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;"><i
-                class="fas fa-comment-dots"></i>&nbsp;Order some menu position&nbsp;&nbsp;
+        <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;">
+            <i class="fas fa-cash-register"></i>&nbsp;Total: {{clientTotal.Sum}} BYN
         </h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-12" style="margin-top: 1rem;">
-                    <textarea Title="Comment" style="border-left-width: 0; border-right-width: 0;" type="text"
-                        class="form-control" [(ngModel)]="managerCallMessage" placeholder="Comment...">
-                        </textarea>
-                </div>
-            </div>
+        <div class="col-md-12">
+            <table style="width: 100%;">
+                <tr *ngFor="let item of clientTotal.Items">
+                    <td>
+                        {{item.Title}}
+                    </td>
+                    <td>
+                        {{item.PricePerItem}} BYN x {{item.Count}}
+                    </td>
+                    <td>
+                        {{item.PricePerItem*item.Count}} BYN
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
-    <div class="modal-footer">
-        <div class="form-group">
-            <button (click)="callManager()" class="btn btn-primary">Send</button>
-        </div>
-    </div>
-</ng-template> -->
-<!-- ///////////////////////////// -->
-
+</ng-template>
+<!-- -------------NO-ACTIVE-ORDERS---------- -->
 <div *ngIf="!isOrderExist" class="col-md-12">
     <div class="card-header">
         <h5 style="opacity:0.7" class="card-title">Now you are not assigned to any order</h5>

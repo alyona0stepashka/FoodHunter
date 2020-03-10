@@ -16,5 +16,16 @@ namespace FH.BLL.VMs
         public int OrderId { get; set; } 
         public int UserProfileId { get; set; }
         public int MenuItemId { get; set; }
+
+        public CreateOrderItemVM(OrderItemVM o)
+        { 
+            Count = o.Count; 
+            Status = o.Status; 
+        }
+
+        public CreateOrderItemVM()
+        {
+            
+        }
     }
 }

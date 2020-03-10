@@ -189,6 +189,21 @@ namespace FH.BLL.Services
 
         public async Task<OrderItemVM> CreateNewOrderItem(CreateOrderItemVM vm)
         {
+            var orderUser = _db.OrderUsers.GetAll().FirstOrDefault(m => m.UserProfileId == vm.UserProfileId && m.Order.IsActive);
+            if (vm.OrderId == 0 && orderUser?.Order.Id != null)
+            {
+                vm.OrderId = orderUser.Order.Id;
+            }
+
+            var orderItem = orderUser?.Order.OrderItems.FirstOrDefault(m => m.MenuItemId == vm.MenuItemId);
+
+            if (orderItem != null)
+            {
+                vm.Count = orderItem.Count+1;
+                vm.Id = orderItem.Id;
+                return await UpdateNewOrderItem(vm);
+            }
+
             var dbItem = new OrderItem
             {
                 OrderId = vm.OrderId,
@@ -199,9 +214,8 @@ namespace FH.BLL.Services
                 Title = vm.Title,
                 UserId = vm.UserProfileId
             };
-            var newItem = await _db.OrderItems.CreateAsync(dbItem);
-            var ret = new OrderItemVM(newItem);
-            return ret;
+            var newItem = await _db.OrderItems.CreateAsync(dbItem); 
+            return new OrderItemVM(newItem);
         }
 
         public async Task DeleteOrderItem(int id)

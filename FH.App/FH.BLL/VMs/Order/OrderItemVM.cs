@@ -29,9 +29,11 @@ namespace FH.BLL.VMs
             Count = o.Count;
             PricePerItem = o.PricePerItem;
             Status = o.Status;
-            OrderId = o.OrderId.Value;
+            if (o.OrderId != null) {OrderId = o.OrderId.Value;}
             UserProfileId = UserProfileId;
-            Photo = new Icon(o.MenuItemId.Value, $"{o.MenuItem.FileModel?.Path}{o.MenuItem.FileModel?.Name}{o.MenuItem.FileModel?.Extension}");
+            if (o.MenuItemId != null) {
+                Photo = new Icon(o.MenuItemId.Value,
+                    $"{o.MenuItem.FileModel?.Path}{o.MenuItem.FileModel?.Name}{o.MenuItem.FileModel?.Extension}"); }
             if (o.MenuItem.Feedbacks != null && o.MenuItem.Feedbacks.Any())
             {
                 Feedbacks = o.MenuItem.Feedbacks.Select(e => new FeedbackVM(e)).ToList();

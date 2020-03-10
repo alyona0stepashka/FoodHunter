@@ -25,6 +25,11 @@ namespace FH.App.Controllers
             _locationService = locationService;
         }
 
+
+
+        /// <summary>
+        /// Get location by locationId
+        /// </summary>
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetLocation(int id) 
@@ -44,6 +49,11 @@ namespace FH.App.Controllers
             }
         }
 
+
+
+        /// <summary>
+        /// Get locations near point
+        /// </summary>
         [HttpGet]
         [Route("{lon}x{lat}")]
         public IActionResult GetLocationsNearPoint(string lon, string lat)
@@ -63,6 +73,11 @@ namespace FH.App.Controllers
             }
         }
 
+
+
+        /// <summary>
+        /// Get all locations by companyId
+        /// </summary>
         [HttpGet]
         [Route("Company/{CompanyId}")]
         public IActionResult GetAllLocationByCompany(int companyId)
@@ -82,6 +97,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Create location
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateLocation([FromForm] CreateLocationVM location)
         {
@@ -101,6 +119,9 @@ namespace FH.App.Controllers
         }
 
 
+        /// <summary>
+        /// Update location info
+        /// </summary>
         [HttpPut]
         public async Task<IActionResult> UpdateLocation([FromForm] CreateLocationVM location)
         {
@@ -119,6 +140,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete location
+        /// </summary>
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteLocation(int id)

@@ -23,9 +23,11 @@ namespace FH.App.Controllers
             _orderService = orderService;
         }
 
+        /// <summary>
+        /// Get all orders by locationId (get it from current user)
+        /// </summary>
         [HttpGet]
-        [Route("location")]
-        [Authorize]
+        [Route("location")] 
         public IActionResult GetAllOrdersByLocationAsync()
         {
             try
@@ -44,9 +46,11 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all active orders by locationId (get it from current user)
+        /// </summary>
         [HttpGet]
-        [Route("location/active")]
-        [Authorize]
+        [Route("location/active")] 
         public IActionResult GetAllActiveOrdersByLocationAsync()
         {
             try
@@ -65,9 +69,11 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all no-manager-orders by locationId (get it from current user)
+        /// </summary>
         [HttpGet]
-        [Route("location/managers/none")]
-        [Authorize]
+        [Route("location/managers/none")] 
         public IActionResult GetAllNoManagersOrdersByLocationAsync()
         {
             try
@@ -86,9 +92,11 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Get order bu orderId
+        /// </summary>
         [HttpGet]
-        [Route("{id}")]
-        [Authorize]
+        [Route("{id}")] 
         public async Task<IActionResult> GetOrderByIdAsync(int id)
         {
             try
@@ -117,6 +125,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Get order history for current user (as client)
+        /// </summary>
         [HttpGet]
         [Route("history")]
         [Authorize]

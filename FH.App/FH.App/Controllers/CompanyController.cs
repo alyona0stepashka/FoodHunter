@@ -27,6 +27,9 @@ namespace FH.App.Controllers
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Get all companies
+        /// </summary>
         [HttpGet]
         public IActionResult GetAllCompanies()
         {
@@ -41,6 +44,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Get company by companyId
+        /// </summary>
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetCompany(int id)
@@ -60,9 +66,10 @@ namespace FH.App.Controllers
             }
         }
 
-        [HttpPost]
-        //[AllowAnonymous]
-        // [IgnoreAntiforgeryToken]
+        /// <summary>
+        /// Create new company
+        /// </summary>
+        [HttpPost] 
         public async Task<IActionResult> CreateCompany([FromForm] CreateCompanyVM company)
         {
             try
@@ -83,6 +90,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete company
+        /// </summary>
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteCompany(int id)

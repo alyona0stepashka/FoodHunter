@@ -23,6 +23,9 @@ namespace FH.App.Controllers
            // _userService = userService;
         }
 
+        /// <summary>
+        /// Register new user
+        /// </summary>
         [HttpPost]
         [Route("register")]
         public async Task<object> Register([FromForm] RegisterVM model)
@@ -42,6 +45,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Login user
+        /// </summary>
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginVM model)
@@ -62,6 +68,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Email confirmation
+        /// </summary>
         [HttpGet]
         [Route("email")]
         public async Task<IActionResult> ConfirmEmail(string user_id, string code)  //user_id
@@ -81,6 +90,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Edit account info
+        /// </summary>
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> EditMyAccountInformation([FromBody] EditAccountInfoVM editUser)

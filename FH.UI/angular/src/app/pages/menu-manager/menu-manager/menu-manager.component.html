@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    <!-- //////////////////////////////////// -->
+    <!-- --------ADD-NEW-MENU--------- -->
     <mat-tab-group style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
 
         <mat-tab *ngIf="isEdit">
@@ -81,7 +81,7 @@
                 </div>
             </div>
         </mat-tab>
-        <!-- ////////////////////////////////// -->
+        <!-- ---------MENUS------------- -->
         <mat-tab *ngFor="let menu of menus">
             <ng-template mat-tab-label>
                 <i class="{{menu.Icon.Value}}" (click)="setCurrentMenuId(menu.Id)">
@@ -181,6 +181,12 @@
                                                             title="Delete" (click)="deleteMenuItem(item.Id)"><i
                                                                 class="fas fa-ban"></i></button>
                                                     </li>
+                                                    <li *ngIf="!isEdit">
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Add to order" (click)="onOrderItem(item)"><i
+                                                                class="fas fa-shopping-basket"></i></button>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -194,8 +200,8 @@
         </mat-tab>
 
     </mat-tab-group>
-    <!-- ///////////////////////////// -->
 
+    <!-- ---------NEW-MENU------------ -->
     <ng-template #newMenuItem let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Create new menu item</h4>
@@ -300,7 +306,7 @@
             </div>
         </div>
     </ng-template>
-    <!--/////////////////////////////  -->
+    <!-------------EDIt-MENU-------------  -->
     <ng-template #editMenu let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your menu info</h4>
@@ -364,7 +370,7 @@
             </form>
         </div>
     </ng-template>
-    <!-- ///////////////////////////////// -->
+    <!-- ----------EDIT-MENU-ITEM----------------- -->
     <ng-template #editMenuItem let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Edit your menu item info</h4>
@@ -469,7 +475,7 @@
             </div>
         </div>
     </ng-template>
-    <!-- ////////////////////////////////////// -->
+    <!-- ---------OPEN-MENU-ITEM-------------- -->
     <ng-template #openMenuItem let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;">{{openedItem.Title}}&nbsp;&nbsp;
