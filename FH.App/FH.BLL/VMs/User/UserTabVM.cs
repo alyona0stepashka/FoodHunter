@@ -32,5 +32,10 @@ namespace FH.BLL.VMs
             }
             Photo = new Icon(m.Id, $"{m.File?.Path}{m.File?.Name}{m.File?.Extension}");
         }
+
+        public UserTabVM()
+        {
+            
+        }
     }
 }

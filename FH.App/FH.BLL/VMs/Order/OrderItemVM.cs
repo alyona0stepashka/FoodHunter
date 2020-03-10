@@ -18,6 +18,7 @@ namespace FH.BLL.VMs
         public string Status { get; set; } 
         public int OrderId { get; set; } 
         public int UserProfileId { get; set; }
+        public int MenuItemId { get; set; }
         public int Rate { get; set; }
         public List<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
 
@@ -29,11 +30,19 @@ namespace FH.BLL.VMs
             Count = o.Count;
             PricePerItem = o.PricePerItem;
             Status = o.Status;
-            if (o.OrderId != null) {OrderId = o.OrderId.Value;}
-            UserProfileId = UserProfileId;
-            if (o.MenuItemId != null) {
-                Photo = new Icon(o.MenuItemId.Value,
-                    $"{o.MenuItem.FileModel?.Path}{o.MenuItem.FileModel?.Name}{o.MenuItem.FileModel?.Extension}"); }
+            if (o.OrderId != null) {OrderId = o.OrderId.Value; }
+
+            if (o.MenuItemId != null)
+            {
+                MenuItemId = o.MenuItemId.Value;
+                UserProfileId = UserProfileId;
+                if (o.MenuItemId != null)
+                {
+                    Photo = new Icon(o.MenuItemId.Value,
+                        $"{o.MenuItem.FileModel?.Path}{o.MenuItem.FileModel?.Name}{o.MenuItem.FileModel?.Extension}");
+                }
+            }
+
             if (o.MenuItem.Feedbacks != null && o.MenuItem.Feedbacks.Any())
             {
                 Feedbacks = o.MenuItem.Feedbacks.Select(e => new FeedbackVM(e)).ToList();

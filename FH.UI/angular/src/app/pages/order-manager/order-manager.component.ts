@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService } from 'app/services/menu.service';
 import { StaticService } from 'app/services/static.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Lightbox } from 'ngx-lightbox';
@@ -10,6 +10,7 @@ import { environment } from 'environments/environment';
 import { OrderService } from 'app/services/order.service';
 import { DatePipe } from '@angular/common';
 import { SignalRService } from 'app/services/signal-r.service';
+import { FeedbackService } from 'app/services/feedback.service';
 
 @Component({
   selector: 'app-order-manager',
@@ -23,7 +24,7 @@ export class OrderManagerComponent implements OnInit {
     private router: Router,
     private orderService: OrderService,
     private menuService: MenuService,
-    private staticService: StaticService,
+    private feedbackService: FeedbackService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     public datepipe: DatePipe,
@@ -62,9 +63,23 @@ export class OrderManagerComponent implements OnInit {
   statuses = ["In start progress", "Cooked in the kitchen", "Ready to serve", "Served on client table", "Paid"];
   //crud items
 
+  //forms
+  feedbackForm: FormGroup = this.formBuilder.group({
+    Stars: [5, [Validators.required]],
+    Comment: ['', [Validators.required]],
+    MenuItemId: [0, [Validators.required]],
+    UserProfileId: [0, [Validators.required]],
+    Photo: [null]
+  });
+  submittedFeedback = false;
+  UploadFile: File = null;
+  //forms
+
   //work with images
   serverUrl = environment.serverURL;
   private lbAlbum: any[] = new Array();
+  imageUrl = './assets/img/upload-photo.jpg';
+  i = 0;
   //work with images
 
 
@@ -98,11 +113,10 @@ export class OrderManagerComponent implements OnInit {
     this.orderService.getOrderById(this.welcomeOrderId).subscribe(
       res => {
         this.order = res;
-        let i = 0;
         this.order.Clients.forEach(client => {
           client.OrderItems.forEach(item => {
-            item.Photo.Number = i;
-            i++;
+            item.Photo.Number = this.i;
+            this.i++;
             this.lbAlbum.push({ src: environment.serverURL + item.Photo.Value, caption: item.Title });
           });
         });
@@ -174,22 +188,59 @@ export class OrderManagerComponent implements OnInit {
     let items = this.order.Clients.find(function (m) {
       return m.User.UserProfileId == clientId;
     }).OrderItems;
-    console.log("items-sum", items);
-
     let sum = 0;
     items.forEach(e => {
       sum += e.PricePerItem * e.Count;
     });
-
     this.clientTotal = {};
     this.clientTotal.Items = items;
     this.clientTotal.Sum = sum;
-    console.log("clientTotal", this.clientTotal);
+  }
+
+  onSubmitFeedback() {
+    this.submittedFeedback = true;
+    if (this.feedbackForm.invalid) {
+      return null;
+    }
+    this.feedbackService.createFeedback(this.feedbackForm, this.UploadFile).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadOrder();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
+  get f() { return this.feedbackForm.controls; }
+
+  uploadPhoto(file: FileList) {
+    this.UploadFile = file.item(0);
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.imageUrl = event.target.result;
+    };
+    reader.readAsDataURL(this.UploadFile);
   }
 
   openModal(content, goal?: string, id?: any) {
     if (goal == "showCheck") {
       this.getClientTotal(0);
+    }
+    if (goal == "addFeedback") {
+      this.feedbackForm.patchValue({ UserProfileId: parseInt(localStorage.getItem("ClientId"), 10), MenuItemId: id });
     }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

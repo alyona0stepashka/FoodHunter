@@ -58,7 +58,7 @@ namespace FH.DAL.DataContext
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Feedback>().HasOne(m => m.MenuItem).WithMany(m => m.Feedbacks).HasForeignKey(m => m.MenuItemId)
                 .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Feedback>().HasOne(m => m.User).WithMany(m => m.Feedbacks).HasForeignKey(m => m.UserId)
+            modelBuilder.Entity<Feedback>().HasOne(m => m.UserProfile).WithMany(m => m.Feedbacks).HasForeignKey(m => m.UserProfileId)
                 .OnDelete(DeleteBehavior.Restrict);
 
 

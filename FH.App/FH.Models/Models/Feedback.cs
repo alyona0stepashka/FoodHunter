@@ -21,9 +21,9 @@ namespace FH.Models.Models
         public int? MenuItemId { get; set; }
         public virtual MenuItem MenuItem { get; set; }
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-        public virtual UserProfile User { get; set; }
+        [ForeignKey("UserProfile")]
+        public int UserProfileId { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
 
         //--------------------------
         public virtual List<FileModel> Photos { get; set; }

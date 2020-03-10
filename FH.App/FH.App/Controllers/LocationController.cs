@@ -79,7 +79,7 @@ namespace FH.App.Controllers
         /// Get all locations by companyId
         /// </summary>
         [HttpGet]
-        [Route("Company/{CompanyId}")]
+        [Route("Company/{companyId}")]
         public IActionResult GetAllLocationByCompany(int companyId)
         {
             try

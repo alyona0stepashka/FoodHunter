@@ -48,7 +48,7 @@
                             </button>
                             <button title="Open my check" class="btn" style="padding: inherit;"
                                 (click)="openModal(showCheck, 'showCheck', null)">
-                                <i class="fas fa-cash-register"></i>
+                                <i class="fas fa-dollar-sign"></i>
                             </button>
                             <button *ngIf="isManager" title="Cancel this order-session" class="btn"
                                 style="padding: inherit;" (click)="cancelSession()">
@@ -56,6 +56,11 @@
                             </button>
                         </div>
                     </div><br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="card-title" style="font-size: 1.3em;">Waiter calls:&nbsp;</label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-5">
                             <div *ngFor="let call of order.ManagerCalls"
@@ -164,15 +169,8 @@
                                                 <li *ngIf="!isManager">
                                                     <button type="submit" class="btn "
                                                         style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                        title="Show details"
-                                                        (click)="openModal(openOrderItem, 'openOrderItem', item.Id)"><i
-                                                            class="fas fa-info-circle"></i></button>
-                                                </li>
-                                                <li *ngIf="isEdit && isManager">
-                                                    <button type="submit" class="btn "
-                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                         title="Add feedback"><i class="fas fa-comment-medical"
-                                                            (click)="openModal(addFeedback, 'addFeedback', item.Id)"></i></button>
+                                                            (click)="openModal(addFeedback, 'addFeedback', item.MenuItemId)"></i></button>
                                                 </li>
                                                 <li *ngIf="isEdit && isManager">
                                                     <button type="submit" class="btn "
@@ -245,6 +243,61 @@
                 </tr>
             </table>
         </div>
+    </div>
+</ng-template>
+<!-----------------ADD-FEEDBACK----------------->
+<ng-template #addFeedback let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="fas fa-comment-medical"></i>&nbsp;Add feedback</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="feedbackForm">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
+                            accept="image/*" (change)="uploadPhoto($event.target.files)"
+                            class="form-control btn btn-primary" placeholder="Photo">
+                        <img [src]="imageUrl" class="avatar"
+                            style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                        <div *ngIf="submittedCompany && f2.Photo.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Photo.errors.required">Company Logo is required</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label>Rate</label>
+                        <ngb-rating formControlName="Stars" max="5" [(rate)]="f.Stars.value" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.Stars.errors }"></ngb-rating>
+                        <div *ngIf="submitted && f.Stars.errors" class="invalid-feedback">
+                            <div *ngIf="f.Stars.errors.required">Stars is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Comment</label>
+                        <textarea Title="Comment" type="text" formControlName="Comment" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.Comment.errors }"
+                            placeholder="Comment about this menu item..."></textarea>
+                        <div *ngIf="submitted && f.Comment.errors" class="invalid-feedback">
+                            <div *ngIf="f.Comment.errors.required">Comment is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" (click)="onSubmitFeedback()" class="btn btn-primary">Save
+                            changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </ng-template>
 <!-- -------------NO-ACTIVE-ORDERS---------- -->

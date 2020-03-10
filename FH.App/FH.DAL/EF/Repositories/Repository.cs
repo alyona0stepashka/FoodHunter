@@ -44,9 +44,16 @@ namespace FH.DAL.EF.Repositories
 
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
-            var newEntity = await _db.Set<TEntity>().AddAsync(entity);
-            await Save();
-            return newEntity.Entity;
+            try
+            {
+                var newEntity = await _db.Set<TEntity>().AddAsync(entity);
+                await Save();
+                return newEntity.Entity;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public virtual async Task Save()

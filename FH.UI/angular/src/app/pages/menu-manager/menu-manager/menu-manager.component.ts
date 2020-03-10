@@ -120,6 +120,7 @@ export class MenuManagerComponent implements OnInit {
   imageUrl = './assets/img/upload-photo.jpg';
   serverUrl = environment.serverURL;
   private lbAlbum: any[] = new Array();
+  index = 0;
   //work with images
 
   async ngOnInit() {
@@ -164,13 +165,12 @@ export class MenuManagerComponent implements OnInit {
       res => {
         this.menus = res as [];
         this.isNotFound = (this.menus.length == 0 && !this.isEdit);
-        let index = 0;
         this.menus.forEach(menu => {
           if (menu != null && menu.MenuItems != null) {
             menu.MenuItems.forEach(item => {
               this.openMenuItem = item;
-              item.Photo.Number = index;
-              index++;
+              item.Photo.Number = this.index;
+              this.index++;
               this.lbAlbum.push({ src: environment.serverURL + item.Photo.Value, caption: item.Title });
             })
           }

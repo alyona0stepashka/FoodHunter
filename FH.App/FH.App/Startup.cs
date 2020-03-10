@@ -174,6 +174,7 @@ Example: 'Bearer 12345abcdef'",
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<ITableService, TableService>();
         }
 
