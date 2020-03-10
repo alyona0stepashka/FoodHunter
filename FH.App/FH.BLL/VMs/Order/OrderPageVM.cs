@@ -23,6 +23,7 @@ namespace FH.BLL.VMs
         public List<OrderPageTabVM> Clients { get; set; } = new List<OrderPageTabVM>();
         public List<ManagerCallVM> ManagerCalls { get; set; }  = new List<ManagerCallVM>();
         public UserTabVM Manager { get; set; }
+        public string ManagerName { get; set; }
 
         public OrderPageVM(Order o)
         {
@@ -39,7 +40,8 @@ namespace FH.BLL.VMs
             Address = o.Table.Location?.Address;
             if (o.Manager != null)
             {
-                Manager = new UserTabVM(o.Manager?.UserProfile); 
+                Manager = new UserTabVM(o.Manager?.UserProfile);
+                ManagerName = $"{o.Manager.UserProfile.FirstName} {o.Manager.UserProfile.LastName[0]}.";
             }
             if (o.OrderUsers != null && o.OrderUsers.Any())
             {

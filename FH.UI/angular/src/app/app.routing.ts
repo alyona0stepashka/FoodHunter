@@ -15,6 +15,7 @@ import { MenuManagerComponent } from './pages/menu-manager/menu-manager/menu-man
 import { TablesManagerComponent } from './pages/tables-manager/tables-manager.component';
 import { LocationSearchComponent } from './pages/location-search/location-search.component';
 import { OrderManagerComponent } from './pages/order-manager/order-manager.component';
+import { OrderListComponent } from './pages/order-list/order-list.component';
 
 export const AppRoutes: Routes = [
   //   {
@@ -57,6 +58,7 @@ export const AppRoutes: Routes = [
       { path: 'menu/:id', component: MenuManagerComponent, canActivate: [AuthGuard] },
       { path: 'table/:id', component: TablesManagerComponent, canActivate: [AuthGuard] },
       { path: 'search', component: LocationSearchComponent, canActivate: [AuthGuard] },
+      { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard] },
       { path: 'order/:id', component: OrderManagerComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
@@ -70,6 +72,7 @@ export const AppRoutes: Routes = [
       { path: 'menu/:id', component: MenuManagerComponent, canActivate: [AuthGuard] },
       { path: 'table/:id', component: TablesManagerComponent, canActivate: [AuthGuard] },
       { path: 'search', component: LocationSearchComponent, canActivate: [AuthGuard] },
+      { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard] },
       { path: 'order/:id', component: OrderManagerComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},

@@ -71,10 +71,10 @@ namespace FH.BLL.Services
             return new OrderPageVM(await _db.Orders.CreateAsync(dbOrder));
         }
 
-        public async Task<OrderPageTabVM> AssignMeToOrder(int orderId, string welcomeCode, string userId)
+        public async Task<OrderPageTabVM> AssignMeToOrder(string welcomeCode, string userId)
         {
-            var order = await _db.Orders.GetByIdAsync(orderId);
-            if (!order.IsActive || order.WelcomeCode.ToString() != welcomeCode)
+            var order = _db.Orders.GetAll().FirstOrDefault(m=>m.WelcomeCode.ToString()== welcomeCode);
+            if (order != null && (!order.IsActive || order.WelcomeCode.ToString() != welcomeCode))
             {
                 throw new Exception("Order session is already cancel (or invalid WelcomeCode)");
             }
@@ -114,7 +114,7 @@ namespace FH.BLL.Services
             }
 
             var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
-            if (!_db.OrderUsers.GetAll().Any(m => m.OrderId == order.Id && m.UserProfileId == myId)) 
+            if (!_db.OrderUsers.GetAll().Any(m => m.OrderId == order.Id && m.UserProfileId == myId) && !_db.OrderUsers.GetAll().Any(m => m.OrderId == order.Id && m.Order.Manager.UserProfileId == myId)) 
             {
                 throw new Exception("You are not assigned this order");
             }
@@ -195,7 +195,7 @@ namespace FH.BLL.Services
                 vm.OrderId = orderUser.Order.Id;
             }
 
-            var orderItem = orderUser?.Order.OrderItems.FirstOrDefault(m => m.MenuItemId == vm.MenuItemId);
+            var orderItem = orderUser?.Order.OrderItems.FirstOrDefault(m => m.MenuItemId == vm.MenuItemId && m.UserId==vm.UserProfileId);
 
             if (orderItem != null)
             {

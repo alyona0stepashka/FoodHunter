@@ -1,5 +1,5 @@
 <!-- <div *ngIf="!isNotFound"> -->
-<div class="row" style="background-color: #ffc5653b;">
+<div *ngIf="isOrderExist" class="row" style="background-color: #ffc5653b;">
     <div class="col-md-6">
         <div class="item text-left col-md-12" style="margin-top: 0.5rem; margin-bottom: 0.5rem; color: #54524e;">
             <span style="white-space: normal; font-size: large; font-weight: bolder;"><i
@@ -15,11 +15,12 @@
     <div class="col-md-6">
         <div class="item text-right col-md-12">
             <span style="white-space: normal; font-size: small; opacity: 0.5;">started at:
-                {{this.datepipe.transform(order.StartDate, 'MMMM d, h:mm a')}}</span>
+                {{this.datepipe.transform(order.StartDate, 'MMMM d, h:mm a')}}</span><br />
             <span *ngIf="!order.IsActive" style="white-space: normal; font-size: small; opacity: 0.5;">ended at:
-                {{this.datepipe.transform(order.EndDate, 'MMMM d, h:mm a')}}</span>
+                {{this.datepipe.transform(order.EndDate, 'MMMM d, h:mm a')}}</span><br *ngIf="!order.IsActive" />
             <span *ngIf="order.Manager!=null" style="white-space: normal; font-size: small; opacity: 0.5;"><i
-                    class="fas fa-concierge-bell"></i>&nbsp;{{order.Manager}} serves you</span>
+                    class="fas fa-user-tie"></i>&nbsp;{{order.ManagerName}} serves you</span><br
+                *ngIf="order.Manager!=null" />
             <span *ngIf="order.Manager==null && isManager" style="white-space: normal; font-size: small; opacity: 0.5;">
                 <button title="Call manager" class="btn" style="padding: inherit;"
                     (click)="openModal(openCallManager, 'openCallManager', null)">
@@ -47,12 +48,12 @@
                                 <i class="fas fa-comment-dots"></i>
                             </button>
                             <button title="Open my check" class="btn" style="padding: inherit;"
-                                (click)="openModal(showCheck, 'showCheck', null)">
+                                (click)="openModal(showCheck, 'showCheck', 0)">
                                 <i class="fas fa-dollar-sign"></i>
                             </button>
                             <button *ngIf="isManager" title="Cancel this order-session" class="btn"
                                 style="padding: inherit;" (click)="cancelSession()">
-                                <i class="fas fa-door-open"></i>
+                                <i class="fas fa-times"></i>
                             </button>
                         </div>
                     </div><br>
@@ -139,10 +140,9 @@
                                         </div>
                                         <div *ngIf="isManager" class="row">
                                             <div class="item text-center col-md-12">
-                                                <select [(ngModel)]="item.Status" formControlName="IconId"
-                                                    class="form-control" (change)="onChangeStatus($event, item.Id)">
-                                                    <option *ngFor="let status of statuses" value="{{status}}">
-                                                        {{status}}</option>
+                                                <select class="form-control" (change)="onChangeStatus($event, item.Id)">
+                                                    <option *ngFor="let status of statuses" value="{{status}}"
+                                                        [selected]="item.Status==status">{{status}}</option>
                                                     <!-- [selected]="item.Status==status"> -->
                                                 </select>
                                             </div>
@@ -166,7 +166,7 @@
                                                         (click)="openModal(openOrderItem, 'openOrderItem', item.Id)"><i
                                                             class="fas fa-info-circle"></i></button>
                                                 </li>
-                                                <li *ngIf="!isManager">
+                                                <li *ngIf="!isManager && client.User.UserProfileId==userProfileId">
                                                     <button type="submit" class="btn "
                                                         style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                         title="Add feedback"><i class="fas fa-comment-medical"
@@ -303,7 +303,17 @@
 <!-- -------------NO-ACTIVE-ORDERS---------- -->
 <div *ngIf="!isOrderExist" class="col-md-12">
     <div class="card-header">
-        <h5 style="opacity:0.7" class="card-title">Now you are not assigned to any order</h5>
+        <h5 style="opacity:0.7" class="card-title">Now you are not assigned to any active order</h5>
+        <h5 style="opacity:0.7" class="card-title">If you already have "Welcome Code" you can join this order</h5>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <input class="form-control" type="text" [(ngModel)]="welcomeCode">
+            </div>
+            <div class="col-md-2 form-group" style="margin-top: -0.5rem;">
+                <button type="submit" (click)="onJoinOrder()" class="btn btn-primary">Join</button>
+            </div>
+        </div>
+        <h5 style="opacity:0.7" class="card-title">{{joinResult}}</h5>
     </div>
 </div>
 

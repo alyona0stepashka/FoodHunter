@@ -18,7 +18,8 @@ namespace FH.BLL.VMs
         public int MenuItemId { get; set; }
 
         public CreateOrderItemVM(OrderItemVM o)
-        { 
+        {
+            Id = o.Id;
             Count = o.Count; 
             Status = o.Status; 
         }

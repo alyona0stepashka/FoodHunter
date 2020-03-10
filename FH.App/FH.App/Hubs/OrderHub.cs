@@ -80,6 +80,7 @@ namespace FH.App.Hubs
                                 connects[index].OrderIds.Add(o);
                             }
                         }
+                        //TODO 10.03.2020 Add update for manager, now it's only for clients
                         if (orderId != null)
                         {
                             connects[index].OrderIds.Add(orderId.Value);
@@ -144,7 +145,7 @@ namespace FH.App.Hubs
                 var order = await _orderService.CreateNewOrder(vm, userId);
                 UpdateList(userId, true, order.Id);
                 var orderers = connects.Where(m => m.OrderIds.Contains(order.Id));
-                var tab = await _orderService.AssignMeToOrder(order.Id, order.WelcomeCode.ToString(), userId);
+                var tab = await _orderService.AssignMeToOrder(order.WelcomeCode.ToString(), userId);
                 var page = _orderService.GetOrderByIdAsync(order.Id, userId);
                 await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("StartSession", page);
             }
@@ -177,7 +178,7 @@ namespace FH.App.Hubs
             }
         }
 
-        public async Task AssignClientToSession(int orderId, string welcomeCode, string userId = null)
+        public async Task AssignClientToSession(string welcomeCode, string userId = null)
         {
             try
             {
@@ -185,9 +186,9 @@ namespace FH.App.Hubs
                 {
                     userId = Context.User.Claims.First(c => c.Type == "UserID").Value;
                 }
-                UpdateList(userId, true, orderId);
-                var orderers = connects.Where(m => m.OrderIds.Contains(orderId));
-                var tab = await _orderService.AssignMeToOrder(orderId, welcomeCode, userId);
+                var tab = await _orderService.AssignMeToOrder(welcomeCode, userId);
+                UpdateList(userId, true, tab.Id);
+                var orderers = connects.Where(m => m.OrderIds.Contains(tab.Id));
                 await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("AssignClient", tab);
             }
             catch (Exception e)

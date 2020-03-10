@@ -38,6 +38,8 @@ export class OrderManagerComponent implements OnInit {
   currentClientId: number;
   closeResult: string;
   isNotFound = false;
+  welcomeCode = '';
+  joinResult = '';
   //logic vars
 
   //my locationId & locationId from url
@@ -51,6 +53,7 @@ export class OrderManagerComponent implements OnInit {
   isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
   isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
   isEdit = (this.isManager && !this.isCurrentUser);
+  userProfileId = localStorage.getItem('ClientId');
   //bool vars for role access
 
   //crud items
@@ -87,11 +90,11 @@ export class OrderManagerComponent implements OnInit {
     await this.activateRoute.params.subscribe(params => this.welcomeOrderId = params.id);
 
     this.isLogin = (localStorage.getItem('token') != null);
-    this.orderId = localStorage.getItem("CurrentOrderId");
-    this.isOrderExist = (this.orderId != null && this.orderId != '0');
     this.isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
     this.isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
     this.isEdit = (this.isManager && !this.isCurrentUser);
+    this.orderId = localStorage.getItem("CurrentOrderId");
+    this.isOrderExist = (this.orderId != null && this.orderId != '0');
 
     if (this.welcomeOrderId == '0') {
       //this.welcomeOrderId = this.orderId;
@@ -99,6 +102,10 @@ export class OrderManagerComponent implements OnInit {
     }
     this.loadOrder();
     this.callManagerListener();
+    this.changeOrderItemStatusListener();
+    this.assignClientListener();
+    this.assignManagerListener();
+    this.addItemListener();
   }
 
   open(index: number): void {
@@ -125,7 +132,7 @@ export class OrderManagerComponent implements OnInit {
       },
       err => {
         this.isNotFound = true;
-        this.isOrderExist = true;
+        this.isOrderExist = false;
         console.log(err);
         this.toastr.error(err.error, 'Error');
       }
@@ -137,6 +144,44 @@ export class OrderManagerComponent implements OnInit {
       // this.order.ManagerCalls.push(data);
       this.loadOrder();
       console.log("call-manager-listener", data);
+    });
+  }
+
+  addItemListener() {
+    this.signalRService.hubConnection.on('AddOrderItem', (data) => {
+      // this.order.ManagerCalls.push(data);
+      this.loadOrder();
+      console.log("add-item-listener", data);
+    });
+  }
+
+  assignClientListener() {
+    this.signalRService.hubConnection.on('AssignClient', (data) => {
+      // this.order.ManagerCalls.push(data);
+      this.order.Clients.push(data);
+      console.log("assign-client-listener", data);
+    });
+  }
+
+  assignManagerListener() {
+    this.signalRService.hubConnection.on('AssignManager', (data) => {
+      // this.order.ManagerCalls.push(data);
+      this.order.Manager = data.Manager;
+      this.order.ManagerName = data.ManagerName;
+      console.log("assign-client-listener", data);
+    });
+  }
+
+  changeOrderItemStatusListener() {
+    this.signalRService.hubConnection.on('ChangeOrderItemStatus', (data) => {
+      // this.order.ManagerCalls.push(data);
+      this.order.Clients.forEach(c => {
+        c.OrderItems.find(function (m) {
+          return m.Id == data.Id;
+        }).Status == data.Status;
+      });
+      this.loadOrder();
+      console.log("change-status-listener", data);
     });
   }
 
@@ -155,6 +200,19 @@ export class OrderManagerComponent implements OnInit {
       .catch(err => console.error(err));
   }
 
+  onJoinOrder() {
+    this.joinResult = '';
+    if (this.welcomeCode == '') {
+      return;
+    }
+    this.signalRService.hubConnection.invoke('AssignClientToSession', this.welcomeCode, null)
+      .then(res => { this.router.navigateByUrl('/dashboard-user/order/' + res.Id); })
+      .catch(err => {
+        console.error(err);
+        this.joinResult = err
+      });
+  }
+
   // leaveSession() {
   //   this.signalRService.hubConnection.invoke('ExitClientFromSession', this.order.Id, null)
   //     .then(res => { location.reload(); })
@@ -169,8 +227,6 @@ export class OrderManagerComponent implements OnInit {
   }
 
   onChangeStatus(event: any, itemId: number) {
-    console.log("value-status", event.target.value);
-
     this.signalRService.hubConnection.invoke('ChangeOrderItemStatus', itemId, event.target.value)
       .then(res => { location.reload(); })
       .catch(err => console.error(err));
@@ -183,7 +239,7 @@ export class OrderManagerComponent implements OnInit {
 
   getClientTotal(clientId: number) {
     if (clientId == 0) {
-      clientId = parseInt(localStorage.getItem("ClientId"), 10);
+      clientId = parseInt(this.userProfileId, 10);
     }
     let items = this.order.Clients.find(function (m) {
       return m.User.UserProfileId == clientId;
@@ -237,7 +293,7 @@ export class OrderManagerComponent implements OnInit {
 
   openModal(content, goal?: string, id?: any) {
     if (goal == "showCheck") {
-      this.getClientTotal(0);
+      this.getClientTotal(id);
     }
     if (goal == "addFeedback") {
       this.feedbackForm.patchValue({ UserProfileId: parseInt(localStorage.getItem("ClientId"), 10), MenuItemId: id });

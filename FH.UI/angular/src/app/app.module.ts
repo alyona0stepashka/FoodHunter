@@ -44,6 +44,7 @@ import { NotFoundComponent } from './pages/404/not-found/not-found.component';
 import { TablesManagerComponent } from './pages/tables-manager/tables-manager.component';
 import { LocationSearchComponent } from './pages/location-search/location-search.component';
 import { OrderManagerComponent } from './pages/order-manager/order-manager.component';
+import { OrderListComponent } from './pages/order-list/order-list.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -66,7 +67,8 @@ import { OrderManagerComponent } from './pages/order-manager/order-manager.compo
     MenuManagerComponent,
     TablesManagerComponent,
     LocationSearchComponent,
-    OrderManagerComponent
+    OrderManagerComponent,
+    OrderListComponent
     //AdminLayoutComponent
   ],
   imports: [

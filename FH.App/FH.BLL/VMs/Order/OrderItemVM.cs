@@ -35,7 +35,7 @@ namespace FH.BLL.VMs
             if (o.MenuItemId != null)
             {
                 MenuItemId = o.MenuItemId.Value;
-                UserProfileId = UserProfileId;
+                UserProfileId = o.UserId.Value;
                 if (o.MenuItemId != null)
                 {
                     Photo = new Icon(o.MenuItemId.Value,

@@ -35,6 +35,7 @@ export class SidebarComponent implements OnInit {
 
     ROUTES_MANAGER: RouteInfo[] = [
         { path: '/dashboard-manager/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-manager/orders', title: 'Orders', icon: 'nc-money-coins', onclick: {}, class: '', childItems: [] },
         {
             path: '/dashboard-manager/location', title: 'Location', icon: 'nc-bank', onclick: {}, class: '', childItems: [
                 { path: '/dashboard-manager/location', title: 'Management', icon: 'M', class: '', onclick: {}, childItems: [] },
@@ -42,7 +43,7 @@ export class SidebarComponent implements OnInit {
         },
         { path: '/dashboard-manager/menu/0', title: 'Menu', icon: 'nc-book-bookmark', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-manager/table/0', title: 'Tables', icon: 'nc-caps-small', onclick: {}, class: '', childItems: [] },
-        { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] },
+        // { path: '/dashboard-manager/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-user/search', title: 'Search', icon: 'nc-zoom-split', onclick: {}, class: '', childItems: [] },
         // { path: '/dashboard-user/order/' + this.currentOrderId, title: 'Current Order', icon: 'nc-paper', onclick: {}, class: '', childItems: [] },
     ];
@@ -50,6 +51,7 @@ export class SidebarComponent implements OnInit {
     ROUTES_USER: RouteInfo[] = [
         { path: '/dashboard-user/dashboard', title: 'Dashboard', icon: 'nc-layout-11', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-user/order/0', title: 'Current Order', icon: 'nc-paper', onclick: {}, class: '', childItems: [] },
+        { path: '/dashboard-manager/orders', title: 'Orders', icon: 'nc-money-coins', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-user/search', title: 'Search', icon: 'nc-zoom-split', onclick: {}, class: '', childItems: [] },
         { path: '/dashboard-user/table/my', title: 'My booking', icon: 'nc-bold', onclick: {}, class: '', childItems: [] },
     ];
@@ -68,7 +70,7 @@ export class SidebarComponent implements OnInit {
     public userItems: RouteInfo[] = [
         {
             path: '#', title: this.fullName, icon: this.icon, class: '', onclick: {}, childItems: [
-                { path: '#', title: 'Switch current role to ' + this.currentRole, icon: 'S', class: 'switch-role-btn', onclick: this.switchRole, childItems: [] },
+                // { path: '#', title: 'Switch current role to ' + this.currentRole, icon: 'S', class: 'switch-role-btn', onclick: this.switchRole, childItems: [] },
                 { path: '#', title: 'Logout', icon: 'X', class: 'logout-btn', onclick: this.logout, childItems: [] }]
         }
 
@@ -105,31 +107,6 @@ export class SidebarComponent implements OnInit {
                 dropdownContent.classList.toggle("collapsed");
             });
         }
-
-        //if (this.isLogin) {
-        // const logout = document.getElementsByClassName("logout-btn");
-        // logout[0].addEventListener("click", function () {
-        //     localStorage.clear();
-        //     window.location.reload(true);
-        // });
-        // const switchRole = document.getElementsByClassName("switch-role-btn");
-        // switchRole[0].addEventListener("click", function () {
-        //     if (this.isCurrentUser) {
-        //         localStorage.setItem('CurrentRole', 'false');
-        //         this.currentRole = "Manager";
-        //         this.isCurrentUser = !this.isCurrentUser;
-        //         document.location.reload(true)
-        //         //this.router.navigateByUrl('/dashboard-user/dashboard')
-        //     }
-        //     else {
-        //         localStorage.setItem('CurrentRole', 'true');
-        //         this.currentRole = "Client";
-        //         this.isCurrentUser = !this.isCurrentUser;
-        //         document.location.reload(true)
-        //         //this.router.navigateByUrl('/dashboard-manager/dashboard')
-        //     }
-        // });
-        // }
     }
 
     public logout(e: any) {
@@ -139,18 +116,18 @@ export class SidebarComponent implements OnInit {
     }
 
 
-    public switchRole(e: any) {
-        if (this.isCurrentUser) {
-            localStorage.setItem('CurrentRole', 'false');
-            this.currentRole = "Manager";
-            this.isCurrentUser = !this.isCurrentUser;
-            this.router.navigateByUrl('/dashboard-user/dashboard');
-        }
-        else {
-            localStorage.setItem('CurrentRole', 'true');
-            this.currentRole = "Client";
-            this.isCurrentUser = !this.isCurrentUser;
-            this.router.navigateByUrl('/dashboard-manager/dashboard');
-        }
-    }
+    // public switchRole(e: any) {
+    //     if (this.isCurrentUser) {
+    //         localStorage.setItem('CurrentRole', 'false');
+    //         this.currentRole = "Manager";
+    //         this.isCurrentUser = !this.isCurrentUser;
+    //         this.router.navigateByUrl('/dashboard-user/dashboard');
+    //     }
+    //     else {
+    //         localStorage.setItem('CurrentRole', 'true');
+    //         this.currentRole = "Client";
+    //         this.isCurrentUser = !this.isCurrentUser;
+    //         this.router.navigateByUrl('/dashboard-manager/dashboard');
+    //     }
+    // }
 }

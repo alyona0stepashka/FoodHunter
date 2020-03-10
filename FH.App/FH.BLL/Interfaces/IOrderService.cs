@@ -10,7 +10,7 @@ namespace FH.BLL.Interfaces
     public interface IOrderService
     {
         Task<OrderPageVM> CreateNewOrder(CreateOrderVM vm, string userId);
-        Task<OrderPageTabVM> AssignMeToOrder(int orderId, string welcomeCode, string userId);
+        Task<OrderPageTabVM> AssignMeToOrder(string welcomeCode, string userId);
         Task CancelOrder(int orderId);
         Task<OrderPageVM> GetOrderByIdAsync(int orderId, string userId);
         List<OrderTabVM> GetAllMyOrders(string userId);
