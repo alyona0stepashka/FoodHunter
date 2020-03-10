@@ -80,7 +80,14 @@ namespace FH.App.Hubs
                                 connects[index].OrderIds.Add(o);
                             }
                         }
-                        //TODO 10.03.2020 Add update for manager, now it's only for clients
+                        var ordersManager = _orderService.GetAllMyManagerOrders(callerId).Where(m => m.IsActive).Select(m => m.Id).ToList();
+                        if (ordersManager.Any())
+                        {
+                            foreach (var o in ordersManager)
+                            {
+                                connects[index].OrderIds.Add(o);
+                            }
+                        } 
                         if (orderId != null)
                         {
                             connects[index].OrderIds.Add(orderId.Value);
@@ -93,6 +100,14 @@ namespace FH.App.Hubs
                         if (orders.Any())
                         {
                             foreach (var o in orders)
+                            {
+                                newConnect.OrderIds.Add(o);
+                            }
+                        }
+                        var ordersManager = _orderService.GetAllMyManagerOrders(callerId).Where(m => m.IsActive).Select(m => m.Id).ToList();
+                        if (ordersManager.Any())
+                        {
+                            foreach (var o in ordersManager)
                             {
                                 newConnect.OrderIds.Add(o);
                             }
@@ -144,10 +159,10 @@ namespace FH.App.Hubs
 
                 var order = await _orderService.CreateNewOrder(vm, userId);
                 UpdateList(userId, true, order.Id);
-                var orderers = connects.Where(m => m.OrderIds.Contains(order.Id));
+                var orderers = connects.Where(m => m.OrderIds.Contains(order.Id)).Select(m => m.ConnectionId).ToList();
                 var tab = await _orderService.AssignMeToOrder(order.WelcomeCode.ToString(), userId);
                 var page = _orderService.GetOrderByIdAsync(order.Id, userId);
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("StartSession", page);
+                await Clients.Clients(orderers).SendAsync("StartSession", page);
             }
             catch (Exception e)
             {
@@ -166,10 +181,10 @@ namespace FH.App.Hubs
 
                 var order = await _orderService.GetOrderByIdAsync(orderId, userId);
                 await _orderService.CancelOrder(orderId);
-                var orderers = connects.Where(m => m.OrderIds.Contains(order.Id));
+                var orderers = connects.Where(m => m.OrderIds.Contains(order.Id)).Select(m => m.ConnectionId).ToList();
 //                var tab = await _orderService.AssignMeToOrder(order.Id, order.WelcomeCode.ToString(), userId);
                 var page = _orderService.GetOrderByIdAsync(order.Id, userId);
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("StartSession", page);
+                await Clients.Clients(orderers).SendAsync("StartSession", page);
                 DisconnectByOrder(order.Id, userId);
             }
             catch (Exception e)
@@ -188,8 +203,8 @@ namespace FH.App.Hubs
                 }
                 var tab = await _orderService.AssignMeToOrder(welcomeCode, userId);
                 UpdateList(userId, true, tab.Id);
-                var orderers = connects.Where(m => m.OrderIds.Contains(tab.Id));
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("AssignClient", tab);
+                var orderers = connects.Where(m => m.OrderIds.Contains(tab.Id)).Select(m => m.ConnectionId).ToList();
+                await Clients.Clients(orderers).SendAsync("AssignClient", tab);
             }
             catch (Exception e)
             {
@@ -206,10 +221,10 @@ namespace FH.App.Hubs
                     userId = Context.User.Claims.First(c => c.Type == "UserID").Value;
                 }
                 UpdateList(userId, true, orderId);
-                var orderers = connects.Where(m => m.OrderIds.Contains(orderId));
+                var orderers = connects.Where(m => m.OrderIds.Contains(orderId)).Select(m => m.ConnectionId).ToList();
                 var manager = _userService.GetUserTabVM(userId);
                 var orderPage = await _orderService.AssignManagerToOrder(orderId, userId);
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("AssignManager", orderPage);
+                await Clients.Clients(orderers).SendAsync("AssignManager", orderPage);
             }
             catch (Exception e)
             {
@@ -226,9 +241,9 @@ namespace FH.App.Hubs
                     userId = Context.User.Claims.First(c => c.Type == "UserID").Value;
                 }
                 UpdateList(userId, false, orderId);
-                var orderers = connects.Where(m => m.OrderIds.Contains(orderId));
+                var orderers = connects.Where(m => m.OrderIds.Contains(orderId)).Select(m => m.ConnectionId).ToList();
                 var client = _userService.GetUserTabVM(userId);
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("ExitClient", client);
+                await Clients.Clients(orderers).SendAsync("ExitClient", client);
             }
             catch (Exception e)
             {
@@ -245,9 +260,9 @@ namespace FH.App.Hubs
                     userId = Context.User.Claims.First(c => c.Type == "UserID").Value;
                 }
                 UpdateList(userId, false, orderId);
-                var orderers = connects.Where(m => m.OrderIds.Contains(orderId));
+                var orderers = connects.Where(m => m.OrderIds.Contains(orderId)).Select(m => m.ConnectionId).ToList();
                 var manager = _userService.GetUserTabVM(userId);
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("ExitManager", manager);
+                await Clients.Clients(orderers).SendAsync("ExitManager", manager);
             }
             catch (Exception e)
             {
@@ -264,9 +279,9 @@ namespace FH.App.Hubs
                     userId = Context.User.Claims.First(c => c.Type == "UserID").Value;
                 }
                 var call = await _orderService.CreateNewManagerCall(new ManagerCallVM {Comment = message, OrderId = orderId, CallTime = DateTime.Now, IsActive = true});
-                var orderers = connects.Where(m => m.OrderIds.Contains(orderId));
+                var orderers = connects.Where(m => m.OrderIds.Contains(orderId)).Select(m => m.ConnectionId).ToList();
                 var manager = _userService.GetUserTabVM(userId);
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("CallManager", call);
+                await Clients.Clients(orderers).SendAsync("CallManager", call);
             }
             catch (Exception e)
             {
@@ -279,8 +294,8 @@ namespace FH.App.Hubs
             try
             {
                 var call = await _orderService.AcceptManagerCall(callId);
-                var orderers = connects.Where(m => m.OrderIds.Contains(call.OrderId));
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("AcceptCallManager", call);
+                var orderers = connects.Where(m => m.OrderIds.Contains(call.OrderId)).Select(m => m.ConnectionId).ToList();
+                await Clients.Clients(orderers).SendAsync("AcceptCallManager", call);
             }
             catch (Exception e)
             {
@@ -293,8 +308,8 @@ namespace FH.App.Hubs
             try
             {
                 var item = await _orderService.CreateNewOrderItem(vm);
-                var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId));
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("AddOrderItem", item);
+                var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId)).Select(m => m.ConnectionId).ToList();
+                await Clients.Clients(orderers).SendAsync("AddOrderItem", item);
             }
             catch (Exception e)
             {
@@ -308,8 +323,8 @@ namespace FH.App.Hubs
             {
                 var item = await _orderService.GetOrderItemByIdAsync(orderItemId);
                 await _orderService.DeleteOrderItem(orderItemId);
-                var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId));
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("RemoveOrderItem", item);
+                var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId)).Select(m => m.ConnectionId).ToList();
+                await Clients.Clients(orderers).SendAsync("RemoveOrderItem", item);
             }
             catch (Exception e)
             {
@@ -324,8 +339,8 @@ namespace FH.App.Hubs
                 var item = await _orderService.GetOrderItemByIdAsync(orderItemId);
                 item.Status = status;
                 item = await _orderService.UpdateNewOrderItem(new CreateOrderItemVM(item));
-                var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId));
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("ChangeOrderItemStatus", item);
+                var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId)).Select(m => m.ConnectionId).ToList();
+                await Clients.Clients(orderers).SendAsync("ChangeOrderItemStatus", item);
             }
             catch (Exception e)
             {
@@ -338,8 +353,8 @@ namespace FH.App.Hubs
             try
             {
                 var item = await _orderService.UpdateNewOrderItem(vm);
-                var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId));
-                await Clients.Clients(orderers.Select(m => m.ConnectionId).ToList()).SendAsync("UpdateOrderItem", item);
+                var orderers = connects.Where(m => m.OrderIds.Contains(item.OrderId)).Select(m => m.ConnectionId).ToList();
+                await Clients.Clients(orderers).SendAsync("UpdateOrderItem", item);
             }
             catch (Exception e)
             {

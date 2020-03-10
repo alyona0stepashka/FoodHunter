@@ -149,15 +149,23 @@ export class OrderManagerComponent implements OnInit {
 
   addItemListener() {
     this.signalRService.hubConnection.on('AddOrderItem', (data) => {
-      // this.order.ManagerCalls.push(data);
       this.loadOrder();
       console.log("add-item-listener", data);
     });
   }
 
+  disableCallListener() {
+    this.signalRService.hubConnection.on('AcceptCallManager', (data) => {
+      // this.order.ManagerCalls = this.order.ManagerCalls.filter(function (m) {
+      //   return m.Id != data.Id;
+      // });
+      this.loadOrder();
+      console.log("disable-call-listener", data);
+    });
+  }
+
   assignClientListener() {
     this.signalRService.hubConnection.on('AssignClient', (data) => {
-      // this.order.ManagerCalls.push(data);
       this.order.Clients.push(data);
       console.log("assign-client-listener", data);
     });
@@ -165,21 +173,19 @@ export class OrderManagerComponent implements OnInit {
 
   assignManagerListener() {
     this.signalRService.hubConnection.on('AssignManager', (data) => {
-      // this.order.ManagerCalls.push(data);
-      this.order.Manager = data.Manager;
-      this.order.ManagerName = data.ManagerName;
+      // this.order.Manager = data.Manager;
+      // this.order.ManagerName = data.ManagerName;
       console.log("assign-client-listener", data);
     });
   }
 
   changeOrderItemStatusListener() {
     this.signalRService.hubConnection.on('ChangeOrderItemStatus', (data) => {
-      // this.order.ManagerCalls.push(data);
-      this.order.Clients.forEach(c => {
-        c.OrderItems.find(function (m) {
-          return m.Id == data.Id;
-        }).Status == data.Status;
-      });
+      // this.order.Clients.forEach(c => {
+      //   c.OrderItems.find(function (m) {
+      //     return m.Id == data.Id;
+      //   }).Status == data.Status;
+      // });
       this.loadOrder();
       console.log("change-status-listener", data);
     });
@@ -198,6 +204,18 @@ export class OrderManagerComponent implements OnInit {
     this.signalRService.hubConnection.invoke('CancelSession', this.order.Id, null)
       .then(res => { location.reload(); })
       .catch(err => console.error(err));
+  }
+
+  disableManagerCall(callId) {
+    this.signalRService.hubConnection.invoke('AcceptCallManager', callId)
+      .then(res => {
+        this.order.ManagerCalls = this.order.ManagerCalls.filter(function (m) {
+          return m.Id != callId;
+        });
+      })
+      .catch(err => console.error(err));
+    console.log("click - disable - call");
+
   }
 
   onJoinOrder() {

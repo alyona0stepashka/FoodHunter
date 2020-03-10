@@ -14,6 +14,7 @@ namespace FH.BLL.Interfaces
         Task CancelOrder(int orderId);
         Task<OrderPageVM> GetOrderByIdAsync(int orderId, string userId);
         List<OrderTabVM> GetAllMyOrders(string userId);
+        List<OrderTabVM> GetAllMyManagerOrders(string userId);
         Task<OrderPageVM> AssignManagerToOrder(int orderId, string userId);
         Task<ManagerCallVM> CreateNewManagerCall(ManagerCallVM vm);
         Task<ManagerCallVM> AcceptManagerCall(int callId);

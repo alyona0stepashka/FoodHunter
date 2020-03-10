@@ -140,6 +140,21 @@ namespace FH.BLL.Services
             return orders;
         }
 
+        public List<OrderTabVM> GetAllMyManagerOrders(string userId)
+        {
+            try
+            {
+                var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
+                var history = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfileId == myId)?.Orders;
+                var orders = history.Select(m => new OrderTabVM(m)).ToList();
+                return orders;
+            }
+            catch (Exception e)
+            {
+                return new List<OrderTabVM>();
+            }
+        }
+
         public List<OrderTabVM> GetAllActiveLocationOrders(string userId)
         {
             var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId);

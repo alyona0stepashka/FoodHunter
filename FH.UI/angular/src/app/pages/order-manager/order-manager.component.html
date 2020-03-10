@@ -43,11 +43,11 @@
                     <div *ngIf="order.IsActive" class="row">
                         <div class="col-md-12">
                             <label class="card-title" style="font-size: 1.3em;">Order actions:&nbsp;</label>
-                            <button title="Call manager" class="btn" style="padding: inherit;"
+                            <button *ngIf="!isManager" title="Call manager" class="btn" style="padding: inherit;"
                                 (click)="openModal(openCallManager, 'openCallManager', null)">
                                 <i class="fas fa-comment-dots"></i>
                             </button>
-                            <button title="Open my check" class="btn" style="padding: inherit;"
+                            <button *ngIf="!isManager" title="Open my check" class="btn" style="padding: inherit;"
                                 (click)="openModal(showCheck, 'showCheck', 0)">
                                 <i class="fas fa-dollar-sign"></i>
                             </button>
@@ -63,21 +63,24 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-5">
-                            <div *ngFor="let call of order.ManagerCalls"
-                                class="alert alert-danger alert-with-icon alert-dismissible fade show"
-                                data-notify="container">
-                                <button type="button" aria-hidden="true" class="close" data-dismiss="alert"
-                                    aria-label="Close">
-                                    <i class="nc-icon nc-simple-remove"></i>
-                                </button>
-                                <span data-notify="icon" class="nc-icon nc-bell-55"></span>
-                                <span data-notify="message"><i
-                                        style="white-space: normal; font-style: normal; font-size: smaller;">[Waiter
-                                        call
-                                        at
-                                        {{this.datepipe.transform(call.CallTime, 'MMMM d, h:mm a')}}]&nbsp;&nbsp;</i>{{call.Comment}}</span>
-                            </div>
+                        <div class="col-md-12">
+
+                            <ng-container *ngFor="let call of order.ManagerCalls">
+                                <div *ngIf="call.IsActive"
+                                    class="alert alert-danger alert-with-icon alert-dismissible fade show"
+                                    data-notify="container">
+                                    <button *ngIf="isManager" type="button" aria-hidden="true" class="close"
+                                        data-dismiss="alert" aria-label="Close" (click)="disableManagerCall(call.Id)">
+                                        <i class="nc-icon nc-simple-remove"></i>
+                                    </button>
+                                    <span data-notify="icon" class="nc-icon nc-bell-55"></span>
+                                    <span data-notify="message"><i
+                                            style="white-space: normal; font-style: normal; font-size: smaller;">[Waiter
+                                            call
+                                            at
+                                            {{this.datepipe.transform(call.CallTime, 'MMMM d, h:mm a')}}]&nbsp;&nbsp;</i>{{call.Comment}}</span>
+                                </div>
+                            </ng-container>
                         </div>
                         <div class="col-md-7">
 
@@ -304,7 +307,7 @@
 <div *ngIf="!isOrderExist" class="col-md-12">
     <div class="card-header">
         <h5 style="opacity:0.7" class="card-title">Now you are not assigned to any active order</h5>
-        <h5 style="opacity:0.7" class="card-title">If you already have "Welcome Code" you can join this order</h5>
+        <h6 style="opacity:0.7" class="card-title">If you already have "Welcome Code" you can join this order</h6>
         <div class="row">
             <div class="col-md-6 form-group">
                 <input class="form-control" type="text" [(ngModel)]="welcomeCode">
