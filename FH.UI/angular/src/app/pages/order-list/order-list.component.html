@@ -78,7 +78,7 @@
                                                         <div
                                                             style="border-radius:50%; width: 10px; height: 10px; background-color: #8dd844; margin:2%;display: inline-block;">
                                                         </div>&nbsp;{{order.ManagerName}}
-                                                    </span>
+                                                    </span><br *ngIf="order.ManagerId!=null && order.ManagerId!=0" />
                                                     <button
                                                         *ngIf="isManager && (order.ManagerId==null || order.ManagerId==0)"
                                                         type="submit" class="btn "

@@ -68,7 +68,7 @@ export class OrderManagerComponent implements OnInit {
 
   //forms
   feedbackForm: FormGroup = this.formBuilder.group({
-    Stars: [5, [Validators.required]],
+    Stars: [, [Validators.required]],
     Comment: ['', [Validators.required]],
     MenuItemId: [0, [Validators.required]],
     UserProfileId: [0, [Validators.required]],
@@ -121,6 +121,7 @@ export class OrderManagerComponent implements OnInit {
       res => {
         this.order = res;
         this.order.Clients.forEach(client => {
+          client.totalSum = this.getClientTotalDisabled(client);
           client.OrderItems.forEach(item => {
             item.Photo.Number = this.i;
             this.i++;
@@ -255,6 +256,14 @@ export class OrderManagerComponent implements OnInit {
     console.log(id);
   }
 
+  getClientTotalDisabled(client) {
+    let sum = 0;
+    client.OrderItems.forEach(e => {
+      sum += e.PricePerItem * e.Count;
+    });
+    return sum;
+  }
+
   getClientTotal(clientId: number) {
     if (clientId == 0) {
       clientId = parseInt(this.userProfileId, 10);
@@ -311,10 +320,19 @@ export class OrderManagerComponent implements OnInit {
 
   openModal(content, goal?: string, id?: any) {
     if (goal == "showCheck") {
+      this.imageUrl = './assets/img/upload-photo.jpg';
       this.getClientTotal(id);
     }
     if (goal == "addFeedback") {
+      this.UploadFile = null;
+      this.feedbackForm.reset();
+      this.imageUrl = './assets/img/upload-photo.jpg';
       this.feedbackForm.patchValue({ UserProfileId: parseInt(localStorage.getItem("ClientId"), 10), MenuItemId: id });
+    }
+    if (goal == "addFeedbackOrder") {
+      this.UploadFile = null;
+      this.feedbackForm.reset();
+      this.feedbackForm.patchValue({ UserProfileId: parseInt(localStorage.getItem("ClientId"), 10), LocationId: this.order.LocationId });
     }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

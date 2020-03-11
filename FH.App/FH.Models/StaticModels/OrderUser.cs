@@ -6,7 +6,8 @@ using FH.Models.Models;
 namespace FH.Models.StaticModels
 {
     public class OrderUser: BaseEntity
-    {
+    { 
+
         public int OrderId { get; set; }
         public virtual Order Order { get; set; }
 

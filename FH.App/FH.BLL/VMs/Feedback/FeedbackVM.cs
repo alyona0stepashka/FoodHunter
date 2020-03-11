@@ -18,17 +18,19 @@ namespace FH.BLL.VMs
 
         public FeedbackVM(Feedback m)
         {
-            Id = m.Id;
-            Stars = m.Stars;
-            Comment = m.Comment;
-            if (m.UserProfile != null) 
-            {
-                User = new UserTabVM(m.UserProfile);
+            if (m != null) { 
+                Id = m.Id;
+                Stars = m.Stars;
+                Comment = m.Comment;
+                if (m.UserProfile != null) 
+                {
+                    User = new UserTabVM(m.UserProfile);
+                }
+                if (m.Photos != null && m.Photos.Any())
+                {
+                    Photos = m.Photos?.Select(e => new Icon(e.Id, $"{e.Path}{e.Name}{e.Extension}")).ToList();
+                }
             }
-            if (m.Photos != null && m.Photos.Any())
-            {
-                Photos = m.Photos?.Select(e => new Icon(e.Id, $"{e.Path}{e.Name}{e.Extension}")).ToList();
-            } 
         }
     }
 }

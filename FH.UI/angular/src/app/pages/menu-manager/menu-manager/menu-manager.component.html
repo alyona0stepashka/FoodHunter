@@ -497,7 +497,7 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-12" style="margin-top: 1rem;">
-                            <label>Price:&nbsp;&nbsp;</label>
+                            <label style="opacity: 0.6; font-weight: 800;">Price:&nbsp;&nbsp;</label>
                             <span *ngIf="openedItem.PriceWithSales==null" style="font-size: 2rem;">{{openedItem.Price}}
                                 BYN</span>
                             <span *ngIf="openedItem.PriceWithSales!=null"
@@ -510,29 +510,30 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12" style="margin-top: 1rem;">
-                            <label>Description:</label>
+                            <label style="opacity: 0.6; font-weight: 800;">Description:</label>
                             <textarea readonly
-                                style="cursor: auto; max-height: fit-content; background-color: white; border-left-width: 0; border-right-width: 0;"
+                                style="cursor: auto; max-height: fit-content; background-color: white; border-left-width: 0; border-right-width: 0; overflow: hidden;"
                                 Title="Description" type="text" class="form-control" value="{{openedItem.Info}}"
                                 placeholder="Description">
                         </textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 1rem;">
+                            <label style="opacity: 0.6; font-weight: 800;">Note for clients:</label>
+                            <textarea readonly readonly
+                                style="cursor: auto; max-height: fit-content; background-color: white; border-left-width: 0; border-right-width: 0; overflow: hidden;"
+                                Title="Note" type="text" class="form-control" value="{{openedItem.Note}}"
+                                placeholder="Note">
+                </textarea>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12" style="margin-top: 1rem;">
-                    <label>Note for clients:</label>
-                    <textarea readonly readonly
-                        style="cursor: auto; max-height: fit-content; background-color: white; border-left-width: 0; border-right-width: 0;"
-                        Title="Note" type="text" class="form-control" value="{{openedItem.Note}}" placeholder="Note">
-                </textarea>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" style="margin-top: 1rem;">
                     <label>Feedbacks</label>
-                    <!-- ---------feedbacks comp------------- -->
+                    <app-feedback-list [feedbacks]="openedItem.Feedbacks"></app-feedback-list>
                 </div>
             </div>
         </div>

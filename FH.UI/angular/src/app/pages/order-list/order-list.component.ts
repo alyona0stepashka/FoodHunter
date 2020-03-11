@@ -4,6 +4,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OrderService } from 'app/services/order.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { environment } from 'environments/environment';
+import { FeedbackService } from 'app/services/feedback.service';
 
 @Component({
   selector: 'app-order-list',
@@ -18,7 +22,10 @@ export class OrderListComponent implements OnInit {
     private orderService: OrderService,
     private toastr: ToastrService,
     public datepipe: DatePipe,
-    private activateRoute: ActivatedRoute, ) { }
+    private activateRoute: ActivatedRoute,
+    private feedbackService: FeedbackService,
+    private formBuilder: FormBuilder,
+    private modalService: NgbModal) { }
 
   //server data
   orders = new Array();
@@ -30,7 +37,14 @@ export class OrderListComponent implements OnInit {
   isLogin = (localStorage.getItem('token') != null);
   isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
   isHaveOrders = true;
+  userProfileId = localStorage.getItem('ClientId');
   //logic vars
+
+  //images
+  closeResult: string;
+  serverUrl = environment.serverURL;
+  imageUrl = './assets/img/upload-photo.jpg';
+  //images
 
   ngOnInit() {
     this.isLogin = (localStorage.getItem('token') != null);
@@ -43,8 +57,6 @@ export class OrderListComponent implements OnInit {
     }
   }
 
-
-
   redirectToOrder(ordId) {
     this.router.navigateByUrl('/dashboard-manager/order/' + ordId);
   }
@@ -56,8 +68,26 @@ export class OrderListComponent implements OnInit {
     this.orderService.getAllOrdersByLocation().subscribe(
       res => {
         this.orders = res as [];
+        this.orders.forEach(o => {
+          o.IsMyFeedbackExist = (o.Feedbacks.findIndex(function (m) {
+            return m.User.UserProfileId == parseInt(this.userProfileId, 10);
+          }) != -1);
+        });
         this.filteredOrders = this.orders;
         this.isHaveOrders = (this.orders != null && this.orders.length > 0);
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
+  loadOrderHistory() {
+    this.orderService.getOrderHistory().subscribe(
+      res => {
+        this.orders = res as [];
+        this.filteredOrders = this.orders;
       },
       err => {
         console.log(err);
@@ -70,20 +100,6 @@ export class OrderListComponent implements OnInit {
     this.signalRService.hubConnection.invoke('AssignManagerToSession', orderId, null)
       .then(res => { this.redirectToOrder(orderId); })
       .catch(err => console.error(err));
-  }
-
-  loadOrderHistory() {
-    this.orderService.getOrderHistory().subscribe(
-      res => {
-        this.orders = res as [];
-        this.filteredOrders = this.orders;
-        this.isHaveOrders = (this.orders != null && this.orders.length > 0);
-      },
-      err => {
-        console.log(err);
-        this.toastr.error(err.error, 'Error');
-      }
-    );
   }
 
 }

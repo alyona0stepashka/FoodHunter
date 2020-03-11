@@ -14,8 +14,7 @@ namespace FH.BLL.VMs
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public decimal Rate { get; set; }
-        public string Address { get; set; }
-        public string TopPhoto { get; set; }
+        public string Address { get; set; } 
         public List<Icon> PhotoAlbum { get; set; } = new List<Icon>();
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
@@ -40,7 +39,6 @@ namespace FH.BLL.VMs
                 Rate = location.Feedbacks.Sum(e => e.Stars) / location.Feedbacks.Count;
             }
             Name = location.Name;
-            //TopPhoto = $"{location.TopFile?.Path}{location.TopFile?.Name}{location.TopFile?.Extension}";
             Address = location.Address;
             Longitude = Convert.ToDecimal(location.Longitude.Replace('.', ','));
             Latitude = Convert.ToDecimal(location.Latitude.Replace('.', ','));

@@ -24,11 +24,15 @@ namespace FH.BLL.VMs
         {
             Id = o.Id; 
             IsActive = o.IsActive;
+            if (o.OrderUsers != null)
+            { 
+                ClientCount = o.OrderUsers.Count;
+            }
+            
             StartDate = o.StartDate;
             EndDate = o.EndDate;
             if (o.Table.LocationId != null) {LocationId = o.Table.LocationId.Value;}
             LocationName = o.Table.Location?.Name;  
-            ClientCount = o.OrderUsers.Count;
             TableNumber = o.Table.Number;
             if (o.ManagerId != null)
             {

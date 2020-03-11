@@ -45,6 +45,7 @@ import { TablesManagerComponent } from './pages/tables-manager/tables-manager.co
 import { LocationSearchComponent } from './pages/location-search/location-search.component';
 import { OrderManagerComponent } from './pages/order-manager/order-manager.component';
 import { OrderListComponent } from './pages/order-list/order-list.component';
+import { FeedbackListComponent } from './pages/feedback-list/feedback-list.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -68,7 +69,8 @@ import { OrderListComponent } from './pages/order-list/order-list.component';
     TablesManagerComponent,
     LocationSearchComponent,
     OrderManagerComponent,
-    OrderListComponent
+    OrderListComponent,
+    FeedbackListComponent,
     //AdminLayoutComponent
   ],
   imports: [

@@ -14,6 +14,7 @@ namespace FH.BLL.VMs
         public int UserProfileId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string FullName { get; set; }
         public string Sex { get; set; }
         public int Age { get; set; }
         public Icon Photo { get; set; } 
@@ -23,6 +24,7 @@ namespace FH.BLL.VMs
             Id = m.UserId;
             FirstName = m.FirstName;
             LastName = m.LastName;
+            FullName = $"{m.FirstName} {m.LastName[0]}.";
             Sex = m.Sex.Value;
             Age = DateTime.Now.Year - m.DateBirth.Year;
             UserProfileId = m.Id;

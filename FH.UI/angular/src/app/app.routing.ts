@@ -16,6 +16,7 @@ import { TablesManagerComponent } from './pages/tables-manager/tables-manager.co
 import { LocationSearchComponent } from './pages/location-search/location-search.component';
 import { OrderManagerComponent } from './pages/order-manager/order-manager.component';
 import { OrderListComponent } from './pages/order-list/order-list.component';
+import { FeedbackListComponent } from './pages/feedback-list/feedback-list.component';
 
 export const AppRoutes: Routes = [
   //   {
@@ -60,6 +61,7 @@ export const AppRoutes: Routes = [
       { path: 'search', component: LocationSearchComponent, canActivate: [AuthGuard] },
       { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard] },
       { path: 'order/:id', component: OrderManagerComponent, canActivate: [AuthGuard] },
+      { path: 'feedbacks', component: FeedbackListComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},
@@ -74,6 +76,7 @@ export const AppRoutes: Routes = [
       { path: 'search', component: LocationSearchComponent, canActivate: [AuthGuard] },
       { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard] },
       { path: 'order/:id', component: OrderManagerComponent, canActivate: [AuthGuard] },
+      { path: 'feedbacks', component: FeedbackListComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},

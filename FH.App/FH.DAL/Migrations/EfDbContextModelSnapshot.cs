@@ -98,6 +98,8 @@ namespace FH.DAL.Migrations
 
                     b.Property<int?>("MenuItemId");
 
+                    b.Property<int?>("OrderUserId");
+
                     b.Property<int>("Stars");
 
                     b.Property<int>("UserProfileId");
@@ -107,6 +109,8 @@ namespace FH.DAL.Migrations
                     b.HasIndex("LocationId");
 
                     b.HasIndex("MenuItemId");
+
+                    b.HasIndex("OrderUserId");
 
                     b.HasIndex("UserProfileId");
 
@@ -717,6 +721,10 @@ namespace FH.DAL.Migrations
                         .WithMany("Feedbacks")
                         .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FH.Models.StaticModels.OrderUser", "OrderUser")
+                        .WithMany()
+                        .HasForeignKey("OrderUserId");
 
                     b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
                         .WithMany("Feedbacks")

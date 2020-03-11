@@ -148,7 +148,7 @@ namespace FH.DAL.DataContext
             modelBuilder.Entity<OrderUser>().HasOne(m => m.Order).WithMany(m => m.OrderUsers).HasForeignKey(m => m.OrderId)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<OrderUser>().HasOne(m => m.UserProfile).WithMany(m => m.OrderUsers).HasForeignKey(m => m.UserProfileId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); 
         }
     }
 }

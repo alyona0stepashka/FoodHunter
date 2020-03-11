@@ -51,15 +51,27 @@
                                 (click)="openModal(showCheck, 'showCheck', 0)">
                                 <i class="fas fa-dollar-sign"></i>
                             </button>
+                            <button *ngIf="!isManager" title="Cancel this order-session" class="btn"
+                                style="padding: inherit;"
+                                (click)="openModal(addFeedback, 'addFeedbackOrder', order.Id)">
+                                <i class="fas fa-star"></i>
+                            </button>
                             <button *ngIf="isManager" title="Cancel this order-session" class="btn"
                                 style="padding: inherit;" (click)="cancelSession()">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
                     </div><br>
-                    <div class="row">
+                    <div *ngIf="order.IsActive" class="row">
                         <div class="col-md-12">
-                            <label class="card-title" style="font-size: 1.3em;">Waiter calls:&nbsp;</label>
+                            <label class="card-title" style="font-size: 1.3em;">Active waiter calls:&nbsp;</label>
+                        </div>
+                    </div>
+                    <div *ngIf="!order.IsActive" class="row">
+                        <div *ngFor="let client of order.Clients" class="col-md-12">
+                            <label class="card-title"
+                                style="font-size: 1.3em;">{{client.User.FirstName}}&nbsp;{{client.User.LastName}}:&nbsp;{{client.totalSum}}
+                                BYN</label>
                         </div>
                     </div>
                     <div class="row">
@@ -143,7 +155,8 @@
                                         </div>
                                         <div *ngIf="isManager" class="row">
                                             <div class="item text-center col-md-12">
-                                                <select class="form-control" (change)="onChangeStatus($event, item.Id)">
+                                                <select class="form-control" (change)="onChangeStatus($event, item.Id)"
+                                                    [disabled]="!order.IsActive">
                                                     <option *ngFor="let status of statuses" value="{{status}}"
                                                         [selected]="item.Status==status">{{status}}</option>
                                                     <!-- [selected]="item.Status==status"> -->
@@ -248,7 +261,7 @@
         </div>
     </div>
 </ng-template>
-<!-----------------ADD-FEEDBACK----------------->
+<!-----------------ADD-FEEDBACK------------------>
 <ng-template #addFeedback let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title"><i class="fas fa-comment-medical"></i>&nbsp;Add feedback</h4>
@@ -266,18 +279,14 @@
                             class="form-control btn btn-primary" placeholder="Photo">
                         <img [src]="imageUrl" class="avatar"
                             style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
-                        <div *ngIf="submittedCompany && f2.Photo.errors" class="invalid-feedback">
-                            <div *ngIf="f2.Photo.errors.required">Company Logo is required</div>
-                        </div>
-
                     </div>
                 </div>
                 <div class="col-md-10">
                     <div class="form-group">
                         <label>Rate</label>
                         <ngb-rating formControlName="Stars" max="5" [(rate)]="f.Stars.value" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.Stars.errors }"></ngb-rating>
-                        <div *ngIf="submitted && f.Stars.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': submittedFeedback && f.Stars.errors }"></ngb-rating>
+                        <div *ngIf="submittedFeedback && f.Stars.errors" class="invalid-feedback">
                             <div *ngIf="f.Stars.errors.required">Stars is required</div>
                         </div>
                     </div>
@@ -288,9 +297,9 @@
                     <div class="form-group">
                         <label>Comment</label>
                         <textarea Title="Comment" type="text" formControlName="Comment" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.Comment.errors }"
+                            [ngClass]="{ 'is-invalid': submittedFeedback && f.Comment.errors }"
                             placeholder="Comment about this menu item..."></textarea>
-                        <div *ngIf="submitted && f.Comment.errors" class="invalid-feedback">
+                        <div *ngIf="submittedFeedback && f.Comment.errors" class="invalid-feedback">
                             <div *ngIf="f.Comment.errors.required">Comment is required</div>
                         </div>
                     </div>

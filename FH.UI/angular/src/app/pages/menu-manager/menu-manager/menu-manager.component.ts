@@ -393,6 +393,8 @@ export class MenuManagerComponent implements OnInit {
 
   openModal(content, goal?: string, id?: any) {
     if (goal == "newMenuItem") {
+      this.UploadFile = null;
+      this.imageUrl = './assets/img/upload-photo.jpg';
       this.menuItemForm.patchValue({ MenuId: id, IsActive: true });
       this.IsActive = true;
       this.IsChecked = true;

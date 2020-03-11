@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Text;
 using FH.Models.Models;
+using FH.Models.StaticModels;
 
 namespace FH.Models.Models
 {
@@ -27,5 +28,6 @@ namespace FH.Models.Models
 
         //--------------------------
         public virtual List<FileModel> Photos { get; set; }
+        public virtual OrderUser OrderUser { get; set; }
     }
 }
