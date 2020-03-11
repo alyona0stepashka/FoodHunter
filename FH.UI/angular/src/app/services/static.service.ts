@@ -18,6 +18,14 @@ export class StaticService {
     return this.http.post(environment.serverURL + '/api/static/search', body);
   }
 
+  getChartDataClient() {
+    return this.http.get(environment.serverURL + '/api/static/client');
+  }
+
+  getChartDataManager() {
+    return this.http.get(environment.serverURL + '/api/static/manager');
+  }
+
   getSexes() {
     return this.http.get(environment.serverURL + '/api/static/sex');
   }

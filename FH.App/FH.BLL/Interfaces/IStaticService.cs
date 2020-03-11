@@ -15,5 +15,7 @@ namespace FH.BLL.Interfaces
         List<Sex> GetSexes();
         List<Icon> GetIcons();
         List<CompanySpecification> GetSpecifications();
+        ChartDataClientVM GetChartDataClient(string userId);
+        ChartDataManagerVM GetChartDataManager(string userId);
     }
 }

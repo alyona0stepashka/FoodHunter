@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using FH.BLL.Interfaces;
 using FH.BLL.VMs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +13,7 @@ namespace FH.App.Controllers
 {
     [Route("api/static")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StaticController : ControllerBase
     {
         private readonly IStaticService _staticService;
@@ -31,6 +34,36 @@ namespace FH.App.Controllers
                     throw new Exception("search is missing");
                 }
                 var items = _staticService.GetSearchResult(search);
+                return Ok(items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("client")]
+        public IActionResult GetChartDataClient()
+        {
+            try
+            {
+                var items = _staticService.GetChartDataClient(User.Claims.First(c => c.Type == "UserID").Value);
+                return Ok(items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("manager")]
+        public IActionResult GetChartDataManager()
+        {
+            try
+            {
+                var items = _staticService.GetChartDataManager(User.Claims.First(c => c.Type == "UserID").Value);
                 return Ok(items);
             }
             catch (Exception ex)

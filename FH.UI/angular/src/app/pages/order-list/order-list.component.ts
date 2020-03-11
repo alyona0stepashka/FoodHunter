@@ -68,11 +68,6 @@ export class OrderListComponent implements OnInit {
     this.orderService.getAllOrdersByLocation().subscribe(
       res => {
         this.orders = res as [];
-        this.orders.forEach(o => {
-          o.IsMyFeedbackExist = (o.Feedbacks.findIndex(function (m) {
-            return m.User.UserProfileId == parseInt(this.userProfileId, 10);
-          }) != -1);
-        });
         this.filteredOrders = this.orders;
         this.isHaveOrders = (this.orders != null && this.orders.length > 0);
       },

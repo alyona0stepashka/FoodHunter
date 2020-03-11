@@ -43,8 +43,8 @@
                     <div *ngIf="order.IsActive" class="row">
                         <div class="col-md-12">
                             <label class="card-title" style="font-size: 1.3em;">Order actions:&nbsp;</label>
-                            <button *ngIf="!isManager" title="Call manager" class="btn" style="padding: inherit;"
-                                (click)="openModal(openCallManager, 'openCallManager', null)">
+                            <button *ngIf="!isManager && order.IsActive" title="Call manager" class="btn"
+                                style="padding: inherit;" (click)="openModal(openCallManager, 'openCallManager', null)">
                                 <i class="fas fa-comment-dots"></i>
                             </button>
                             <button *ngIf="!isManager" title="Open my check" class="btn" style="padding: inherit;"
@@ -56,7 +56,7 @@
                                 (click)="openModal(addFeedback, 'addFeedbackOrder', order.Id)">
                                 <i class="fas fa-star"></i>
                             </button>
-                            <button *ngIf="isManager" title="Cancel this order-session" class="btn"
+                            <button *ngIf="isManager && order.IsActive" title="Cancel this order-session" class="btn"
                                 style="padding: inherit;" (click)="cancelSession()">
                                 <i class="fas fa-times"></i>
                             </button>
@@ -74,9 +74,8 @@
                                 BYN</label>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" *ngIf="order.IsActive">
                         <div class="col-md-12">
-
                             <ng-container *ngFor="let call of order.ManagerCalls">
                                 <div *ngIf="call.IsActive"
                                     class="alert alert-danger alert-with-icon alert-dismissible fade show"
@@ -93,9 +92,6 @@
                                             {{this.datepipe.transform(call.CallTime, 'MMMM d, h:mm a')}}]&nbsp;&nbsp;</i>{{call.Comment}}</span>
                                 </div>
                             </ng-container>
-                        </div>
-                        <div class="col-md-7">
-
                         </div>
                     </div>
                 </div>
@@ -175,20 +171,13 @@
                                     <td width="2%">
                                         <div class="item text-center col-md-12" style="padding: 0;">
                                             <ul style="list-style:none; padding:0; margin:0;">
-                                                <li>
-                                                    <button type="submit" class="btn "
-                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
-                                                        title="Show details"
-                                                        (click)="openModal(openOrderItem, 'openOrderItem', item.Id)"><i
-                                                            class="fas fa-info-circle"></i></button>
-                                                </li>
                                                 <li *ngIf="!isManager && client.User.UserProfileId==userProfileId">
                                                     <button type="submit" class="btn "
                                                         style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                         title="Add feedback"><i class="fas fa-comment-medical"
                                                             (click)="openModal(addFeedback, 'addFeedback', item.MenuItemId)"></i></button>
                                                 </li>
-                                                <li *ngIf="isEdit && isManager">
+                                                <li *ngIf="isManager && order.IsActive">
                                                     <button type="submit" class="btn "
                                                         style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
                                                         title="Remove" (click)="deleteOrderItem(item.Id)"><i

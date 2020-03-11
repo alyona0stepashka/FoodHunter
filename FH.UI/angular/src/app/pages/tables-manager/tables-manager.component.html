@@ -103,9 +103,9 @@
 
                 </div>
                 <div class="card-body">
-                    <div *ngIf="tableBookingNow.length == 0" class="col-md-12 text-center"
-                        style="background-color: #79797917;">
-                        History is empty
+                    <div *ngIf="tableBookingNow.length==0 || tableBookingNow==null || tableBookingNow==undefined"
+                        class=" text-center" style="background: #8a8a8a26;">
+                        <label class="text-center">No Booking Yet</label>
                     </div>
                     <table *ngIf="tableBookingNow.length > 0" class="table table-striped">
                         <tbody>

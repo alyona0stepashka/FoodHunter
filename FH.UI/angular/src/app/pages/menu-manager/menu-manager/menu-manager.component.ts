@@ -19,8 +19,8 @@ export class MenuManagerComponent implements OnInit {
   constructor(
     public signalRService: SignalRService,
     private menuService: MenuService,
-    private staticService: StaticService,
     private formBuilder: FormBuilder,
+    private staticService: StaticService,
     private toastr: ToastrService,
     private activateRoute: ActivatedRoute,
     private lbLightbox: Lightbox,
