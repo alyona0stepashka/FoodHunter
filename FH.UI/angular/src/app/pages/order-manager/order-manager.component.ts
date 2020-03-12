@@ -135,7 +135,7 @@ export class OrderManagerComponent implements OnInit {
         this.isNotFound = true;
         this.isOrderExist = false;
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }

@@ -13,7 +13,8 @@ namespace FH.BLL.VMs
         public bool IsActive { get; set; } = true;
         public DateTime CallTime { get; set; } = DateTime.Now;
         public string Comment { get; set; }
-        public int OrderId { get; set; } 
+        public int OrderId { get; set; }
+        public int TableNumber { get; set; }
 
         public ManagerCallVM(ManagerCall m)
         {
@@ -22,6 +23,7 @@ namespace FH.BLL.VMs
             CallTime = m.CallTime;
             Comment = m.Comment;
             OrderId = m.OrderId.Value;
+            if (m.Order != null && m.Order.Table!=null) {TableNumber = m.Order.Table.Number;}
         }
 
         public ManagerCallVM()

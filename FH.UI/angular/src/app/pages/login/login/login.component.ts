@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
           },
           err => {
             console.log(err);
-            this.toastr.error(err.error, 'Error');
+            // this.toastr.error(err.error, 'Error');
           }
         );
         //window.location.reload();

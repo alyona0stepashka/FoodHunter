@@ -111,8 +111,14 @@ export class SidebarComponent implements OnInit {
 
     public logout(e: any) {
         localStorage.clear();
-        window.location.reload(true);
+        //window.location.reload(true);
         this.router.navigateByUrl('/welcome/login');
+
+        this.isLogin = (localStorage.getItem('token') != null);
+        this.isManager = ((this.isLogin) && (localStorage.getItem('IsManager').toLocaleLowerCase() == 'true'));
+        this.isCurrentUser = ((this.isLogin) && (localStorage.getItem('CurrentRole').toLocaleLowerCase() == 'false'));
+        this.fullName = localStorage.getItem('FullName');
+        this.icon = environment.serverURL + localStorage.getItem('Icon');
     }
 
 
