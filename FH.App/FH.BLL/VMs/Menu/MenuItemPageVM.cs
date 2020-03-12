@@ -20,7 +20,8 @@ namespace FH.BLL.VMs
         public string MenuTitle { get; set; }
         public Icon Photo { get; set; }
         public int Rate { get; set; }
-        public List<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
+        public int FeedbacksCount { get; set; }
+        //public List<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
 
         public MenuItemPageVM(MenuItem m)
         {
@@ -37,8 +38,9 @@ namespace FH.BLL.VMs
             Photo = new Icon(m.Id, $"{m.FileModel?.Path}{m.FileModel?.Name}{m.FileModel?.Extension}");
             if (m.Feedbacks != null && m.Feedbacks.Any())
             {
-                Feedbacks = m.Feedbacks.Select(e => new FeedbackVM(e)).ToList();
-                Rate = m.Feedbacks.Sum(e => e.Stars) / m.Feedbacks.Count;
+                FeedbacksCount = m.Feedbacks.Count;
+                //Feedbacks = m.Feedbacks.Select(e => new FeedbackVM(e)).ToList();
+                Rate = m.Feedbacks.Sum(e => e.Stars) / FeedbacksCount;
             }
         }
     }

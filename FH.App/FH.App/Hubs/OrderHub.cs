@@ -178,14 +178,12 @@ namespace FH.App.Hubs
                 {
                     userId = Context.User.Claims.First(c => c.Type == "UserID").Value;
                 }
-
-                var order = await _orderService.GetOrderByIdAsync(orderId, userId);
                 await _orderService.CancelOrder(orderId);
-                var orderers = connects.Where(m => m.OrderIds.Contains(order.Id)).Select(m => m.ConnectionId).ToList();
+                var orderers = connects.Where(m => m.OrderIds.Contains(orderId)).Select(m => m.ConnectionId).ToList();
 //                var tab = await _orderService.AssignMeToOrder(order.Id, order.WelcomeCode.ToString(), userId);
-                var page = _orderService.GetOrderByIdAsync(order.Id, userId);
-                await Clients.Clients(orderers).SendAsync("StartSession", page);
-                DisconnectByOrder(order.Id, userId);
+                var page = _orderService.GetOrderByIdAsync(orderId, userId);
+                await Clients.Clients(orderers).SendAsync("CancelSession", page);
+                DisconnectByOrder(orderId, userId);
             }
             catch (Exception e)
             {

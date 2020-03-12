@@ -129,8 +129,8 @@
                                                     title="{{item.Rate}}">
                                                     <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true">
                                                     </ngb-rating>
-                                                    <i *ngIf="item.Feedbacks!=null">({{item.Feedbacks.length}})</i>
-                                                    <i *ngIf="item.Feedbacks==null">(0)</i>
+                                                    <i *ngIf="item.FeedbacksCount!=null">({{item.FeedbacksCount}})</i>
+                                                    <i *ngIf="item.FeedbacksCount==null">(0)</i>
                                                 </div>
                                             </div>
                                         </td>
@@ -480,10 +480,10 @@
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;">{{openedItem.Title}}&nbsp;&nbsp;
             </h4>
-            <ngb-rating max="5" [(rate)]="openedItem.Rate" [readonly]="true" title="{{openedItem.Feedbacks.length}}">
+            <ngb-rating max="5" [(rate)]="openedItem.Rate" [readonly]="true" title="{{openedItem.FeedbacksCount}}">
             </ngb-rating>
-            <i *ngIf="openedItem.Feedbacks!=null">({{openedItem.Feedbacks.length}})</i>
-            <i *ngIf="openedItem.Feedbacks==null">(0)</i>
+            <i *ngIf="openedItem.FeedbacksCount!=null">({{openedItem.FeedbacksCount}})</i>
+            <i *ngIf="openedItem.FeedbacksCount==null">(0)</i>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -533,7 +533,7 @@
             <div class="row">
                 <div class="col-md-12" style="margin-top: 1rem;">
                     <label>Feedbacks</label>
-                    <app-feedback-list [feedbacks]="openedItem.Feedbacks"></app-feedback-list>
+                    <app-feedback-list [feedbacks]="feedbacks"></app-feedback-list>
                 </div>
             </div>
         </div>

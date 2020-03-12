@@ -106,6 +106,8 @@ export class OrderManagerComponent implements OnInit {
     this.assignClientListener();
     this.assignManagerListener();
     this.addItemListener();
+    this.disableCallListener();
+    this.cancelOrderSessionListener();
   }
 
   open(index: number): void {
@@ -145,6 +147,14 @@ export class OrderManagerComponent implements OnInit {
       // this.order.ManagerCalls.push(data);
       this.loadOrder();
       console.log("call-manager-listener", data);
+    });
+  }
+
+  cancelOrderSessionListener() {
+    this.signalRService.hubConnection.on('CancelSession', (data) => {
+      // this.order.ManagerCalls.push(data);
+      this.loadOrder();
+      console.log("cancel-session-listener", data);
     });
   }
 

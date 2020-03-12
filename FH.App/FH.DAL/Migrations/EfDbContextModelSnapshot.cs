@@ -810,9 +810,10 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.Order", b =>
                 {
-                    b.HasOne("FH.Models.Models.Location")
+                    b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("Orders")
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.Manager", "Manager")
                         .WithMany("Orders")

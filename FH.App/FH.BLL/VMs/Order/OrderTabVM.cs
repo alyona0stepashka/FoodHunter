@@ -18,7 +18,8 @@ namespace FH.BLL.VMs
         public string LocationName { get; set; }
         public string ManagerName { get; set; }
         public int TableNumber { get; set; }
-        public int ManagerId { get; set; }  
+        public int ManagerId { get; set; }
+        public List<ManagerCallVM> Calls { get; set; } = new List<ManagerCallVM>();
 
         public OrderTabVM(Order o)
         {
@@ -39,6 +40,8 @@ namespace FH.BLL.VMs
                 ManagerId = o.ManagerId.Value;
                 ManagerName = $"{o.Manager.UserProfile.FirstName} {o.Manager.UserProfile.LastName[0]}.";
             }
+
+            if (o.ManagerCalls != null) Calls = o.ManagerCalls.Select(m => new ManagerCallVM(m)).ToList();
         }
     }
 }

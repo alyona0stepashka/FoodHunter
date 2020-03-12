@@ -32,16 +32,24 @@ namespace FH.BLL.VMs
             IsActive = o.IsActive;
             StartDate = o.StartDate;
             EndDate = o.EndDate;
-            TableId = o.TableId.Value;
+            if (o.TableId != null) {TableId = o.TableId.Value;}
             TableNumber = o.Table?.Number.ToString();
-            LocationId = (int)o.Table?.LocationId.Value;
-            LocationName = o.Table.Location?.Name;
-            CompanyName = o.Table.Location?.Company?.Name;
-            Address = o.Table.Location?.Address;
+            if (o.Table?.LocationId != null) {LocationId = (int) o.Table?.LocationId.Value;}
+
+            if (o.Table != null && o.Table.Location != null)
+            {
+                LocationName = o.Table.Location?.Name;
+                CompanyName = o.Table.Location?.Company?.Name;
+                Address = o.Table.Location?.Address;
+            }
+
             if (o.Manager != null)
             {
-                Manager = new UserTabVM(o.Manager?.UserProfile);
-                ManagerName = $"{o.Manager.UserProfile.FirstName} {o.Manager.UserProfile.LastName[0]}.";
+                if (o.Manager?.UserProfile != null)
+                {
+                    Manager = new UserTabVM(o.Manager?.UserProfile);
+                    ManagerName = $"{o.Manager.UserProfile.FirstName} {o.Manager.UserProfile.LastName[0]}.";
+                }
             }
             if (o.OrderUsers != null && o.OrderUsers.Any())
             {

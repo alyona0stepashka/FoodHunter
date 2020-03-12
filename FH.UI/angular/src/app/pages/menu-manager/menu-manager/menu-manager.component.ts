@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Lightbox } from 'ngx-lightbox';
 import { SignalRService } from 'app/services/signal-r.service';
+import { FeedbackService } from 'app/services/feedback.service';
 
 @Component({
   selector: 'app-menu-manager',
@@ -17,6 +18,7 @@ import { SignalRService } from 'app/services/signal-r.service';
 export class MenuManagerComponent implements OnInit {
 
   constructor(
+    public feedbackService: FeedbackService,
     public signalRService: SignalRService,
     private menuService: MenuService,
     private formBuilder: FormBuilder,
@@ -72,6 +74,7 @@ export class MenuManagerComponent implements OnInit {
   //bool vars for role access
 
   //server lists
+  feedbacks = new Array();
   menus = new Array();
   icons = new Array();
   //server lists
@@ -352,6 +355,29 @@ export class MenuManagerComponent implements OnInit {
     );
   }
 
+  loadFeedbacksMenuItem(id) {
+    this.feedbackService.getMenuItemFeedbacks(id).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationMenu();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
   setCurrentMenuId(id) {
     this.currentMenuId = id;
     console.log(id);
@@ -423,6 +449,7 @@ export class MenuManagerComponent implements OnInit {
       this.openMenuItem = { ...item };
       console.log("openMenuItem", this.openMenuItem);
       this.openItemPhotoPath = environment.serverURL + this.openMenuItem.Photo.Value;
+      this.loadFeedbacksMenuItem(id);
     }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

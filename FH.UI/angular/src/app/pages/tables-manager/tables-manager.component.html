@@ -89,7 +89,8 @@
     <!-- ----------------Booking Management-------------------------->
     <mat-tab>
         <ng-template mat-tab-label><span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
-                <b>Booking</b></span>
+                <b>Booking</b>&nbsp;<b
+                    *ngIf="tableBookingNowWarningLength>0">({{tableBookingNowWarningLength}})</b></span>
         </ng-template>
         <div>
             <div class="card card-user" style="min-height: auto;">
@@ -129,7 +130,8 @@
                                         </div>
                                         <div class="row">
                                             <div style="white-space: normal;" class="col-md-12">
-                                                {{book.Client.FirstName}}&nbsp;{{book.Client.LastName}},{{book.Client.Age}}
+                                                {{book.Client.FirstName}}&nbsp;{{book.Client.LastName}},
+                                                {{book.Client.Age}}
                                             </div>
                                         </div>
                                     </td>

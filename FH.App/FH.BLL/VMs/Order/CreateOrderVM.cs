@@ -12,6 +12,6 @@ namespace FH.BLL.VMs
         public DateTime StartDate { get; set; } = DateTime.Now;
         //public DateTime EndDate { get; set; } 
         public int TableId { get; set; } 
-        //public int LocationId { get; set; } 
+        public int LocationId { get; set; } 
     }
 }

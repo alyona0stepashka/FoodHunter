@@ -101,8 +101,8 @@ namespace FH.DAL.DataContext
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Order>().HasOne(m => m.Table).WithMany(m => m.Orders).HasForeignKey(m => m.TableId)
                 .OnDelete(DeleteBehavior.Restrict);
-//            modelBuilder.Entity<Order>().HasOne(m => m.Location).WithMany(m => m.Orders)
-//                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Order>().HasOne(m => m.Location).WithMany(m => m.Orders).HasForeignKey(m => m.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<OrderItem>().HasOne(m => m.Order).WithMany(m => m.OrderItems).HasForeignKey(m => m.OrderId)

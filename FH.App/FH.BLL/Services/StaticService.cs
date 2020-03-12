@@ -54,9 +54,9 @@ namespace FH.BLL.Services
             retVal.OrdersLastMonth = ordersLastMonth.Count();
             for (var i = 1; i <= 12; i++)
             {
-                var ordersForMonth = orders.Where(b => b.EndDate != null && ((DateTime)b.EndDate).Month == i);
+                var ordersForMonth = orders.Where(b => b.EndDate != null && ((DateTime) b.EndDate).Month == i);
                 var countPayment = ordersForMonth.Select(m =>
-                    m.OrderItems.Select(n => (n.PricePerItem * (decimal)n.Count)).Sum()).Sum();
+                    m.OrderItems.Where(e=>e.UserId==client.Id).Select(n => (n.PricePerItem * (decimal)n.Count)).Sum()).Sum();
                 retVal.ClientPaymentActivity.Add(countPayment);
             }
             retVal.PaymentLastMonth = retVal.ClientPaymentActivity[DateTime.Now.Month - 1];

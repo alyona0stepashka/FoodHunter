@@ -36,6 +36,10 @@
                             <tbody>
                                 <ng-container *ngFor="let order of orders">
                                     <tr style="cursor: pointer;" (click)="redirectToOrder(order.Id)">
+                                        <td width="1%" *ngIf="order.IsActive" style="background-color: #8dd844;"
+                                            title="Active"></td>
+                                        <td width="1%" *ngIf="!order.IsActive" style="background-color: #cccccc;"
+                                            title="Canceled"></td>
                                         <td width="30%">
                                             <div class="row">
                                                 <div class="item text-center col-md-12">
@@ -61,10 +65,10 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td width="15%">
+                                        <td width="10%">
                                             <div class="row">
                                                 <div class="item text-center col-md-12">
-                                                    <span *ngIf="order.IsActive">
+                                                    <!-- <span *ngIf="order.IsActive">
                                                         <div
                                                             style="border-radius:50%; width: 10px; height: 10px; background-color: #8dd844; margin:2%;display: inline-block;">
                                                         </div>&nbsp;Active
@@ -73,11 +77,10 @@
                                                         <div
                                                             style="border-radius:50%; width: 10px; height: 10px; background-color: #cccccc; margin:2%;display: inline-block;">
                                                         </div>&nbsp;Canceled
-                                                    </span><br *ngIf="!order.IsActive" />
-                                                    <span *ngIf="order.ManagerId!=null && order.ManagerId!=0">
-                                                        <div
-                                                            style="border-radius:50%; width: 10px; height: 10px; background-color: #8dd844; margin:2%;display: inline-block;">
-                                                        </div>&nbsp;{{order.ManagerName}}
+                                                    </span><br *ngIf="!order.IsActive" /> -->
+                                                    <span *ngIf="order.ManagerId!=null && order.ManagerId!=0"
+                                                        title="Waiter">
+                                                        <i class="fas fa-user-tie"></i>&nbsp;{{order.ManagerName}}
                                                     </span><br *ngIf="order.ManagerId!=null && order.ManagerId!=0" />
                                                     <button
                                                         *ngIf="isManager && (order.ManagerId==null || order.ManagerId==0)"
@@ -96,6 +99,45 @@
                                 </ng-container>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <!-------------- MANAGER-CALLS ------------>
+    <mat-tab *ngIf="isManager">
+        <ng-template mat-tab-label>
+            <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                <i class="fas fa-fire-alt"></i>&nbsp;Waiter calls
+            </span>
+        </ng-template>
+        <div>
+            <div class="card card-user" style="min-height: auto;">
+                <div class="card-body">
+                    <div *ngIf="calls!=null && calls.length>0" class=" text-center" style="background: #8a8a8a26;">
+                        <label class="text-center">No Active Calls Now</label>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ng-container *ngFor="let call of calls">
+                                    <div *ngIf="call.IsActive"
+                                        class="alert alert-danger alert-with-icon alert-dismissible fade show"
+                                        data-notify="container">
+                                        <button *ngIf="isManager" type="button" aria-hidden="true" class="close"
+                                            data-dismiss="alert" aria-label="Close"
+                                            (click)="disableManagerCall(call.Id)">
+                                            <i class="nc-icon nc-simple-remove"></i>
+                                        </button>
+                                        <span data-notify="icon" class="nc-icon nc-bell-55"></span>
+                                        <span data-notify="message"><i
+                                                style="white-space: normal; font-style: normal; font-size: smaller;">[
+                                                {{this.datepipe.transform(call.CallTime, 'MMMM d, h:mm a')}}]&nbsp;&nbsp;</i>Table#{{call.TableNumber}}:
+                                            {{call.Comment}}</span>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

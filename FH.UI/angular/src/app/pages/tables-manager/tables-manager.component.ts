@@ -70,6 +70,7 @@ export class TablesManagerComponent implements OnInit {
   tables = new Array();
   tableBookingHistory = new Array();
   tableBookingNow = new Array();
+  tableBookingNowWarningLength = 0;
   freeTables = new Array();
   freeTablesNow = new Array();
   //server list
@@ -137,6 +138,22 @@ export class TablesManagerComponent implements OnInit {
             }
           })
           console.log("total books", this.tableBookingNow);
+          let warning = this.tableBookingNow.find(function (book) {
+            return (book.IsConfirm == null && book.IsActive);
+          })
+          if (warning == undefined) {
+            this.tableBookingNowWarningLength = 0;
+          }
+          else {
+            if (warning.length == undefined) {
+              this.tableBookingNowWarningLength = 1;
+            }
+            else {
+              this.tableBookingNowWarningLength = warning.length;
+            }
+          }
+          console.log("this.tableBookingNowWarningLength", this.tableBookingNowWarningLength);
+
           this.countFreeTablesNow();
         },
         err => {
@@ -153,6 +170,7 @@ export class TablesManagerComponent implements OnInit {
       IsActive: true,
       StartDate: new Date(),
       TableId: tableId,
+      LocationId: this.welcomeLocationId
     }
     this.signalRService.hubConnection.invoke('StartSession', body, null)
       .then(res => { })

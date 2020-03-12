@@ -33,7 +33,7 @@ namespace FH.BLL.Services
                     Status = "In progress",
                     StartDate = vm.StartDate,
                     TableId = vm.TableId,
-                    //LocationId = vm.LocationId
+                    LocationId = vm.LocationId
             };
             var orderNew = await _db.Orders.CreateAsync(dbOrder);
             var dbOrderUser = new OrderUser
@@ -55,20 +55,12 @@ namespace FH.BLL.Services
             }
 
             var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
-            if (order.ManagerId==myId)
-            {
-                throw new Exception("You are already assigned to this order");
-            }
 
             var myManagerId = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfileId == myId).Id;
-            if (order.ManagerId == myManagerId)
-            {
-                throw new Exception("You are already assigned to this order");
-            }
 
             order.ManagerId = myManagerId;
             var dbOrder = await _db.Orders.UpdateAsync(order);
-            return new OrderPageVM(await _db.Orders.CreateAsync(dbOrder));
+            return new OrderPageVM(dbOrder);
         }
 
         public async Task<OrderPageTabVM> AssignMeToOrder(string welcomeCode, string userId)
@@ -185,6 +177,7 @@ namespace FH.BLL.Services
                 return new List<OrderTabVM>();
             }
             var orders = manager.Location.Orders.Select(m => new OrderTabVM(m)).ToList();
+            //var noManagersOrders = 
             return orders;
         }
 

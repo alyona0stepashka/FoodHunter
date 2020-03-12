@@ -30,6 +30,7 @@ export class OrderListComponent implements OnInit {
   //server data
   orders = new Array();
   filteredOrders = new Array();
+  calls = new Array();
   //server data
 
   //logic vars
@@ -55,6 +56,38 @@ export class OrderListComponent implements OnInit {
     else {
       this.loadOrderHistory();
     }
+    this.disableCallListener();
+    this.createOrderListener();
+  }
+
+  disableCallListener() {
+    this.signalRService.hubConnection.on('AcceptCallManager', (data) => {
+      // this.order.ManagerCalls = this.order.ManagerCalls.filter(function (m) {
+      //   return m.Id != data.Id;
+      // });
+      if (this.isManager) {
+        this.loadAllOrders();
+      }
+      else {
+        this.loadOrderHistory();
+      }
+      console.log("disable-call-listener", data);
+    });
+  }
+
+  createOrderListener() {
+    this.signalRService.hubConnection.on('StartSession', (data) => {
+      // this.order.ManagerCalls = this.order.ManagerCalls.filter(function (m) {
+      //   return m.Id != data.Id;
+      // });
+      if (this.isManager) {
+        this.loadAllOrders();
+      }
+      else {
+        this.loadOrderHistory();
+      }
+      console.log("new-order-listener", data);
+    });
   }
 
   redirectToOrder(ordId) {
@@ -70,6 +103,9 @@ export class OrderListComponent implements OnInit {
         this.orders = res as [];
         this.filteredOrders = this.orders;
         this.isHaveOrders = (this.orders != null && this.orders.length > 0);
+        this.orders.forEach(o => {
+          this.calls.push(o.Calls);
+        })
       },
       err => {
         console.log(err);
@@ -93,7 +129,10 @@ export class OrderListComponent implements OnInit {
 
   assignOrderAsManager(orderId) {
     this.signalRService.hubConnection.invoke('AssignManagerToSession', orderId, null)
-      .then(res => { this.redirectToOrder(orderId); })
+      .then(res => {
+        new Promise(resolve => setTimeout(resolve, 1000));
+        this.redirectToOrder(orderId);
+      })
       .catch(err => console.error(err));
   }
 
