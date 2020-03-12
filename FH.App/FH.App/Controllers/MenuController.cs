@@ -60,6 +60,7 @@ namespace FH.App.Controllers
                 }
 
                 var menuPage = _menuService.GetAllMenusByLocationId(id);
+//                var menuPage = new MenuPageVM();
                 return Ok(menuPage);
             }
             catch (Exception ex)

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FH.BLL.Interfaces;
+using FH.BLL.VMs;
 using FH.DAL.EF.Interfaces;
 using FH.Models.EnumModels;
 using FH.Models.Models;
@@ -40,7 +41,7 @@ namespace FH.BLL.Services
                     throw new Exception("Invalid file type.");
                 }
         }
-        public async Task<Icon> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null)
+        public async Task<IconVM> CreateFileDbAsync(IFormFile photo, int? feedbackId = null, string userId = null, int? locationId = null)
         {
                 IsValidFile(photo, 150);
                 var file = new FileModel
@@ -70,7 +71,7 @@ namespace FH.BLL.Services
                 {
                     await photo.CopyToAsync(fileStream);
                 }
-                return new Icon(file.Id, $"{file.Path}{file.Name}{file.Extension}"); 
+                return new IconVM(file.Id, $"{file.Path}{file.Name}{file.Extension}"); 
         }
         public void CreateDirectoryIfNotExist(string path)
         {

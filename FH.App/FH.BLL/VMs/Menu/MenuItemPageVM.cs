@@ -18,7 +18,7 @@ namespace FH.BLL.VMs
         public bool IsActive { get; set; }
         public int MenuId { get; set; }
         public string MenuTitle { get; set; }
-        public Icon Photo { get; set; }
+        public IconVM Photo { get; set; }
         public int Rate { get; set; }
         public int FeedbacksCount { get; set; }
         //public List<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
@@ -35,7 +35,7 @@ namespace FH.BLL.VMs
             IsActive = m.IsActive;
             MenuId = m.MenuId.Value;
             MenuTitle = m.Menu?.Title;
-            Photo = new Icon(m.Id, $"{m.FileModel?.Path}{m.FileModel?.Name}{m.FileModel?.Extension}");
+            Photo = new IconVM(m.Id, $"{m.FileModel?.Path}{m.FileModel?.Name}{m.FileModel?.Extension}");
             if (m.Feedbacks != null && m.Feedbacks.Any())
             {
                 FeedbacksCount = m.Feedbacks.Count;

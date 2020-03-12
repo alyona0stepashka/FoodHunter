@@ -14,7 +14,7 @@ namespace FH.BLL.VMs
         public string LocationName { get; set; }
         public string Title { get; set; }
         public string Info { get; set; }
-        public Icon Icon { get; set; }
+        public IconVM Icon { get; set; }
         public List<MenuItemPageVM> MenuItems { get; set; } = new List<MenuItemPageVM>();
 
         public MenuPageVM(Menu m)
@@ -23,12 +23,18 @@ namespace FH.BLL.VMs
             LocationId = m.LocationId.Value;
             Title = m.Title;
             Info = m.Info;
-            Icon = m.Icon;
+            Icon = new IconVM(m.Icon);
             LocationName = m.Location?.Name;
             if (m.MenuItems != null && m.MenuItems.Any())
             {
                 MenuItems = m.MenuItems?.Select(e => new MenuItemPageVM(e)).ToList();
             }
         }
+
+        public MenuPageVM()
+        {
+            
+        }
     }
+    
 }

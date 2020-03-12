@@ -11,7 +11,7 @@ namespace FH.BLL.VMs
     public class OrderItemVM
     {
         public int Id{ get; set; }
-        public Icon Photo { get; set; }
+        public IconVM Photo { get; set; }
         public string Title { get; set; } 
         public double Count { get; set; } 
         public decimal PricePerItem { get; set; } 
@@ -38,7 +38,7 @@ namespace FH.BLL.VMs
                 UserProfileId = o.UserId.Value;
                 if (o.MenuItemId != null)
                 {
-                    Photo = new Icon(o.MenuItemId.Value,
+                    Photo = new IconVM(o.MenuItemId.Value,
                         $"{o.MenuItem.FileModel?.Path}{o.MenuItem.FileModel?.Name}{o.MenuItem.FileModel?.Extension}");
                 }
             }

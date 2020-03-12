@@ -117,9 +117,9 @@ namespace FH.BLL.Services
             return items; 
         }
 
-        public List<Icon> GetIcons()
+        public List<IconVM> GetIcons()
         {
-            var items = _db.Icons.GetAll().ToList();
+            var items = _db.Icons.GetAll().Select(m=>new IconVM(m)).ToList();
             if (items == null)
             {
                 throw new Exception("Icons not found");

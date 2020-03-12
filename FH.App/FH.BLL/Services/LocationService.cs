@@ -37,7 +37,7 @@ namespace FH.BLL.Services
             return new LocationPageVM(locNew);
         }
 
-        public async Task<Icon> UploadLocationTopPhoto(IFormFile photo, int locationId)
+        public async Task<IconVM> UploadLocationTopPhoto(IFormFile photo, int locationId)
         {
             var file = await _fileService.CreateFileDbAsync(photo);
             var location = await _db.Locations.GetByIdAsync(locationId);

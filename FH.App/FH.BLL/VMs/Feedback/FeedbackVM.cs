@@ -14,7 +14,7 @@ namespace FH.BLL.VMs
         public int Stars { get; set; }
         public string Comment { get; set; } 
         public UserTabVM User { get; set; } = new UserTabVM();
-        public List<Icon> Photos { get; set; } = new List<Icon>();
+        public List<IconVM> Photos { get; set; } = new List<IconVM>();
 
         public FeedbackVM(Feedback m)
         {
@@ -28,7 +28,7 @@ namespace FH.BLL.VMs
                 }
                 if (m.Photos != null && m.Photos.Any())
                 {
-                    Photos = m.Photos?.Select(e => new Icon(e.Id, $"{e.Path}{e.Name}{e.Extension}")).ToList();
+                    Photos = m.Photos?.Select(e => new IconVM(e.Id, $"{e.Path}{e.Name}{e.Extension}")).ToList();
                 }
             }
         }

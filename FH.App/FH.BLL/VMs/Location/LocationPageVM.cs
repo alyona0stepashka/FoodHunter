@@ -15,11 +15,11 @@ namespace FH.BLL.VMs
         public decimal Latitude { get; set; }
         public decimal Rate { get; set; }
         public string Address { get; set; } 
-        public List<Icon> PhotoAlbum { get; set; } = new List<Icon>();
+        public List<IconVM> PhotoAlbum { get; set; } = new List<IconVM>();
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string CompanyPhoto { get; set; }
-        public Icon Specification { get; set; }
+        public IconVM Specification { get; set; }
         public string Vk { get; set; }
         public string Facebook { get; set; }
         public string Instagram { get; set; }
@@ -31,7 +31,7 @@ namespace FH.BLL.VMs
             Rate = 0;
             if (location.PhotoAlbum != null && location.PhotoAlbum.Any())
             {
-                PhotoAlbum = location.PhotoAlbum?.Select(m => new Icon(m.Id, $"{m.Path}{m.Name}{m.Extension}")).ToList();
+                PhotoAlbum = location.PhotoAlbum?.Select(m => new IconVM(m.Id, $"{m.Path}{m.Name}{m.Extension}")).ToList();
             }
             if (location.Feedbacks != null && location.Feedbacks.Any())
             {
@@ -48,7 +48,7 @@ namespace FH.BLL.VMs
                 Vk = location.Company.Vk;
                 Instagram = location.Company.Instagram;
                 Site = location.Company.Site;
-                Specification = new Icon(location.Company.Specification.Id, location.Company.Specification.Value);
+                Specification = new IconVM(location.Company.Specification.Id, location.Company.Specification.Value);
                 CompanyId = location.Company.Id;
                 CompanyName = location.Company.Name;
                 CompanyPhoto =

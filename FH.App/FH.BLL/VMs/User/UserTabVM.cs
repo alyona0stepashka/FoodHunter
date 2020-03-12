@@ -17,7 +17,7 @@ namespace FH.BLL.VMs
         public string FullName { get; set; }
         public string Sex { get; set; }
         public int Age { get; set; }
-        public Icon Photo { get; set; } 
+        public IconVM Photo { get; set; } 
 
         public UserTabVM(UserProfile m)
         {
@@ -32,7 +32,7 @@ namespace FH.BLL.VMs
             {
                 Age--;
             }
-            Photo = new Icon(m.Id, $"{m.File?.Path}{m.File?.Name}{m.File?.Extension}");
+            Photo = new IconVM(m.Id, $"{m.File?.Path}{m.File?.Name}{m.File?.Extension}");
         }
 
         public UserTabVM()

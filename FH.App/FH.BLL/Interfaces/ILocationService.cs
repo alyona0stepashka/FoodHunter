@@ -15,7 +15,7 @@ namespace FH.BLL.Interfaces
         List<LocationTabVM> GetLocationsByCompany(int companyId);
         Task<LocationPageVM> CreateLocationAsync(CreateLocationVM location, string userId);
         Task<LocationPageVM> UpdateLocationAsync(CreateLocationVM location);
-        Task<Icon> UploadLocationTopPhoto(IFormFile photo, int locationId);
+        Task<IconVM> UploadLocationTopPhoto(IFormFile photo, int locationId);
         Task DeleteLocationAsync(int id);
     }
 }
