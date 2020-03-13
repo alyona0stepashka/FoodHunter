@@ -77,7 +77,9 @@ namespace FH.DAL.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("FileId")
+                        .IsUnique()
+                        .HasFilter("[FileId] IS NOT NULL");
 
                     b.HasIndex("SpecificationId");
 
@@ -96,9 +98,11 @@ namespace FH.DAL.Migrations
 
                     b.Property<int?>("MenuItemId");
 
+                    b.Property<int?>("OrderUserId");
+
                     b.Property<int>("Stars");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserProfileId");
 
                     b.HasKey("Id");
 
@@ -106,7 +110,9 @@ namespace FH.DAL.Migrations
 
                     b.HasIndex("MenuItemId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("OrderUserId");
+
+                    b.HasIndex("UserProfileId");
 
                     b.ToTable("Feedbacks");
                 });
@@ -146,7 +152,7 @@ namespace FH.DAL.Migrations
 
                     b.Property<string>("AdminId");
 
-                    b.Property<int>("CompanyId");
+                    b.Property<int?>("CompanyId");
 
                     b.Property<string>("Latitude");
 
@@ -154,15 +160,11 @@ namespace FH.DAL.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("TopFileId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("TopFileId");
 
                     b.ToTable("Locations");
                 });
@@ -173,19 +175,44 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("LocationId");
+                    b.Property<int?>("LocationId");
 
-                    b.Property<int>("UserProfileId");
-
-                    b.Property<DateTime>("WorkBegin");
+                    b.Property<int?>("UserProfileId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("UserProfileId");
+                    b.HasIndex("UserProfileId")
+                        .IsUnique()
+                        .HasFilter("[UserProfileId] IS NOT NULL");
 
                     b.ToTable("Managers");
+                });
+
+            modelBuilder.Entity("FH.Models.Models.ManagerCall", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CallTime");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int?>("OrderId");
+
+                    b.Property<int?>("UserProfileId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.ToTable("ManagerCalls");
                 });
 
             modelBuilder.Entity("FH.Models.Models.Menu", b =>
@@ -194,11 +221,11 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("IconId");
+                    b.Property<int?>("IconId");
 
                     b.Property<string>("Info");
 
-                    b.Property<int>("LocationId");
+                    b.Property<int?>("LocationId");
 
                     b.Property<string>("Title");
 
@@ -217,13 +244,13 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("FileModelId");
+                    b.Property<int?>("FileModelId");
 
                     b.Property<string>("Info");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<int>("MenuId");
+                    b.Property<int?>("MenuId");
 
                     b.Property<string>("Note");
 
@@ -248,15 +275,19 @@ namespace FH.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("EndDate");
+                    b.Property<DateTime?>("EndDate");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<int>("LocationId");
+                    b.Property<int?>("LocationId");
+
+                    b.Property<int?>("ManagerId");
 
                     b.Property<DateTime>("StartDate");
 
-                    b.Property<int>("TableId");
+                    b.Property<string>("Status");
+
+                    b.Property<int?>("TableId");
 
                     b.Property<Guid>("WelcomeCode")
                         .ValueGeneratedOnAdd();
@@ -264,6 +295,8 @@ namespace FH.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
+
+                    b.HasIndex("ManagerId");
 
                     b.HasIndex("TableId");
 
@@ -278,7 +311,9 @@ namespace FH.DAL.Migrations
 
                     b.Property<double>("Count");
 
-                    b.Property<int>("OrderId");
+                    b.Property<int?>("MenuItemId");
+
+                    b.Property<int?>("OrderId");
 
                     b.Property<decimal>("PricePerItem");
 
@@ -286,9 +321,11 @@ namespace FH.DAL.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MenuItemId");
 
                     b.HasIndex("OrderId");
 
@@ -334,7 +371,7 @@ namespace FH.DAL.Migrations
 
                     b.Property<string>("Info");
 
-                    b.Property<int>("LocationId");
+                    b.Property<int?>("LocationId");
 
                     b.Property<int>("Number");
 
@@ -353,7 +390,7 @@ namespace FH.DAL.Migrations
 
                     b.Property<DateTime>("BookTime");
 
-                    b.Property<int>("ClientId");
+                    b.Property<int?>("ClientId");
 
                     b.Property<string>("Comment");
 
@@ -365,7 +402,7 @@ namespace FH.DAL.Migrations
 
                     b.Property<DateTime>("StartTime");
 
-                    b.Property<int>("TableId");
+                    b.Property<int?>("TableId");
 
                     b.HasKey("Id");
 
@@ -401,7 +438,9 @@ namespace FH.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("FileId")
+                        .IsUnique()
+                        .HasFilter("[FileId] IS NOT NULL");
 
                     b.HasIndex("SexId");
 
@@ -455,6 +494,25 @@ namespace FH.DAL.Migrations
                     b.HasIndex("UserProfileId");
 
                     b.ToTable("CuisineUsers");
+                });
+
+            modelBuilder.Entity("FH.Models.StaticModels.OrderUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OrderId");
+
+                    b.Property<int>("UserProfileId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.ToTable("OrderUsers");
                 });
 
             modelBuilder.Entity("FH.Models.StaticModels.SubscriptionType", b =>
@@ -642,39 +700,49 @@ namespace FH.DAL.Migrations
                         .HasForeignKey("AdminId");
 
                     b.HasOne("FH.Models.Models.FileModel", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId");
+                        .WithOne("Company")
+                        .HasForeignKey("FH.Models.Models.Company", "FileId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.StaticModels.CompanySpecification", "Specification")
-                        .WithMany()
-                        .HasForeignKey("SpecificationId");
+                        .WithMany("Companies")
+                        .HasForeignKey("SpecificationId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.Feedback", b =>
                 {
                     b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("Feedbacks")
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.MenuItem", "MenuItem")
                         .WithMany("Feedbacks")
-                        .HasForeignKey("MenuItemId");
+                        .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("FH.Models.Models.UserProfile", "User")
+                    b.HasOne("FH.Models.StaticModels.OrderUser", "OrderUser")
+                        .WithMany()
+                        .HasForeignKey("OrderUserId");
+
+                    b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
                         .WithMany("Feedbacks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.FileModel", b =>
                 {
                     b.HasOne("FH.Models.Models.Feedback", "Feedback")
                         .WithMany("Photos")
-                        .HasForeignKey("FeedbackId");
+                        .HasForeignKey("FeedbackId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("PhotoAlbum")
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.Location", b =>
@@ -686,11 +754,7 @@ namespace FH.DAL.Migrations
                     b.HasOne("FH.Models.Models.Company", "Company")
                         .WithMany("Locations")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FH.Models.Models.FileModel", "TopFile")
-                        .WithMany()
-                        .HasForeignKey("TopFileId");
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.Manager", b =>
@@ -698,33 +762,45 @@ namespace FH.DAL.Migrations
                     b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("Managers")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithOne("Manager")
+                        .HasForeignKey("FH.Models.Models.Manager", "UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("FH.Models.Models.ManagerCall", b =>
+                {
+                    b.HasOne("FH.Models.Models.Order", "Order")
+                        .WithMany("ManagerCalls")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FH.Models.Models.UserProfile")
+                        .WithMany("ManagerCalls")
+                        .HasForeignKey("UserProfileId");
                 });
 
             modelBuilder.Entity("FH.Models.Models.Menu", b =>
                 {
                     b.HasOne("FH.Models.EnumModels.Icon", "Icon")
-                        .WithMany()
+                        .WithMany("Menus")
                         .HasForeignKey("IconId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("Menus")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.MenuItem", b =>
                 {
                     b.HasOne("FH.Models.Models.FileModel", "FileModel")
-                        .WithMany()
+                        .WithMany("MenuItems")
                         .HasForeignKey("FileModelId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.Menu", "Menu")
                         .WithMany("MenuItems")
@@ -735,9 +811,14 @@ namespace FH.DAL.Migrations
             modelBuilder.Entity("FH.Models.Models.Order", b =>
                 {
                     b.HasOne("FH.Models.Models.Location", "Location")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FH.Models.Models.Manager", "Manager")
+                        .WithMany("Orders")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.Table", "Table")
                         .WithMany("Orders")
@@ -747,15 +828,20 @@ namespace FH.DAL.Migrations
 
             modelBuilder.Entity("FH.Models.Models.OrderItem", b =>
                 {
+                    b.HasOne("FH.Models.Models.MenuItem", "MenuItem")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("FH.Models.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.UserProfile", "User")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.Subscription", b =>
@@ -763,12 +849,12 @@ namespace FH.DAL.Migrations
                     b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("Subscriptions")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.StaticModels.SubscriptionType", "SubscriptionType")
-                        .WithMany()
+                        .WithMany("Subscriptions")
                         .HasForeignKey("SubscriptionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
@@ -780,7 +866,7 @@ namespace FH.DAL.Migrations
                     b.HasOne("FH.Models.Models.Location", "Location")
                         .WithMany("Tables")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.TableBook", b =>
@@ -788,23 +874,25 @@ namespace FH.DAL.Migrations
                     b.HasOne("FH.Models.Models.UserProfile", "Client")
                         .WithMany("TableBooks")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.Table", "Table")
                         .WithMany("TableBooks")
                         .HasForeignKey("TableId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.Models.UserProfile", b =>
                 {
                     b.HasOne("FH.Models.Models.FileModel", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId");
+                        .WithOne("UserProfile")
+                        .HasForeignKey("FH.Models.Models.UserProfile", "FileId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.EnumModels.Sex", "Sex")
-                        .WithMany()
-                        .HasForeignKey("SexId");
+                        .WithMany("Users")
+                        .HasForeignKey("SexId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
@@ -815,14 +903,27 @@ namespace FH.DAL.Migrations
             modelBuilder.Entity("FH.Models.StaticModels.CuisineUser", b =>
                 {
                     b.HasOne("FH.Models.StaticModels.Cuisine", "Cuisine")
-                        .WithMany()
+                        .WithMany("CuisineUsers")
                         .HasForeignKey("CuisineId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
-                        .WithMany("CuisinePreference")
+                        .WithMany("CuisineUsers")
                         .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("FH.Models.StaticModels.OrderUser", b =>
+                {
+                    b.HasOne("FH.Models.Models.Order", "Order")
+                        .WithMany("OrderUsers")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
+                        .WithMany("OrderUsers")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

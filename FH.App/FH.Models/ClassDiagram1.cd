@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FH.Models.Models.Company">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAEAAAgBgAAgIAAQYAAAAEAAAAgABAAAIAAAA=</HashCode>
+      <FileName>Models\Company.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.Feedback">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAJAAAEAAAAADAAAAIAAAgAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Feedback.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.FileModel">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAABIAAAIKAAQAAAQAAQAAAAAABAAAAAA=</HashCode>
+      <FileName>Models\FileModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.Location">
+    <Position X="4" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQEAAAAAEFIAAAAAAAAqQQQAAAAAAAACAAAEBAAAAAA=</HashCode>
+      <FileName>Models\Location.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.Manager">
+    <Position X="2.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEIAAAAAAAAAAAABAIAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Manager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.ManagerCall">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAEAAAAAAAAEAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ManagerCall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.Menu">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAFgAAAIAAAAAAAAAAAAAAAAAAEEAAAA=</HashCode>
+      <FileName>Models\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.MenuItem">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAQEAAEAAEAACAAAAAAAIDAAAAAAAAEEAAAA=</HashCode>
+      <FileName>Models\MenuItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.Order">
+    <Position X="12.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAECAEAAAIAEAAIQAQgAAAABAAAAAAAAEgAAAA=</HashCode>
+      <FileName>Models\Order.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.OrderItem">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEBAAAEAAABAFAAAAAAAAwAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\OrderItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.Subscription">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAJAAAAAAAAAAAIAAIAAAggAAAAAAAAAQAAAEgAAAA=</HashCode>
+      <FileName>Models\Subscription.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.Table">
+    <Position X="7.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEIAAAAAAAAAAAAAEIAAAAAAAAAAAAAAAAAAMAAAAA=</HashCode>
+      <FileName>Models\Table.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.TableBook">
+    <Position X="9.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAkAAAQBQAIAAgAAAAAAEAAAAAAAQ=</HashCode>
+      <FileName>Models\TableBook.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.Models.UserProfile">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQABAEAACQEAJAIAAAACAAgAAAAEBAAAAAAgAIIAAAg=</HashCode>
+      <FileName>Models\UserProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.StaticModels.CompanySpecification">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>StaticModels\CompanySpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.StaticModels.Cuisine">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>StaticModels\Cuisine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.StaticModels.CuisineUser">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAEAAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StaticModels\CuisineUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.StaticModels.OrderUser">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StaticModels\OrderUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.StaticModels.SubscriptionType">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAQAAEAEAAAAA=</HashCode>
+      <FileName>StaticModels\SubscriptionType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.EnumModels.Icon">
+    <Position X="14.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAgAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>StaticModels\Icon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.EnumModels.Sex">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>StaticModels\Sex.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FH.Models.BaseEntity">
+    <Position X="8.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BaseEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

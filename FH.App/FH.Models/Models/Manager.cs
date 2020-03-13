@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace FH.Models.Models
 {
     public class Manager: BaseEntity
-    {
-        public DateTime WorkBegin { get; set; }
+    { 
 
         [ForeignKey("Location")]
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
         public virtual Location Location { get; set; }
 
         [ForeignKey("UserProfile")]
-        public int UserProfileId { get; set; }
+        public int? UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }
 
         //-------------------------
+        public virtual List<Order> Orders { get; set; }
     }
 }

@@ -32,8 +32,6 @@ import { LoginComponent } from './pages/login/login/login.component';
 import { RegisterComponent } from './pages/register/register/register.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component/../about-us/about-us.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component/../contact-us/contact-us.component';
-import { DashboardUserComponent } from './pages/dashboard-user/dashboard-user/dashboard-user.component';
-import { DashboardManagerComponent } from './pages/dashboard-manager/dashboard-manager/dashboard-manager.component';
 import { ForbiddenComponent } from './pages/forbidden/403/forbidden.component';
 import { LocationManagerComponent } from './pages/location-manager/location-manager/location-manager.component';
 import { OopsComponent } from './pages/500/oops.component';
@@ -43,6 +41,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NotFoundComponent } from './pages/404/not-found/not-found.component';
 import { TablesManagerComponent } from './pages/tables-manager/tables-manager.component';
 import { LocationSearchComponent } from './pages/location-search/location-search.component';
+import { OrderManagerComponent } from './pages/order-manager/order-manager.component';
+import { OrderListComponent } from './pages/order-list/order-list.component';
+import { FeedbackListComponent } from './pages/feedback-list/feedback-list.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -55,8 +57,6 @@ import { LocationSearchComponent } from './pages/location-search/location-search
     RegisterComponent,
     AboutUsComponent,
     ContactUsComponent,
-    DashboardUserComponent,
-    DashboardManagerComponent,
     ForbiddenComponent,
     LocationManagerComponent,
     OopsComponent,
@@ -64,7 +64,11 @@ import { LocationSearchComponent } from './pages/location-search/location-search
     LocationPageComponent,
     MenuManagerComponent,
     TablesManagerComponent,
-    LocationSearchComponent
+    LocationSearchComponent,
+    OrderManagerComponent,
+    OrderListComponent,
+    FeedbackListComponent,
+    DashboardComponent,
     //AdminLayoutComponent
   ],
   imports: [

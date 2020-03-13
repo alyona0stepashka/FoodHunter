@@ -9,5 +9,6 @@ namespace FH.BLL.Interfaces
 {
     public interface IUserService
     {
+        UserTabVM GetUserTabVM(string userId);
     }
 }

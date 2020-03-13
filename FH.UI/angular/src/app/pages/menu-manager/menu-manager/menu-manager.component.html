@@ -1,5 +1,14 @@
 <div *ngIf="!isNotFound">
-    <mat-tab-group *ngIf="isLocationExist" style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+
+    <div *ngIf="!isLocationExist && isEdit" class="col-md-12">
+        <div class="card-header">
+            <h5 style="opacity:0.7" class="card-title">Before this you have to register your business location <a
+                    href="/#/dashboard-manager/location"><i>here</i></a></h5>
+        </div>
+    </div>
+
+    <!-- --------ADD-NEW-MENU--------- -->
+    <mat-tab-group style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
 
         <mat-tab *ngIf="isEdit">
             <ng-template mat-tab-label>
@@ -72,7 +81,7 @@
                 </div>
             </div>
         </mat-tab>
-        <!-- ////////////////////////////////// -->
+        <!-- ---------MENUS------------- -->
         <mat-tab *ngFor="let menu of menus">
             <ng-template mat-tab-label>
                 <i class="{{menu.Icon.Value}}" (click)="setCurrentMenuId(menu.Id)">
@@ -120,8 +129,8 @@
                                                     title="{{item.Rate}}">
                                                     <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true">
                                                     </ngb-rating>
-                                                    <i *ngIf="item.Feedbacks!=null">({{item.Feedbacks.length}})</i>
-                                                    <i *ngIf="item.Feedbacks==null">(0)</i>
+                                                    <i *ngIf="item.FeedbacksCount!=null">({{item.FeedbacksCount}})</i>
+                                                    <i *ngIf="item.FeedbacksCount==null">(0)</i>
                                                 </div>
                                             </div>
                                         </td>
@@ -172,6 +181,12 @@
                                                             title="Delete" (click)="deleteMenuItem(item.Id)"><i
                                                                 class="fas fa-ban"></i></button>
                                                     </li>
+                                                    <li *ngIf="!isEdit">
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Add to order" (click)="onOrderItem(item)"><i
+                                                                class="fas fa-shopping-basket"></i></button>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -185,17 +200,8 @@
         </mat-tab>
 
     </mat-tab-group>
-    <!-- ///////////////////////////// -->
 
-    <div *ngIf="!isLocationExist && isEdit" class="col-md-12">
-        <div class="card-header">
-            <h5 style="opacity:0.7" class="card-title">Before this you have to register your business location <a
-                    href="/#/dashboard-manager/location"><i>here</i></a></h5>
-        </div>
-    </div>
-
-    <!-- //////////////////////////////////// -->
-
+    <!-- ---------NEW-MENU------------ -->
     <ng-template #newMenuItem let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Create new menu item</h4>
@@ -300,7 +306,7 @@
             </div>
         </div>
     </ng-template>
-    <!--/////////////////////////////  -->
+    <!-------------EDIT-MENU--------------->
     <ng-template #editMenu let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your menu info</h4>
@@ -364,7 +370,7 @@
             </form>
         </div>
     </ng-template>
-    <!-- ///////////////////////////////// -->
+    <!-- ----------EDIT-MENU-ITEM----------------- -->
     <ng-template #editMenuItem let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Edit your menu item info</h4>
@@ -469,13 +475,15 @@
             </div>
         </div>
     </ng-template>
-    <!-- ////////////////////////////////////// -->
+    <!-- ---------OPEN-MENU-ITEM-------------- -->
     <ng-template #openMenuItem let-modal>
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;">{{openMenuItem.Title}}&nbsp;&nbsp;
+            <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;">{{openedItem.Title}}&nbsp;&nbsp;
             </h4>
-            <ngb-rating max="5" [(rate)]="openMenuItem.Rate" [readonly]="true">
+            <ngb-rating max="5" [(rate)]="openedItem.Rate" [readonly]="true" title="{{openedItem.FeedbacksCount}}">
             </ngb-rating>
+            <i *ngIf="openedItem.FeedbacksCount!=null">({{openedItem.FeedbacksCount}})</i>
+            <i *ngIf="openedItem.FeedbacksCount==null">(0)</i>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -483,29 +491,49 @@
         <div class="modal-body">
             <div class="row">
                 <div class="item text-center col-md-4">
-                    <img style="max-height: 22rem; width: auto;" (click)="open(openMenuItem.Photo.Number)"
+                    <img style="max-height: 22rem; width: auto;" (click)="open(openedItem.Photo.Number)"
                         src="{{openItemPhotoPath}}" />
                 </div>
                 <div class="col-md-8">
                     <div class="row">
-                        <div class="col-md-12">
-                            <label>Price:&nbsp;&nbsp;</label>
-                            <span *ngIf="openMenuItem.PriceWithSales==null"
-                                style="font-size: large;">{{openMenuItem.Price}}
+                        <div class="col-md-12" style="margin-top: 1rem;">
+                            <label style="opacity: 0.6; font-weight: 800;">Price:&nbsp;&nbsp;</label>
+                            <span *ngIf="openedItem.PriceWithSales==null" style="font-size: 2rem;">{{openedItem.Price}}
                                 BYN</span>
-                            <span *ngIf="openMenuItem.PriceWithSales!=null"
-                                style="font-size: large;">{{openMenuItem.PriceWithSales}}
+                            <span *ngIf="openedItem.PriceWithSales!=null"
+                                style="font-size: 2rem;">{{openedItem.PriceWithSales}}
                                 BYN</span>&nbsp;
-                            <span *ngIf="openMenuItem.PriceWithSales!=null"
-                                style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}
+                            <span *ngIf="openedItem.PriceWithSales!=null"
+                                style="text-decoration-line: line-through; opacity: 0.5;">{{openedItem.Price}}
                                 BYN</span>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-                            <h4>{{openMenuItem.Title}}</h4>
+                        <div class="col-md-12" style="margin-top: 1rem;">
+                            <label style="opacity: 0.6; font-weight: 800;">Description:</label>
+                            <textarea readonly
+                                style="cursor: auto; max-height: fit-content; background-color: white; border-left-width: 0; border-right-width: 0; overflow: hidden;"
+                                Title="Description" type="text" class="form-control" value="{{openedItem.Info}}"
+                                placeholder="Description">
+                        </textarea>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 1rem;">
+                            <label style="opacity: 0.6; font-weight: 800;">Note for clients:</label>
+                            <textarea readonly readonly
+                                style="cursor: auto; max-height: fit-content; background-color: white; border-left-width: 0; border-right-width: 0; overflow: hidden;"
+                                Title="Note" type="text" class="form-control" value="{{openedItem.Note}}"
+                                placeholder="Note">
+                </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="margin-top: 1rem;">
+                    <label>Feedbacks</label>
+                    <app-feedback-list [feedbacks]="feedbacks"></app-feedback-list>
                 </div>
             </div>
         </div>

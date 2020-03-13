@@ -7,6 +7,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
+import { SignalRService } from 'app/services/signal-r.service';
 
 @Component({
   selector: 'app-tables-manager',
@@ -16,6 +17,7 @@ import { Subject } from 'rxjs';
 export class TablesManagerComponent implements OnInit {
 
   constructor(
+    public signalRService: SignalRService,
     private tableService: TableService,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -68,6 +70,7 @@ export class TablesManagerComponent implements OnInit {
   tables = new Array();
   tableBookingHistory = new Array();
   tableBookingNow = new Array();
+  tableBookingNowWarningLength = 0;
   freeTables = new Array();
   freeTablesNow = new Array();
   //server list
@@ -111,6 +114,7 @@ export class TablesManagerComponent implements OnInit {
       this.tableService.getMyTableBooks().subscribe(
         res => {
           this.tableBookingNow = res as [];
+          this.countFreeTablesNow();
           console.log("my-total-books", this.tableBookingNow);
         },
         err => {
@@ -134,6 +138,22 @@ export class TablesManagerComponent implements OnInit {
             }
           })
           console.log("total books", this.tableBookingNow);
+          let warning = this.tableBookingNow.find(function (book) {
+            return (book.IsConfirm == null && book.IsActive);
+          })
+          if (warning == undefined) {
+            this.tableBookingNowWarningLength = 0;
+          }
+          else {
+            if (warning.length == undefined) {
+              this.tableBookingNowWarningLength = 1;
+            }
+            else {
+              this.tableBookingNowWarningLength = warning.length;
+            }
+          }
+          console.log("this.tableBookingNowWarningLength", this.tableBookingNowWarningLength);
+
           this.countFreeTablesNow();
         },
         err => {
@@ -143,6 +163,18 @@ export class TablesManagerComponent implements OnInit {
         }
       );
     }
+  }
+
+  startOrder(tableId) {
+    const body = {
+      IsActive: true,
+      StartDate: new Date(),
+      TableId: tableId,
+      LocationId: this.welcomeLocationId
+    }
+    this.signalRService.hubConnection.invoke('StartSession', body, null)
+      .then(res => { })
+      .catch(err => console.error(err));
   }
 
   editTable(id: number) {
@@ -203,10 +235,12 @@ export class TablesManagerComponent implements OnInit {
 
         if ((res1 && res2) || (res3 && res4)) {
           isFree = false;
+          t.IsFree = false;
         }
       });
-      if (isFree || t.TableBooks.length == 0) {
+      if ((isFree || t.TableBooks.length == 0) && !t.IsHaveOrderNow) {
         this.freeTablesNow.push(t);
+        t.IsFree = true;
       }
     })
     return this.freeTablesNow.length;

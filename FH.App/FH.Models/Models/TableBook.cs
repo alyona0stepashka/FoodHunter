@@ -22,11 +22,11 @@ namespace FH.Models.Models
         public bool IsActive { get; set; }
 
         [ForeignKey("Table")]
-        public int TableId { get; set; }
+        public int? TableId { get; set; }
         public virtual Table Table { get; set; }
 
         [ForeignKey("Client")]
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         public virtual UserProfile Client { get; set; }
 
         //-------------------------------

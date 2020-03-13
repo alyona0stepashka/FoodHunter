@@ -13,7 +13,7 @@ namespace FH.Models.Models
         public string Info { get; set; }
 
         [ForeignKey("Location")]
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
         public virtual Location Location { get; set; }
 
         //-------------------------------

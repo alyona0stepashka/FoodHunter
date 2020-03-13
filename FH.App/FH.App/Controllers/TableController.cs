@@ -26,6 +26,9 @@ namespace FH.App.Controllers
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Get table-booking history for current user (as client)
+        /// </summary>
         [HttpGet]
         [Route("my")]
         public IActionResult GetMyTableBooks()
@@ -41,6 +44,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all table-booking by locationId
+        /// </summary>
         [HttpGet]
         [Route("{id}/booking")]
         public IActionResult GetAllTableBooksByLocation(int id)
@@ -60,6 +66,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Accept table-book by bookId
+        /// </summary>
         [HttpGet]
         [Route("{id}/booking/accept")]
         public IActionResult AcceptTableBook(int id)
@@ -79,6 +88,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Decline table-book by bookId
+        /// </summary>
         [HttpGet]
         [Route("{id}/booking/decline")]
         public IActionResult DeclineTableBook(int id)
@@ -98,6 +110,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Cancel table-book by bookId (as client)
+        /// </summary>
         [HttpGet]
         [Route("{id}/booking/cancel")]
         public IActionResult CancelTableBook(int id)
@@ -117,6 +132,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all tables by locationId
+        /// </summary>
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetAllTablesByLocation(int id)
@@ -136,6 +154,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Create table-book
+        /// </summary>
         [HttpPost]
         [Route("booking")]
         public async Task<IActionResult> CreateTableBook([FromForm] CreateTableBookVM table)
@@ -155,6 +176,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Create table
+        /// </summary>
         [HttpPost] 
         public async Task<IActionResult> CreateTable([FromForm] CreateTableVM table)
         {
@@ -173,6 +197,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Update table
+        /// </summary>
         [HttpPut]
         public async Task<IActionResult> UpdateTable([FromForm] CreateTableVM table)
         {
@@ -191,6 +218,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete table
+        /// </summary>
         [HttpDelete]
         [Route("{id}")]
         public IActionResult DeleteTables(int id)

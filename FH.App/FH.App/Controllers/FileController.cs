@@ -25,6 +25,9 @@ namespace FH.App.Controllers
             _locationService = locationService;
         }
 
+        /// <summary>
+        /// Upload photo to location album by locationId
+        /// </summary>
         [HttpPost]
         [Route("location/album/{id}")]
         public async Task<IActionResult> UploadLocationAlbumPhoto(/*[FromForm]*/ int id)
@@ -46,6 +49,10 @@ namespace FH.App.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Delete photo from location album by photoId
+        /// </summary>
         [HttpDelete]
         [Route("location/album/{id}")]
         public async Task<IActionResult> DeleteLocationAlbumPhoto(int id)

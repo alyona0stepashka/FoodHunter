@@ -13,7 +13,9 @@ namespace FH.BLL.Interfaces
     {
         List<SearchTabVM> GetSearchResult(SearchQueryVM search);
         List<Sex> GetSexes();
-        List<Icon> GetIcons();
+        List<IconVM> GetIcons();
         List<CompanySpecification> GetSpecifications();
+        ChartDataClientVM GetChartDataClient(string userId);
+        ChartDataManagerVM GetChartDataManager(string userId);
     }
 }

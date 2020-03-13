@@ -23,6 +23,9 @@ namespace FH.App.Controllers
             _menuService = menuService;
         }
 
+        /// <summary>
+        /// Get menuItem by menuItemId
+        /// </summary>
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetMenuItemPage(int id)
@@ -42,6 +45,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Create menu item
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateMenuItem([FromForm] CreateMenuItemVM menu)
         {
@@ -62,6 +68,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Update menu item
+        /// </summary>
         [HttpPut]
         public async Task<IActionResult> UpdateMenuItem([FromForm] CreateMenuItemVM menu)
         {
@@ -80,6 +89,9 @@ namespace FH.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete menu item
+        /// </summary>
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteMenuItem(int id)

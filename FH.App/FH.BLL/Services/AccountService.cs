@@ -68,6 +68,11 @@ namespace FH.BLL.Services
                 UserId = user.Id
             };
             await _db.UserProfiles.CreateAsync(userProfile);
+            if (model.Role == "manager")
+            {
+                var manager = new Manager {UserProfileId = userProfile.Id};
+            await _db.Managers.CreateAsync(manager);
+            }
 
             //await _chatService.SetLastOnlineAsync(user.Id);
             //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

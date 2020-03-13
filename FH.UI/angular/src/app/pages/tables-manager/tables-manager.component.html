@@ -19,7 +19,7 @@
             <div class="card card-user" style="min-height: auto;">
                 <div class="card-header">
                     <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Tables Management</h5>
-                    <h5 class="card-title" style="font-size: 1.3em;  margin-top: 0; margin-bottom: 0;">Tables:
+                    <h5 class="card-title" style="font-size: 1.3em;  margin-top: 0; margin-bottom: 0;">All tables:
                         {{tables.length}}&nbsp;<i *ngIf="isEdit" title="Add new table"
                             style="padding: inherit; cursor: pointer;" class="fas fa-plus"
                             (click)="openModal(newTable, 'newTable')">
@@ -68,6 +68,13 @@
                                                         title="Delete" (click)="deleteTable(item.Id)"><i
                                                             class="fas fa-ban"></i></button>
                                                 </li>
+                                                <li *ngIf="!isEdit && item.IsFree && !item.IsHaveOrderNow">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Start order session with this table"
+                                                        (click)="startOrder(item.Id)"><i
+                                                            class="fas fa-sign-in-alt"></i></button>
+                                                </li>
                                             </ul>
                                         </div>
                                     </td>
@@ -82,7 +89,8 @@
     <!-- ----------------Booking Management-------------------------->
     <mat-tab>
         <ng-template mat-tab-label><span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
-                <b>Booking</b></span>
+                <b>Booking</b>&nbsp;<b
+                    *ngIf="tableBookingNowWarningLength>0">({{tableBookingNowWarningLength}})</b></span>
         </ng-template>
         <div>
             <div class="card card-user" style="min-height: auto;">
@@ -96,9 +104,9 @@
 
                 </div>
                 <div class="card-body">
-                    <div *ngIf="tableBookingNow.length == 0" class="col-md-12 text-center"
-                        style="background-color: #79797917;">
-                        History is empty
+                    <div *ngIf="tableBookingNow.length==0 || tableBookingNow==null || tableBookingNow==undefined"
+                        class=" text-center" style="background: #8a8a8a26;">
+                        <label class="text-center">No Booking Yet</label>
                     </div>
                     <table *ngIf="tableBookingNow.length > 0" class="table table-striped">
                         <tbody>
@@ -122,7 +130,8 @@
                                         </div>
                                         <div class="row">
                                             <div style="white-space: normal;" class="col-md-12">
-                                                {{book.Client.FirstName}}&nbsp;{{book.Client.LastName}},{{book.Client.Age}}
+                                                {{book.Client.FirstName}}&nbsp;{{book.Client.LastName}},
+                                                {{book.Client.Age}}
                                             </div>
                                         </div>
                                     </td>

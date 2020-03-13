@@ -16,11 +16,13 @@ namespace FH.BLL.Services
     {
         private IUnitOfWork _db { get; set; }
         private readonly IFileService _fileService;
+        private readonly IUserService _userService;
         //private readonly 
-        public LocationService(IUnitOfWork uow, IFileService fileService)
+        public LocationService(IUnitOfWork uow, IFileService fileService, IUserService userService)
         {
             _db = uow;
             _fileService = fileService;
+            _userService = userService;
         }
 
         public async Task<LocationPageVM> UpdateLocationAsync(CreateLocationVM location)
@@ -35,11 +37,11 @@ namespace FH.BLL.Services
             return new LocationPageVM(locNew);
         }
 
-        public async Task<Icon> UploadLocationTopPhoto(IFormFile photo, int locationId)
+        public async Task<IconVM> UploadLocationTopPhoto(IFormFile photo, int locationId)
         {
             var file = await _fileService.CreateFileDbAsync(photo);
             var location = await _db.Locations.GetByIdAsync(locationId);
-            location.TopFileId = file.Id;
+            //location.TopFileId = file.Id;
             await _db.Locations.UpdateAsync(location);
             return file;
         }
@@ -107,7 +109,14 @@ namespace FH.BLL.Services
                     CompanyId = location.CompanyId,
                     AdminId = userId
                 };
-                return new LocationPageVM(await _db.Locations.CreateAsync(newLocation));
+                var dbLocation = await _db.Locations.CreateAsync(newLocation);
+                var manager = new Manager
+                {
+                    LocationId = newLocation.Id,
+                    UserProfileId = _userService.GetUserTabVM(userId).UserProfileId
+                };
+                var dbManager = await _db.Managers.CreateAsync(manager);
+            return new LocationPageVM(dbLocation);
           
         }
 

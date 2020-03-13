@@ -30,9 +30,11 @@ namespace FH.DAL.EF.Repositories
         private IRepository<MenuItem> _menuItems;
         private IRepository<Subscription> _subscriptions;
         private IRepository<Order> _orders;
+        private IRepository<OrderUser> _orderUsers;
         private IRepository<OrderItem> _orderItems;
         private IRepository<Sex> _sexes;
         private IRepository<Cuisine> _cuisines;
+        private IRepository<ManagerCall> _managerCalls;
         private IRepository<CompanySpecification> _companyspecifications;
         private IRepository<SubscriptionType> _subscriptionTypes;
         private IRepository<Icon> _icons;
@@ -41,6 +43,7 @@ namespace FH.DAL.EF.Repositories
 
         public IRepository<UserProfile> UserProfiles => _userProfiles ?? (_userProfiles = new Repository<UserProfile>(_db));
         public IRepository<FileModel> FileModels => _fileModels ?? (_fileModels = new Repository<FileModel>(_db));
+        public IRepository<ManagerCall> ManagerCalls => _managerCalls ?? (_managerCalls = new Repository<ManagerCall>(_db));
         public IRepository<CuisineUser> CuisineUsers => _cuisineUsers ?? (_cuisineUsers = new Repository<CuisineUser>(_db));
         public IRepository<Company> Companys => _companys ?? (_companys = new Repository<Company>(_db));
         public IRepository<Location> Locations => _locations ?? (_locations = new Repository<Location>(_db));
@@ -50,6 +53,7 @@ namespace FH.DAL.EF.Repositories
         public IRepository<Subscription> Subscriptions => _subscriptions ?? (_subscriptions = new Repository<Subscription>(_db));
         public IRepository<MenuItem> MenuItems => _menuItems ?? (_menuItems = new Repository<MenuItem>(_db));
         public IRepository<Order> Orders => _orders ?? (_orders = new Repository<Order>(_db));
+        public IRepository<OrderUser> OrderUsers => _orderUsers ?? (_orderUsers = new Repository<OrderUser>(_db));
         public IRepository<OrderItem> OrderItems => _orderItems ?? (_orderItems = new Repository<OrderItem>(_db));
         public IRepository<Sex> Sexes => _sexes ?? (_sexes = new Repository<Sex>(_db));
         public IRepository<Cuisine> Cuisines => _cuisines ?? (_cuisines = new Repository<Cuisine>(_db));

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FH.App.Hubs;
 using FH.BLL.Infrastructure;
 using FH.BLL.Interfaces;
 using FH.BLL.Services;
@@ -22,6 +16,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 //using Microsoft.OData.Edm;
 
 namespace FH.App
@@ -72,11 +72,18 @@ namespace FH.App
                         builder.WithOrigins("http://localhost:4200")
 
                             .AllowAnyHeader()
+                            .AllowCredentials()
                             .AllowAnyMethod();
                     });
             });
 
-            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+            });
+
+
+            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"]);
 
             services.AddAuthentication(x =>
             {
@@ -87,7 +94,7 @@ namespace FH.App
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = false;
-                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -165,7 +172,9 @@ Example: 'Bearer 12345abcdef'",
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStaticService, StaticService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<ITableService, TableService>();
         }
 
@@ -189,6 +198,10 @@ Example: 'Bearer 12345abcdef'",
             app.UseStaticFiles();
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<OrderHub>("/hub");
+            });  
             //app.UseMvc(routeBuilder =>
             //{
             //    routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());

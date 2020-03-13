@@ -16,11 +16,15 @@ namespace FH.Models.Models
         public string Status { get; set; }
 
         [ForeignKey("Order")]
-        public int OrderId { get; set; }
+        public int? OrderId { get; set; }
         public virtual Order Order { get; set; }
 
+        [ForeignKey("MenuItem")]
+        public int? MenuItemId { get; set; }
+        public virtual MenuItem MenuItem { get; set; }
+
         [ForeignKey("User")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public virtual UserProfile User { get; set; }
 
         //------------------------

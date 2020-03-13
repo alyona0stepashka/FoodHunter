@@ -7,6 +7,8 @@ import { environment } from 'environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Lightbox } from 'ngx-lightbox';
+import { SignalRService } from 'app/services/signal-r.service';
+import { FeedbackService } from 'app/services/feedback.service';
 
 @Component({
   selector: 'app-menu-manager',
@@ -16,9 +18,11 @@ import { Lightbox } from 'ngx-lightbox';
 export class MenuManagerComponent implements OnInit {
 
   constructor(
+    public feedbackService: FeedbackService,
+    public signalRService: SignalRService,
     private menuService: MenuService,
-    private staticService: StaticService,
     private formBuilder: FormBuilder,
+    private staticService: StaticService,
     private toastr: ToastrService,
     private activateRoute: ActivatedRoute,
     private lbLightbox: Lightbox,
@@ -70,17 +74,27 @@ export class MenuManagerComponent implements OnInit {
   //bool vars for role access
 
   //server lists
+  feedbacks = new Array();
   menus = new Array();
   icons = new Array();
   //server lists
 
-  //crud menu
+  //crud
   editMenu: any;
-  //crud menu
+  orderItem = {
+    Count: 1,
+    PricePerItem: 1,
+    Title: "",
+    OrderId: 0,
+    UserProfileId: '1',
+    MenuItemId: '0'
+  }
+  //crud
 
   //crud menu items
   editMenuItem: any;
   editItemPhotoPath;
+  openedItem: any;
   openMenuItem = {
     Id: 1,
     Title: "Veritatis vel culpa",
@@ -109,6 +123,7 @@ export class MenuManagerComponent implements OnInit {
   imageUrl = './assets/img/upload-photo.jpg';
   serverUrl = environment.serverURL;
   private lbAlbum: any[] = new Array();
+  index = 0;
   //work with images
 
   async ngOnInit() {
@@ -153,13 +168,12 @@ export class MenuManagerComponent implements OnInit {
       res => {
         this.menus = res as [];
         this.isNotFound = (this.menus.length == 0 && !this.isEdit);
-        let index = 0;
         this.menus.forEach(menu => {
           if (menu != null && menu.MenuItems != null) {
             menu.MenuItems.forEach(item => {
               this.openMenuItem = item;
-              item.Photo.Number = index;
-              index++;
+              item.Photo.Number = this.index;
+              this.index++;
               this.lbAlbum.push({ src: environment.serverURL + item.Photo.Value, caption: item.Title });
             })
           }
@@ -341,9 +355,57 @@ export class MenuManagerComponent implements OnInit {
     );
   }
 
+  loadFeedbacksMenuItem(id) {
+    this.feedbackService.getMenuItemFeedbacks(id).subscribe(
+      (res: any) => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+        this.loadLocationMenu();
+        this.modalService.dismissAll();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error(err.error, 'Error');
+      }
+    );
+  }
+
   setCurrentMenuId(id) {
     this.currentMenuId = id;
     console.log(id);
+  }
+
+  onOrderItem(item) {
+    this.orderItem.MenuItemId = item.Id;
+    this.orderItem.PricePerItem = item.PriceWithSales;
+    if (item.PriceWithSales == null || item.PriceWithSales == 0) {
+      this.orderItem.PricePerItem = item.Price;
+    }
+    this.orderItem.Title = item.Title;
+    this.orderItem.UserProfileId = localStorage.getItem('ClientId');
+    this.orderItem.OrderId = 0;
+    this.signalRService.hubConnection.invoke('AddOrderItem', this.orderItem)
+      .then(res => {
+        this.toastr.success(
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          "",
+          {
+            timeOut: 4000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon"
+          }
+        );
+      })
+      .catch(err => console.error(err));
   }
 
   uploadPhoto(file: FileList) {
@@ -357,6 +419,8 @@ export class MenuManagerComponent implements OnInit {
 
   openModal(content, goal?: string, id?: any) {
     if (goal == "newMenuItem") {
+      this.UploadFile = null;
+      this.imageUrl = './assets/img/upload-photo.jpg';
       this.menuItemForm.patchValue({ MenuId: id, IsActive: true });
       this.IsActive = true;
       this.IsChecked = true;
@@ -380,9 +444,12 @@ export class MenuManagerComponent implements OnInit {
       console.log("id", id);
       var menu = this.menus.find(m => m.Id == this.currentMenuId);
       console.log("openMenu", menu);
-      this.openMenuItem = menu.MenuItems.find(m => m.Id == id);
+      var item = menu.MenuItems.find(m => m.Id == id);
+      this.openedItem = item;
+      this.openMenuItem = { ...item };
       console.log("openMenuItem", this.openMenuItem);
       this.openItemPhotoPath = environment.serverURL + this.openMenuItem.Photo.Value;
+      this.loadFeedbacksMenuItem(id);
     }
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
