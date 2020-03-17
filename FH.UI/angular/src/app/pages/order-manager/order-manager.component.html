@@ -52,8 +52,7 @@
                                 <i class="fas fa-dollar-sign"></i>
                             </button>
                             <button *ngIf="!isManager" title="Add feedback about this order" class="btn"
-                                style="padding: inherit;"
-                                (click)="openModal(addFeedback, 'addFeedbackOrder', order.Id)">
+                                style="padding: inherit;" (click)="openModal(addFeedback, 'addFeedbackOrder', null)">
                                 <i class="fas fa-star"></i>
                             </button>
                             <button *ngIf="isManager && order.IsActive" title="Cancel this order-session" class="btn"

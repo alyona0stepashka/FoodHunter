@@ -83,8 +83,8 @@ namespace FH.BLL.Services
                 retVal.ClientPaymentActivity.Add(countPayment);
             } 
             retVal.PaymentLastMonth = retVal.ClientPaymentActivity[DateTime.Now.Month - 1];
-            var ordersToday = orders.Where(b => (b.StartDate) == DateTime.Today);
-            var ordersYesterday = orders.Where(b => (b.StartDate) == DateTime.Today.AddDays(-1));
+            var ordersToday = orders.Where(b => (b.StartDate.DayOfYear) == DateTime.Today.DayOfYear);
+            var ordersYesterday = orders.Where(b => (b.StartDate.DayOfYear) == DateTime.Today.AddDays(-1).DayOfYear);
             retVal.ClientsToday = ordersToday.Select(m => m.OrderUsers.Count).Sum();
             for (var i = 0; i < 24; i++)
             {

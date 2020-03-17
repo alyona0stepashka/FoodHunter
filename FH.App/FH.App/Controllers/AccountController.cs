@@ -13,7 +13,6 @@ namespace FH.App.Controllers
 {
     [Route("api/account")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountController : ControllerBase
     {
 
@@ -75,6 +74,7 @@ namespace FH.App.Controllers
         /// </summary>
         [HttpGet]
         [Route("staff")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult GetStaffList() 
         {
             try
