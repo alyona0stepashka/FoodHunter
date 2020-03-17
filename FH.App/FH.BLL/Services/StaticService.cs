@@ -98,18 +98,18 @@ namespace FH.BLL.Services
             return retVal;
         }
 
-        public List<Sex> GetSexes()
+        public List<SexVM> GetSexes()
         {
-            var items = _db.Sexes.GetAll().ToList();
+            var items = _db.Sexes.GetAll().Select(m=>new SexVM(m)).ToList();
             if (items == null)
             {
                 throw new Exception("Sexes not found");
             }
             return items; 
         }
-        public List<CompanySpecification> GetSpecifications()
+        public List<CompanySpecificationVM> GetSpecifications()
         {
-            var items = _db.CompanySpecifications.GetAll().ToList();
+            var items = _db.CompanySpecifications.GetAll().Select(m => new CompanySpecificationVM(m)).ToList();
             if (items == null)
             {
                 throw new Exception("Specifications not found");

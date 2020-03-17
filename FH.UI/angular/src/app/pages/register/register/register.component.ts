@@ -22,7 +22,8 @@ export class RegisterComponent implements OnInit {
     private toastr: ToastrService,
     private staticService: StaticService) { }
 
-  @Input() isStaff = false;
+  @Input() isStaff;
+  @Input() locationId;
 
   submitted = false;
   UploadFile: File = null;
@@ -30,6 +31,7 @@ export class RegisterComponent implements OnInit {
   public sexes: StaticBase[] = new Array();
 
   registerForm = this.formBuilder.group({
+    LocationId: [''],
     FirstName: ['', [Validators.required]],
     LastName: ['', [Validators.required]],
     Phone: ['', [Validators.required/*, Validators.pattern("^(375-)[0-9]{2}(-)[0-9]{3}(-)[0-9]{2}(-)[0-9]{2}$")*/]],
@@ -61,7 +63,10 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return null;
     }
+    if (this.locationId != '0' && this.locationId != undefined) {
 
+      this.registerForm.patchValue({ LocationId: this.locationId });
+    }
     this.service.register(this.registerForm, this.UploadFile).subscribe(
       (res: any) => {
         // this.userId = res as string;
@@ -76,10 +81,7 @@ export class RegisterComponent implements OnInit {
             toastClass: "alert alert-success alert-with-icon"
           }
         );
-        if (this.isStaff) {
-          this.router.navigate(['/dashboard-manager/staff']);
-        }
-        this.router.navigate(['/welcome/login']);
+        this.router.navigate(['/dashboard-manager/staff']);
       },
       err => {
         console.log(err);

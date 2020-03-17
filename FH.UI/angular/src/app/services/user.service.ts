@@ -18,6 +18,10 @@ export class UserService {
     body.append("Password", registerFormData.value.Password);
     body.append("Phone", registerFormData.value.Phone);
     body.append("DateBirth", registerFormData.value.DateBirth);
+    if (registerFormData.value.LocationId != null && registerFormData.value.LocationId != undefined && registerFormData.value.LocationId != '0') {
+
+      body.append("LocationId", registerFormData.value.LocationId);
+    }
     body.append("SexId", registerFormData.value.Sex);
     body.append("Photo", fileToUpload);
     body.append("Role", registerFormData.value.Role);
@@ -33,6 +37,14 @@ export class UserService {
   }
 
   getMyProfile() {
-    return this.http.get(environment.serverURL + '/api/users/current');
+    return this.http.get(environment.serverURL + '/api/acoount/current');
+  }
+
+  getStaffByLocation() {
+    return this.http.get(environment.serverURL + '/api/account/staff');
+  }
+
+  deleteUser(id) {
+    return this.http.delete(environment.serverURL + '/api/account/delete');
   }
 }

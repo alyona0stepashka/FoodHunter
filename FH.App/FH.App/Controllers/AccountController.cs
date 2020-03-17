@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FH.BLL.Interfaces;
 using FH.BLL.VMs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace FH.App.Controllers
 {
     [Route("api/account")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountController : ControllerBase
     {
 
@@ -69,6 +71,25 @@ namespace FH.App.Controllers
         }
 
         /// <summary>
+        /// Get staff list by location
+        /// </summary>
+        [HttpGet]
+        [Route("staff")]
+        public IActionResult GetStaffList() 
+        {
+            try
+            { 
+                var staff = _accountService.GetLocationStaff(User.Claims.First(c => c.Type == "UserID").Value);
+                staff.Reverse();
+                return Ok(staff);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Email confirmation
         /// </summary>
         [HttpGet]
@@ -105,6 +126,24 @@ namespace FH.App.Controllers
                 } 
                 editUser.Id = User.Claims.First(c => c.Type == "UserID").Value;
                 await _accountService.EditAccountInfo(editUser); 
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Delete user
+        /// </summary>
+        [HttpDelete]
+        [Route("delete")]
+        public IActionResult DeleteUser(string userId)
+        {
+            try
+            {
+                _accountService.DeleteUser(userId);
                 return Ok();
             }
             catch (Exception ex)

@@ -36,6 +36,7 @@ namespace FH.App.Controllers
             try
             {
                 var companies =  _companyService.GetAllCompanies();
+                companies.Reverse();
                 return Ok(companies);
             }
             catch (Exception ex)

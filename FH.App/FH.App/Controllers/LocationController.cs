@@ -65,6 +65,7 @@ namespace FH.App.Controllers
                     throw new Exception("Point is missing");
                 }
                 var locations = _locationService.GetLocationsNearPoint(lon, lat);
+                locations.Reverse();
                 return Ok(locations);
             }
             catch (Exception ex)
@@ -89,6 +90,7 @@ namespace FH.App.Controllers
                     throw new Exception("CompanyId is missing");
                 }
                 var locationPage = _locationService.GetLocationsByCompany(companyId);
+                locationPage.Reverse();
                 return Ok(locationPage);
             }
             catch (Exception ex)

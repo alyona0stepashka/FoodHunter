@@ -38,6 +38,8 @@ namespace FH.App.Controllers
                 {
                     throw new Exception("Orders not found by id.");
                 }
+
+                orderList.Reverse();
                 return Ok(orderList);
             }
             catch (Exception ex)
@@ -61,6 +63,7 @@ namespace FH.App.Controllers
                 {
                     throw new Exception("Orders not found by id.");
                 }
+                orderList.Reverse();
                 return Ok(orderList);
             }
             catch (Exception ex)
@@ -84,6 +87,7 @@ namespace FH.App.Controllers
                 {
                     throw new Exception("Orders not found by id.");
                 }
+                orderList.Reverse();
                 return Ok(orderList);
             }
             catch (Exception ex)
@@ -141,6 +145,7 @@ namespace FH.App.Controllers
                 {
                     throw new Exception("Orders not found by id.");
                 }
+                orderList.Reverse();
                 return Ok(orderList);
             }
             catch (Exception ex)

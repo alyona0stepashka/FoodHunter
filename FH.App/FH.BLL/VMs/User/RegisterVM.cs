@@ -10,6 +10,8 @@ namespace FH.BLL.VMs
 
     public class RegisterVM
     {
+        public int? LocationId { get; set; }
+
         public string Role { get; set; } = "user";
 
         public string Email { get; set; }

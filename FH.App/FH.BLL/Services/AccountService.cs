@@ -70,8 +70,8 @@ namespace FH.BLL.Services
             await _db.UserProfiles.CreateAsync(userProfile);
             if (model.Role == "manager")
             {
-                var manager = new Manager {UserProfileId = userProfile.Id};
-            await _db.Managers.CreateAsync(manager);
+                var manager = new Manager {UserProfileId = userProfile.Id, LocationId = model.LocationId};
+                await _db.Managers.CreateAsync(manager);
             }
 
             //await _chatService.SetLastOnlineAsync(user.Id);
@@ -231,6 +231,25 @@ namespace FH.BLL.Services
                 $"Your Account Info has been updating.");
 
         }
+
+        public List<UserTabVM> GetLocationStaff(string userId)
+        {
+            var managers = new List<UserTabVM>();
+            var manager = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId)?.Manager;
+            if (manager != null && manager.Location != null)
+            { 
+                    managers = manager.Location.Managers.Select(m=>new UserTabVM(m.UserProfile)).ToList(); 
+            }
+
+            return managers;
+        }
+
+        public void DeleteUser(string userId)
+        {
+            var user = _userManager.Users.FirstOrDefault(m => m.Id == userId);
+            if (user != null) _userManager.DeleteAsync(user);
+        }
+
 
         public void Dispose()
         {
