@@ -178,5 +178,7 @@ namespace FH.DAL.DataContext
                 await db.UserProfiles.CreateAsync(userProfile2);
             }
         }
+
+
     }
 }

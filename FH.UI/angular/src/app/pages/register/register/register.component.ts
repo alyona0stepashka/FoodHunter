@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -22,24 +22,26 @@ export class RegisterComponent implements OnInit {
     private toastr: ToastrService,
     private staticService: StaticService) { }
 
-  registerForm: FormGroup;
+  @Input() isStaff = false;
+
   submitted = false;
   UploadFile: File = null;
   imageUrl = './assets/img/upload-photo.jpg';
   public sexes: StaticBase[] = new Array();
 
+  registerForm = this.formBuilder.group({
+    FirstName: ['', [Validators.required]],
+    LastName: ['', [Validators.required]],
+    Phone: ['', [Validators.required/*, Validators.pattern("^(375-)[0-9]{2}(-)[0-9]{3}(-)[0-9]{2}(-)[0-9]{2}$")*/]],
+    Sex: ['', [Validators.required]],
+    DateBirth: ['', [Validators.required]],
+    Email: ['', [Validators.required, Validators.email]],
+    Password: ['', [Validators.required, Validators.minLength(6)]],
+    Photo: [null, [Validators.required]],
+    Role: ['manager', [Validators.required]]
+  });
+
   ngOnInit() {
-    this.registerForm = this.formBuilder.group({
-      FirstName: ['', [Validators.required]],
-      LastName: ['', [Validators.required]],
-      Phone: ['', [Validators.required/*, Validators.pattern("^(375-)[0-9]{2}(-)[0-9]{3}(-)[0-9]{2}(-)[0-9]{2}$")*/]],
-      Sex: ['', [Validators.required]],
-      DateBirth: ['', [Validators.required]],
-      Email: ['', [Validators.required, Validators.email]],
-      Password: ['', [Validators.required, Validators.minLength(6)]],
-      Photo: [null, [Validators.required]],
-      Role: ['', [Validators.required]]
-    });
     this.staticService.getSexes().subscribe(
       res => {
         this.sexes = res as StaticBase[];
@@ -74,9 +76,10 @@ export class RegisterComponent implements OnInit {
             toastClass: "alert alert-success alert-with-icon"
           }
         );
+        if (this.isStaff) {
+          this.router.navigate(['/dashboard-manager/staff']);
+        }
         this.router.navigate(['/welcome/login']);
-        // this.router.navigate(['/auth/first/' + this.userId]); 
-        // this.router.navigate(['/auth/login/' + this.userId]);
       },
       err => {
         console.log(err);
