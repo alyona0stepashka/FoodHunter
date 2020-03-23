@@ -1,0 +1,203 @@
+<div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i class="nc-icon nc-globe text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Orders</p>
+                            <p class="card-title">{{chartData.OrdersLastMonth}}
+                                <p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fa fa-calendar-o"></i> This month
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i class="nc-icon nc-money-coins text-success"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Payment</p>
+                            <p class="card-title">BYN {{chartData.PaymentLastMonth}}
+                                <p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fa fa-calendar-o"></i> This month
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i class="nc-icon nc-vector text-danger"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div *ngIf="isManager" class="numbers">
+                            <p class="card-category">Clients</p>
+                            <p class="card-title">+{{chartData.ClientsToday}}
+                                <p>
+                        </div>
+                        <div *ngIf="!isManager" class="numbers">
+                            <p class="card-category">Visited Locations</p>
+                            <p class="card-title">+{{chartData.VisitedLocationsLastMonth}}
+                                <p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div *ngIf="isManager" class="stats">
+                    <i class="fa fa-clock-o"></i> Today
+                </div>
+                <div *ngIf="!isManager" class="stats">
+                    <i class="fa fa-calendar-o"></i> This month
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i class="nc-icon nc-favourite-28 text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Average rating</p>
+                            <p class="card-title">~{{chartData.AverageRate}}
+                                <p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fa fa-history"></i> All time
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isManager" class="row">
+    <div class="col-md-12">
+        <div class="card card-chart">
+            <div class="card-header">
+                <h5 class="card-title">Tables occupancy</h5>
+                <p class="card-category">24 Hours performance</p>
+            </div>
+            <div class="card-body">
+                <canvas id="speedChart" width="400" height="100"></canvas>
+            </div>
+            <div class="card-footer">
+                <div class="chart-legend">
+                    <i class="fa fa-circle text-info"></i> Yesterday
+                    <i class="fa fa-circle text-warning"></i> Today
+                </div>
+                <hr />
+                <div class="card-stats">
+                    <i class="fa fa-check"></i> Updated server data
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!isManager" class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <h5 class="card-title">My Payment Activity</h5>
+                <p class="card-category">Full year performance</p>
+            </div>
+            <div class="card-body ">
+                <canvas id=chartHours width="400" height="100"></canvas>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fa fa-history"></i> Updated 3 minutes ago
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isManager" class="row">
+    <div class="col-md-4">
+        <div class="card ">
+            <div class="card-header ">
+                <h5 class="card-title">Rate Statistics</h5>
+                <p class="card-category">Based on clients feedbacks</p>
+            </div>
+            <div class="card-body ">
+                <canvas
+                    *ngIf="chartData.PerfectRateCount!=0 || chartData.NormalRateCount!=0 || chartData.BadRateCount!=0"
+                    id="chartEmail"></canvas>
+                <div *ngIf="chartData.PerfectRateCount==0 && chartData.NormalRateCount==0 && chartData.BadRateCount==0"
+                    class=" text-center" style="background: #8a8a8a26;">
+                    <label class="text-center">No Rating Yet</label>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <div class="legend">
+                    <i class="fa fa-circle text-warning"></i> Perfect
+                    <i class="fa fa-circle text-primary"></i> Normal
+                    <i class="fa fa-circle text-black"></i> Bad
+                </div>
+                <hr>
+                <div class="stats">
+                    <i class="fa fa-calendar"></i> All time
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card ">
+            <div class="card-header ">
+                <h5 class="card-title">Client Payment Activity</h5>
+                <p class="card-category">Full year performance</p>
+            </div>
+            <div class="card-body ">
+                <canvas id=chartHours width="400" height="100"></canvas>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fa fa-history"></i> Updated 3 minutes ago
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

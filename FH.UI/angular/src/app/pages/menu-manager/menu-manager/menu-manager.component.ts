@@ -369,7 +369,7 @@ export class MenuManagerComponent implements OnInit {
           }
         );
         this.loadLocationMenu();
-        this.modalService.dismissAll();
+        //this.modalService.dismissAll();
       },
       err => {
         console.log(err);

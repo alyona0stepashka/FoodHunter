@@ -140,14 +140,14 @@ namespace FH.DAL.DataContext
             {
                 var newUser = new IdentityUser()
                 {
-                    Email = "user1@mail.ru",
-                    UserName = "user1@mail.ru",
+                    Email = "q@q",
+                    UserName = "q@q",
                     EmailConfirmed = true
                 };
                 var newUser2 = new IdentityUser
                 {
-                    Email = "user2@mail.ru",
-                    UserName = "user2@mail.ru",
+                    Email = "a@a",
+                    UserName = "a@a",
                     EmailConfirmed = true,
                 };
                 await userManager.CreateAsync(newUser, "parol01");
@@ -176,6 +176,7 @@ namespace FH.DAL.DataContext
                 };
                 await db.UserProfiles.CreateAsync(userProfile);
                 await db.UserProfiles.CreateAsync(userProfile2);
+
             }
         }
 
