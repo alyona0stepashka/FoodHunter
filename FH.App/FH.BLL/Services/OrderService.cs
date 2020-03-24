@@ -187,17 +187,16 @@ namespace FH.BLL.Services
             }
 
             if (manager.Location != null && manager.Location.Orders != null)
-                {
-                    var orders = manager.Location.Orders.Select(m =>
+            {
+                var orders = manager.Location.Orders;
+                var orders2 = new List<OrderTabVM>();
+                    foreach (var ord in orders)
                     {
-                        if (m.Manager != null && m.Manager.UserProfile != null)
-                                return new OrderTabVM(m, m.Location, m.Manager.UserProfile);
-                        return new OrderTabVM();
-                    }).ToList();
-                    //var noManagersOrders = 
-                    return orders;
-                }
-
+                        var ord2 = _db.Orders.GetAll().FirstOrDefault(m=>m.Id==ord.Id);
+                        if (ord2 != null) orders2.Add(new OrderTabVM(ord2, ord2.Location, ord2.Manager?.UserProfile??new UserProfile()));
+                    } 
+                    return orders2;
+            }
             return new List<OrderTabVM>();
         }
 

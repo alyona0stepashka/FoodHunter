@@ -131,8 +131,8 @@ export class OrderListComponent implements OnInit {
   assignOrderAsManager(orderId) {
     this.signalRService.hubConnection.invoke('AssignManagerToSession', orderId, null)
       .then(res => {
-        new Promise(resolve => setTimeout(resolve, 1000));
-        this.redirectToOrder(orderId);
+        new Promise(resolve => setTimeout(resolve, 1000)).then(res => { this.redirectToOrder(orderId); });
+
       })
       .catch(err => console.error(err));
   }

@@ -9,7 +9,7 @@
                 <ng-container *ngFor="let f of feedbacks">
                     <tr>
                         <td width="10%">
-                            <div class="row">
+                            <div *ngIf="f.User.Photo!=null && f.User.Photo.Value!=null" class="row">
                                 <div class="item text-center col-md-12">
                                     <img style="max-height: 3rem; width: auto; cursor: pointer;"
                                         (click)="open(f.User.Photo.Number)" clas="avatar-mini"

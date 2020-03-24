@@ -23,9 +23,7 @@ namespace FH.BLL.VMs
                 Stars = m.Stars;
                 Comment = m.Comment;
                 if (p != null)
-                {
-                    if (p.Sex != null)
-                        if (p.File != null)
+                { 
                             User = new UserTabVM(p, p.Sex, p.File);
                 }
                 if (photos != null && photos.Any())
