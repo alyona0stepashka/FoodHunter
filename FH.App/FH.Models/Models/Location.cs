@@ -11,6 +11,8 @@ namespace FH.Models.Models
     {
         public string Name { get; set; }
 
+        public string Currency { get; set; }
+
         public string Longitude { get; set; }
 
         public string Latitude { get; set; }
@@ -30,8 +32,7 @@ namespace FH.Models.Models
 //        public virtual FileModel TopFile { get; set; }
 
         //-----------------------
-        public virtual List<Manager> Managers { get; set; }
-        public virtual List<Subscription> Subscriptions { get; set; }
+        public virtual List<Manager> Managers { get; set; } 
         public virtual List<Menu> Menus { get; set; }
         public virtual List<Order> Orders { get; set; }
         public virtual List<Feedback> Feedbacks { get; set; }

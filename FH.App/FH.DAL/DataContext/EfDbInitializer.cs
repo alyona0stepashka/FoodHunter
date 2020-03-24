@@ -40,35 +40,7 @@ namespace FH.DAL.DataContext
                     await db.CompanySpecifications.CreateAsync(item);
                     //id1 = item.Id;
                 }
-            }
-
-            //------------------------
-            //var id2 = 0;
-            if (!db.Cuisines.GetAll().Any())
-            {
-                var list = new List<Cuisine>()
-                {
-                    new Cuisine() {Value = "Not defined"},
-                    new Cuisine() {Value = "Belarusian"},
-                    new Cuisine() {Value = "Russian"},
-                    new Cuisine() {Value = "Chinese"},
-                    new Cuisine() {Value = "Greek"},
-                    new Cuisine() {Value = "Azerbaijani"},
-                    new Cuisine() {Value = "Brazilian"},
-                    new Cuisine() {Value = "French"},
-                    new Cuisine() {Value = "German"},
-                    new Cuisine() {Value = "Indian"},
-                    new Cuisine() {Value = "Jewish"},
-                    new Cuisine() {Value = "Ukrainian"},
-                    new Cuisine() {Value = "Italian"},
-                    new Cuisine() {Value = "Armenian"}
-                };
-                foreach (var item in list)
-                {
-                    await db.Cuisines.CreateAsync(item);
-                    //id2 = item.Id;
-                }
-            }
+            } 
 
             //------------------------
             var id3 = 0;
@@ -86,27 +58,7 @@ namespace FH.DAL.DataContext
                     await db.Sexes.CreateAsync(item);
                     id3 = item.Id;
                 }
-            }
-
-            //------------------------
-            //var id4 = 0;
-            if (!db.SubscriptionTypes.GetAll().Any())
-            {
-                var list = new List<SubscriptionType>()
-                {
-                    new SubscriptionType()
-                        {Title = "Free Trial", PricePerMonth = 0, Info = "Free trial month with Gold level"},
-                    new SubscriptionType()
-                        {Title = "Silver", PricePerMonth = 25, Info = "Take orders, 3 menu, 15 menu items"},
-                    new SubscriptionType()
-                        {Title = "Gold", PricePerMonth = 50, Info = "Silver + unlimited menu, reports"}
-                };
-                foreach (var item in list)
-                {
-                    await db.SubscriptionTypes.CreateAsync(item);
-                    //id4 = item.Id;
-                }
-            }
+            } 
 
             //------------------------
             //var id5 = 0;

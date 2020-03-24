@@ -206,26 +206,7 @@ namespace FH.BLL.Services
             if (editResult == null)
             {
                 throw new Exception("Edit user info fail");
-            }
-
-            if (model.CuisinePreference != null)
-            {
-                var dbCuisinePrefs = _db.CuisineUsers.GetAll().Where(m => m.UserProfileId == userProfile.Id);
-                foreach (var dbItem in dbCuisinePrefs)
-                {
-                    if (!model.CuisinePreference.Select(m => m == dbItem.CuisineId).Any())
-                    {
-                        await _db.CuisineUsers.DeleteAsync(dbItem.Id);
-                        model.CuisinePreference.Remove(dbItem.CuisineId);
-                    }
-                }
-
-                foreach (var newItemId in model.CuisinePreference)
-                {
-                    var bu = await _db.CuisineUsers.CreateAsync(new CuisineUser
-                        {CuisineId = newItemId, UserProfileId = userProfile.Id});
-                }
-            }
+            } 
 
             await _emailService.SendEmailAsync(user.Email, "Edit your account info",
                 $"Your Account Info has been updating.");

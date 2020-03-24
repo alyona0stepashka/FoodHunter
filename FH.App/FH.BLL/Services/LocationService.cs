@@ -33,6 +33,7 @@ namespace FH.BLL.Services
             locationDb.Longitude = location.Longitude;
             locationDb.Latitude = location.Latitude;
             locationDb.CompanyId = location.CompanyId;
+            locationDb.Currency = location.Currency;
             var locNew = await _db.Locations.UpdateAsync(locationDb);
             return new LocationPageVM(locNew);
         }
@@ -107,6 +108,7 @@ namespace FH.BLL.Services
                     Longitude = location.Longitude,
                     Latitude = location.Latitude,
                     CompanyId = location.CompanyId,
+                    Currency = location.Currency,
                     AdminId = userId
                 };
                 var dbLocation = await _db.Locations.CreateAsync(newLocation);
@@ -115,7 +117,7 @@ namespace FH.BLL.Services
                     LocationId = newLocation.Id,
                     UserProfileId = _userService.GetUserTabVM(userId).UserProfileId
                 };
-                var dbManager = await _db.Managers.CreateAsync(manager);
+                await _db.Managers.CreateAsync(manager);
             return new LocationPageVM(dbLocation);
           
         }

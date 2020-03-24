@@ -19,18 +19,18 @@ export class FeedbackListComponent implements OnInit {
     private lbLightbox: Lightbox,
     private router: Router) { }
 
-  //server list
+  // server list
   @Input() feedbacks;
-  //server list
+  // server list
 
-  //logic vars
+  // logic vars
   serverUrl = environment.serverURL;
   isEmpty = false;
-  //logic vars
+  // logic vars
 
-  //images
+  // images
   private lbAlbum: any[] = new Array();
-  //images
+  // images
 
   ngOnInit() {
     this.feedbacks.forEach(element => {

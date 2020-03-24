@@ -29,9 +29,9 @@
                                     <div class="form-group">
                                         <label>Menu Name</label>
                                         <input Title="Title" type="text" formControlName="Title" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.Title.errors }"
+                                            [ngClass]="{ 'is-invalid': submittedMenu && f.Title.errors }"
                                             placeholder="Title" />
-                                        <div *ngIf="submitted && f.Title.errors" class="invalid-feedback">
+                                        <div *ngIf="submittedMenu && f.Title.errors" class="invalid-feedback">
                                             <div *ngIf="f.Title.errors.required">Title is required</div>
                                         </div>
                                     </div>
@@ -40,7 +40,7 @@
                                     <div class="form-group">
                                         <label>Remark</label>
                                         <select formControlName="IconId" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.IconId.errors }"
+                                            [ngClass]="{ 'is-invalid': submittedMenu && f.IconId.errors }"
                                             placeholder="Remark">
                                             <option value="" selected disabled hidden>Choose a remark...</option>
                                             <option *ngFor="let icon of icons" value="{{icon.Id}}">
@@ -54,7 +54,7 @@
                                                     </div>
                                                 </div>
                                         </select>
-                                        <div *ngIf="submitted && f.IconId.errors" class="invalid-feedback">
+                                        <div *ngIf="submittedMenu && f.IconId.errors" class="invalid-feedback">
                                             <div *ngIf="f.IconId.errors.required">Remark is required</div>
                                         </div>
                                     </div>
@@ -65,9 +65,9 @@
                                     <div class="form-group">
                                         <label>Description</label>
                                         <input Title="Info" type="text" formControlName="Info" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.Info.errors }"
+                                            [ngClass]="{ 'is-invalid': submittedMenu && f.Info.errors }"
                                             placeholder="Info" />
-                                        <div *ngIf="submitted && f.Info.errors" class="invalid-feedback">
+                                        <div *ngIf="submittedMenu && f.Info.errors" class="invalid-feedback">
                                             <div *ngIf="f.Info.errors.required">Info is required</div>
                                         </div>
                                     </div>
@@ -321,8 +321,8 @@
                         <div class="form-group">
                             <label>Menu Name</label>
                             <input Title="Title" type="text" formControlName="Title" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.Title.errors }" placeholder="Title" />
-                            <div *ngIf="submitted && f.Title.errors" class="invalid-feedback">
+                                [ngClass]="{ 'is-invalid': submittedEditMenu && f.Title.errors }" placeholder="Title" />
+                            <div *ngIf="submittedEditMenu && f.Title.errors" class="invalid-feedback">
                                 <div *ngIf="f.Title.errors.required">Title is required</div>
                             </div>
                         </div>
@@ -331,7 +331,7 @@
                         <div class="form-group">
                             <label>Remark</label>
                             <select formControlName="IconId" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.IconId.errors }" placeholder="Remark">
+                                [ngClass]="{ 'is-invalid': submittedEditMenu && f.IconId.errors }" placeholder="Remark">
                                 <option value="" selected disabled hidden>Choose a remark...</option>
                                 <option *ngFor="let icon of icons" value="{{icon.Id}}">
 
@@ -344,7 +344,7 @@
                                         </div>
                                     </div>
                             </select>
-                            <div *ngIf="submitted && f.IconId.errors" class="invalid-feedback">
+                            <div *ngIf="submittedEditMenu && f.IconId.errors" class="invalid-feedback">
                                 <div *ngIf="f.IconId.errors.required">Remark is required</div>
                             </div>
                         </div>
@@ -355,9 +355,9 @@
                         <div class="form-group">
                             <label>Description</label>
                             <textarea Title="Describe Info" type="text" formControlName="Info" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.Info.errors }"
+                                [ngClass]="{ 'is-invalid': submittedEditMenu && f.Info.errors }"
                                 placeholder="Any info about your company..."></textarea>
-                            <div *ngIf="submitted && f.Info.errors" class="invalid-feedback">
+                            <div *ngIf="submittedEditMenu && f.Info.errors" class="invalid-feedback">
                                 <div *ngIf="f.Info.errors.required">Info is required</div>
                             </div>
                         </div>

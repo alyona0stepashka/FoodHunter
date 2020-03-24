@@ -13,6 +13,7 @@ namespace FH.BLL.VMs
         public string Title { get; set; }
         public string Info { get; set; }
         public string Note { get; set; }
+        public string Currency { get; set; } = "BYN";
         public decimal Price { get; set; }
         public decimal? PriceWithSales { get; set; }
         public bool IsActive { get; set; }
@@ -30,11 +31,16 @@ namespace FH.BLL.VMs
             Info = m.Info;
             Note = m.Note;
             Price = m.Price;
-            Rate = 0;
-            PriceWithSales = m.PriceWithSales;
-            IsActive = m.IsActive;
-            MenuId = m.MenuId.Value;
-            MenuTitle = m.Menu?.Title;
+            if (m.Menu != null)
+            {
+                if (m.Menu.Location != null) Currency = m.Menu.Location.Currency;
+                Rate = 0;
+                PriceWithSales = m.PriceWithSales;
+                IsActive = m.IsActive;
+                if (m.MenuId != null) MenuId = m.MenuId.Value;
+                MenuTitle = m.Menu?.Title;
+            }
+
             Photo = new IconVM(m.Id, $"{m.FileModel?.Path}{m.FileModel?.Name}{m.FileModel?.Extension}");
             if (m.Feedbacks != null && m.Feedbacks.Any())
             {

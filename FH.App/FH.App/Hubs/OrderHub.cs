@@ -52,7 +52,7 @@ namespace FH.App.Hubs
             }
         }
 
-        public void DisconnectByOrder(int orderId, string userId)
+        public void DisconnectByOrder(int orderId)
         {
             foreach (var c in connects)
             {
@@ -183,7 +183,7 @@ namespace FH.App.Hubs
 //                var tab = await _orderService.AssignMeToOrder(order.Id, order.WelcomeCode.ToString(), userId);
                 var page = _orderService.GetOrderByIdAsync(orderId, userId);
                 await Clients.Clients(orderers).SendAsync("CancelSession", page);
-                DisconnectByOrder(orderId, userId);
+                DisconnectByOrder(orderId);
             }
             catch (Exception e)
             {

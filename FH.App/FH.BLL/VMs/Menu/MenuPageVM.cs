@@ -20,10 +20,10 @@ namespace FH.BLL.VMs
         public MenuPageVM(Menu m)
         {
             Id = m.Id;
-            LocationId = m.LocationId.Value;
+            if (m.LocationId != null) LocationId = m.LocationId.Value;
             Title = m.Title;
             Info = m.Info;
-            Icon = new IconVM(m.Icon);
+            if (m.Icon != null) Icon = new IconVM(m.Icon);
             LocationName = m.Location?.Name;
             if (m.MenuItems != null && m.MenuItems.Any())
             {
