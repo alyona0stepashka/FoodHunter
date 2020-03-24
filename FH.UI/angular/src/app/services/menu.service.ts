@@ -41,7 +41,9 @@ export class MenuService {
     body.append("Title", registerFormData.value.Title);
     body.append("Info", registerFormData.value.Info);
     body.append("Price", registerFormData.value.Price);
-    body.append("PriceWithSales", registerFormData.value.PriceWithSales);
+    if (registerFormData.value.PriceWithSales != null) {
+      body.append("PriceWithSales", registerFormData.value.PriceWithSales);
+    }
     body.append("IsActive", registerFormData.value.IsActive);
     body.append("MenuId", registerFormData.value.MenuId);
     body.append("Note", registerFormData.value.Note);

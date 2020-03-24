@@ -11,7 +11,7 @@ namespace FH.BLL.VMs
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public string Info { get; set; }
+        public string Info { get; set; } 
         public string Note { get; set; }
         public string Currency { get; set; } = "BYN";
         public decimal Price { get; set; }
@@ -24,7 +24,7 @@ namespace FH.BLL.VMs
         public int FeedbacksCount { get; set; }
         //public List<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
 
-        public MenuItemPageVM(MenuItem m)
+        public MenuItemPageVM(MenuItem m, string currency)
         {
             Id = m.Id;
             Title = m.Title;
@@ -32,8 +32,13 @@ namespace FH.BLL.VMs
             Note = m.Note;
             Price = m.Price;
             if (m.Menu != null)
-            {
-                if (m.Menu.Location != null) Currency = m.Menu.Location.Currency;
+            { 
+                if (m.Menu.Location != null) {Currency = m.Menu.Location.Currency;}
+                else
+                {
+                    Currency = currency;
+                }
+
                 Rate = 0;
                 PriceWithSales = m.PriceWithSales;
                 IsActive = m.IsActive;

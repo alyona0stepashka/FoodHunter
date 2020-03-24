@@ -26,10 +26,8 @@
                             </button>
                         </div>
                     </div><br> -->
-                    <div *ngIf="!isHaveOrders" class="col-md-12">
-                        <div class="card-header">
-                            <h5 style="opacity:0.7" class="card-title">There is no orders yet</h5>
-                        </div>
+                    <div *ngIf="!isHaveOrders" class=" text-center" style="background: #8a8a8a26;">
+                        <label class="text-center">No Orders Yet</label>
                     </div>
                     <div class="card-body">
                         <table *ngIf="isHaveOrders" class="table table-striped">
@@ -114,7 +112,7 @@
         <div>
             <div class="card card-user" style="min-height: auto;">
                 <div class="card-body">
-                    <div *ngIf="calls!=null && calls.length>0" class=" text-center" style="background: #8a8a8a26;">
+                    <div *ngIf="calls==null || calls.length==0" class=" text-center" style="background: #8a8a8a26;">
                         <label class="text-center">No Active Calls Now</label>
                     </div>
                     <div class="card-body">

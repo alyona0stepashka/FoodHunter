@@ -119,11 +119,10 @@ namespace FH.BLL.Services
                 var roles = await _userManager.GetRolesAsync(user);
                 var isManager = roles.Any(m => m.Equals("manager"));
                 var profile = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId.Equals(user.Id));
-                var icon = $"{profile?.File?.Path}{profile?.File?.Name}{profile?.File?.Extension}";
-                var fullName = $"{profile?.FirstName} {profile?.LastName}";
-                var myLocation = _db.Locations.GetAll().FirstOrDefault(m => m.AdminId == user.Id);
-                var myLocationId = myLocation?.Id ?? 0;
                 var profileId = profile?.Id;
+                var icon = $"{profile?.File?.Path}{profile?.File?.Name}{profile?.File?.Extension}";
+                var fullName = $"{profile?.FirstName} {profile?.LastName}"; 
+                var myLocationId = _db.Managers.GetAll().FirstOrDefault(m => profileId != null && m.UserProfileId == profileId)?.LocationId ?? 0;
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -217,9 +216,15 @@ namespace FH.BLL.Services
         {
             var managers = new List<UserTabVM>();
             var manager = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId)?.Manager;
-            if (manager != null && manager.Location != null)
+            var location = _db.Locations.GetAll().FirstOrDefault(m => m.Id == manager.LocationId);
+            if (location != null)
             { 
-                    managers = manager.Location.Managers.Select(m=>new UserTabVM(m.UserProfile)).ToList(); 
+                    managers = location.Managers.Select(m=>
+                    {
+                        if (m.UserProfile != null)
+                            return new UserTabVM(m.UserProfile, m.UserProfile.Sex, m.UserProfile.File);
+                        return new UserTabVM();
+                    }).ToList(); 
             }
 
             return managers;

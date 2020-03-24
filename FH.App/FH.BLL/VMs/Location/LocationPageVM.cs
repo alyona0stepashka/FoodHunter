@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text; 
 using FH.Models.EnumModels;
 using FH.Models.Models;
 
@@ -11,6 +11,7 @@ namespace FH.BLL.VMs
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Currency { get; set; }
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public decimal Rate { get; set; }
@@ -29,13 +30,14 @@ namespace FH.BLL.VMs
         public LocationPageVM(Location location)
         {
             Rate = 0;
+            Currency = location.Currency;
             if (location.PhotoAlbum != null && location.PhotoAlbum.Any())
             {
                 PhotoAlbum = location.PhotoAlbum?.Select(m => new IconVM(m.Id, $"{m.Path}{m.Name}{m.Extension}")).ToList();
             }
             if (location.Feedbacks != null && location.Feedbacks.Any())
             {
-                Feedbacks = location.Feedbacks?.Select(m => new FeedbackVM(m)).ToList(); 
+                Feedbacks = location.Feedbacks?.Select(m => new FeedbackVM(m, m.UserProfile, m.Photos)).ToList(); 
                 Rate = location.Feedbacks.Sum(e => e.Stars) / location.Feedbacks.Count;
             }
             Name = location.Name;

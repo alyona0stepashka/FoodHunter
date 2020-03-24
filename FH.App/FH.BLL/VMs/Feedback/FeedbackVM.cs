@@ -16,19 +16,21 @@ namespace FH.BLL.VMs
         public UserTabVM User { get; set; } = new UserTabVM();
         public List<IconVM> Photos { get; set; } = new List<IconVM>();
 
-        public FeedbackVM(Feedback m)
+        public FeedbackVM(Feedback m, UserProfile p, List<FileModel> photos)
         {
             if (m != null) { 
                 Id = m.Id;
                 Stars = m.Stars;
                 Comment = m.Comment;
-                if (m.UserProfile != null) 
+                if (p != null)
                 {
-                    User = new UserTabVM(m.UserProfile);
+                    if (p.Sex != null)
+                        if (p.File != null)
+                            User = new UserTabVM(p, p.Sex, p.File);
                 }
-                if (m.Photos != null && m.Photos.Any())
+                if (photos != null && photos.Any())
                 {
-                    Photos = m.Photos?.Select(e => new IconVM(e.Id, $"{e.Path}{e.Name}{e.Extension}")).ToList();
+                    Photos = photos?.Select(e => new IconVM(e.Id, $"{e.Path}{e.Name}{e.Extension}")).ToList();
                 }
             }
         }

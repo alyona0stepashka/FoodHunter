@@ -49,7 +49,7 @@ namespace FH.BLL.Services
         public async Task<OrderPageVM> AssignManagerToOrder(int orderId, string userId)
         {
             var order = await _db.Orders.GetByIdAsync(orderId);
-            if (!order.IsActive)
+            if (order == null || !order.IsActive)
             {
                 throw new Exception("Order session is already cancel.");
             }
@@ -81,7 +81,7 @@ namespace FH.BLL.Services
                 OrderId = order.Id,
                 UserProfileId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id
             }; 
-            return new OrderPageTabVM(await _db.OrderUsers.CreateAsync(dbOrderUser));
+            return new OrderPageTabVM(await _db.OrderUsers.CreateAsync(dbOrderUser), order.Location.Currency);
         }
 
         public async Task CancelOrder(int orderId)
@@ -128,7 +128,12 @@ namespace FH.BLL.Services
         {
             var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
             var history = _db.OrderUsers.GetAll().Where(m => m.UserProfileId == myId).ToList();
-            var orders = history.Select(m => new OrderTabVM(m.Order)).ToList();
+            var orders = history.Select(m =>
+            {
+                if (m.Order != null && m.Order.Location != null && m.Order.Manager != null && m.Order.Manager.UserProfile != null)
+                            return new OrderTabVM(m.Order, m.Order.Location, m.Order.Manager.UserProfile);
+                return new OrderTabVM();
+            }).ToList();
             return orders;
         }
 
@@ -138,8 +143,12 @@ namespace FH.BLL.Services
             {
                 var myId = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId).Id;
                 var history = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfileId == myId)?.Orders;
-                var orders = history.Select(m => new OrderTabVM(m)).ToList();
-                return orders;
+                if (history != null)
+                {
+                    var orders = history.Select(m => new OrderTabVM(m, m.Location, m.Manager.UserProfile)).ToList();
+                    return orders;
+                }
+                return new List<OrderTabVM>();
             }
             catch (Exception e)
             {
@@ -154,20 +163,20 @@ namespace FH.BLL.Services
             {
                 return new List<OrderTabVM>();
             }
-            var orders = manager.Location.Orders.Where(m=>m.IsActive).Select(m => new OrderTabVM(m)).ToList();
+            var orders = manager.Location.Orders.Where(m => m.IsActive).Select(m => new OrderTabVM(m, m.Location, m.Manager.UserProfile)).ToList();
             return orders;
         }
 
-        public List<OrderTabVM> GetAllNoManagersLocationOrders(string userId)
-        {
-            var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId);
-            if (manager == null)
-            {
-                return new List<OrderTabVM>();
-            }
-            var orders = manager.Location.Orders.Where(m => m.ManagerId==null).Select(m => new OrderTabVM(m)).ToList();
-            return orders;
-        }
+        //public List<OrderTabVM> GetAllNoManagersLocationOrders(string userId)
+        //{
+        //    var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId);
+        //    if (manager == null)
+        //    {
+        //        return new List<OrderTabVM>();
+        //    }
+        //    var orders = manager.Location.Orders.Where(m => m.ManagerId == null).Select(m => new OrderTabVM(m)).ToList();
+        //    return orders;
+        //}
 
         public List<OrderTabVM> GetAllLocationOrders(string userId)
         {
@@ -176,9 +185,20 @@ namespace FH.BLL.Services
             {
                 return new List<OrderTabVM>();
             }
-            var orders = manager.Location.Orders.Select(m => new OrderTabVM(m)).ToList();
-            //var noManagersOrders = 
-            return orders;
+
+            if (manager.Location != null && manager.Location.Orders != null)
+                {
+                    var orders = manager.Location.Orders.Select(m =>
+                    {
+                        if (m.Manager != null && m.Manager.UserProfile != null)
+                                return new OrderTabVM(m, m.Location, m.Manager.UserProfile);
+                        return new OrderTabVM();
+                    }).ToList();
+                    //var noManagersOrders = 
+                    return orders;
+                }
+
+            return new List<OrderTabVM>();
         }
 
         public async Task<ManagerCallVM> CreateNewManagerCall(ManagerCallVM vm)
@@ -222,8 +242,9 @@ namespace FH.BLL.Services
                 Title = vm.Title,
                 UserId = vm.UserProfileId
             };
-            var newItem = await _db.OrderItems.CreateAsync(dbItem); 
-            return new OrderItemVM(newItem);
+            var newItem = await _db.OrderItems.CreateAsync(dbItem);
+            var order = _db.Orders.GetAll().FirstOrDefault(m => m.Id == vm.OrderId);
+            return new OrderItemVM(newItem, order.Location.Currency);
         }
 
         public async Task DeleteOrderItem(int id)
@@ -237,13 +258,19 @@ namespace FH.BLL.Services
             dbItem.Count = vm.Count;
             dbItem.Status = vm.Status;
             var newItem = await _db.OrderItems.UpdateAsync(dbItem);
-            var ret = new OrderItemVM(newItem);
-            return ret;
+            var order = _db.Orders.GetAll().FirstOrDefault(m => m.Id == dbItem.OrderId);
+            if (order != null)
+            {
+                var ret = new OrderItemVM(newItem, order.Location.Currency);
+                return ret;
+            }
+            throw new Exception("order not found");
         }
         public async Task<OrderItemVM> GetOrderItemByIdAsync(int id)
         {
-            var dbItem = await _db.OrderItems.GetByIdAsync(id); 
-            var ret = new OrderItemVM(dbItem);
+            var dbItem = await _db.OrderItems.GetByIdAsync(id);
+            var order = _db.Orders.GetAll().FirstOrDefault(m => m.Id == dbItem.OrderId);
+            var ret = new OrderItemVM(dbItem, order.Location.Currency);
             return ret;
         }
 

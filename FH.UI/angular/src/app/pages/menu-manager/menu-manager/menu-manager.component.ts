@@ -218,6 +218,8 @@ export class MenuManagerComponent implements OnInit {
           }
         );
         this.loadLocationMenu();
+        this.menuForm.reset();
+        this.submittedMenu = false;
       },
       err => {
         console.log(err);
@@ -247,6 +249,7 @@ export class MenuManagerComponent implements OnInit {
         this.loadLocationMenu();
         this.modalService.dismissAll();
         this.menuItemForm.reset();
+        this.submittedMenuItem = false;
       },
       err => {
         console.log(err);
@@ -274,6 +277,7 @@ export class MenuManagerComponent implements OnInit {
         );
         this.loadLocationMenu();
         this.modalService.dismissAll();
+        this.submittedEditMenu = false;
       },
       err => {
         console.log(err);
@@ -305,7 +309,7 @@ export class MenuManagerComponent implements OnInit {
   }
 
   onSubmitEditMenuItem() {
-    this.submittedEditMenu = true;
+    this.submittedEditMenuItem = true;
     this.menuItemForm.patchValue({ IsActive: this.IsChecked });
     if (this.menuItemForm.invalid) {
       return null;
@@ -324,6 +328,7 @@ export class MenuManagerComponent implements OnInit {
         );
         this.loadLocationMenu();
         this.modalService.dismissAll();
+        this.submittedEditMenuItem = false;
       },
       err => {
         console.log(err);
@@ -358,6 +363,7 @@ export class MenuManagerComponent implements OnInit {
   loadFeedbacksMenuItem(id) {
     this.feedbackService.getMenuItemFeedbacks(id).subscribe(
       (res: any) => {
+        this.feedbacks = res as [];
         this.toastr.success(
           '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
           "",

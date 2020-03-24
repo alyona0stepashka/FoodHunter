@@ -48,53 +48,53 @@ namespace FH.App.Controllers
             }
         }
 
-        /// <summary>
-        /// Get all active orders by locationId (get it from current user)
-        /// </summary>
-        [HttpGet]
-        [Route("location/active")] 
-        public IActionResult GetAllActiveOrdersByLocationAsync()
-        {
-            try
-            {
-                var meId = User.Claims.First(c => c.Type == "UserID").Value;
-                var orderList = _orderService.GetAllActiveLocationOrders(meId);
-                if (orderList == null)
-                {
-                    throw new Exception("Orders not found by id.");
-                }
-                orderList.Reverse();
-                return Ok(orderList);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        ///// <summary>
+        ///// Get all active orders by locationId (get it from current user)
+        ///// </summary>
+        //[HttpGet]
+        //[Route("location/active")] 
+        //public IActionResult GetAllActiveOrdersByLocationAsync()
+        //{
+        //    try
+        //    {
+        //        var meId = User.Claims.First(c => c.Type == "UserID").Value;
+        //        var orderList = _orderService.GetAllActiveLocationOrders(meId);
+        //        if (orderList == null)
+        //        {
+        //            throw new Exception("Orders not found by id.");
+        //        }
+        //        orderList.Reverse();
+        //        return Ok(orderList);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         /// <summary>
         /// Get all no-manager-orders by locationId (get it from current user)
         /// </summary>
-        [HttpGet]
-        [Route("location/managers/none")] 
-        public IActionResult GetAllNoManagersOrdersByLocationAsync()
-        {
-            try
-            {
-                var meId = User.Claims.First(c => c.Type == "UserID").Value;
-                var orderList = _orderService.GetAllNoManagersLocationOrders(meId);
-                if (orderList == null)
-                {
-                    throw new Exception("Orders not found by id.");
-                }
-                orderList.Reverse();
-                return Ok(orderList);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpGet]
+        //[Route("location/managers/none")] 
+        //public IActionResult GetAllNoManagersOrdersByLocationAsync()
+        //{
+        //    try
+        //    {
+        //        var meId = User.Claims.First(c => c.Type == "UserID").Value;
+        //        var orderList = _orderService.GetAllNoManagersLocationOrders(meId);
+        //        if (orderList == null)
+        //        {
+        //            throw new Exception("Orders not found by id.");
+        //        }
+        //        orderList.Reverse();
+        //        return Ok(orderList);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         /// <summary>
         /// Get order bu orderId

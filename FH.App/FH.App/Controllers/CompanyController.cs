@@ -19,12 +19,10 @@ namespace FH.App.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public CompanyController(ICompanyService companyService, UserManager<IdentityUser> userManager)
+        public CompanyController(ICompanyService companyService)
         {
             _companyService = companyService;
-            _userManager = userManager;
         }
 
         /// <summary>

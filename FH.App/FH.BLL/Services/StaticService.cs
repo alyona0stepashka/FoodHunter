@@ -44,57 +44,68 @@ namespace FH.BLL.Services
         {
             var retVal = new ChartDataClientVM();
             var client = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId);
-            var orders = client.OrderUsers.Select(m=>m.Order);
-            retVal.AverageRate = !client.Feedbacks.Any() ? 0 : client.Feedbacks.Average(m => m.Stars);
-            retVal.BadRateCount = client.Feedbacks.Count(m => m.Stars < 3);
-            retVal.NormalRateCount = client.Feedbacks.Count(m => m.Stars == 3 || m.Stars == 4);
-            retVal.PerfectRateCount = client.Feedbacks.Count(m => m.Stars == 5);
-            var ordersLastMonth = client.OrderUsers.Where(m =>
-                m.Order.EndDate != null && m.Order.EndDate.Value.Month == DateTime.Now.Month);
-            retVal.OrdersLastMonth = ordersLastMonth.Count();
-            for (var i = 1; i <= 12; i++)
+            if (client != null)
             {
-                var ordersForMonth = orders.Where(b => b.EndDate != null && ((DateTime) b.EndDate).Month == i);
-                var countPayment = ordersForMonth.Select(m =>
-                    m.OrderItems.Where(e=>e.UserId==client.Id).Select(n => (n.PricePerItem * (decimal)n.Count)).Sum()).Sum();
-                retVal.ClientPaymentActivity.Add(countPayment);
+                var orders = client.OrderUsers.Select(m=>m.Order);
+                retVal.AverageRate = !client.Feedbacks.Any() ? 0 : client.Feedbacks.Average(m => m.Stars);
+                retVal.BadRateCount = client.Feedbacks.Count(m => m.Stars < 3);
+                retVal.NormalRateCount = client.Feedbacks.Count(m => m.Stars == 3 || m.Stars == 4);
+                retVal.PerfectRateCount = client.Feedbacks.Count(m => m.Stars == 5);
+                var ordersLastMonth = client.OrderUsers.Where(m =>
+                    m.Order.EndDate != null && m.Order.EndDate.Value.Month == DateTime.Now.Month);
+                retVal.OrdersLastMonth = ordersLastMonth.Count();
+                for (var i = 1; i <= 12; i++)
+                {
+                    var ordersForMonth = orders.Where(b => b.EndDate != null && ((DateTime) b.EndDate).Month == i);
+                    var countPayment = ordersForMonth.Select(m =>
+                        m.OrderItems.Where(e=>e.UserId==client.Id).Select(n => (n.PricePerItem * (decimal)n.Count)).Sum()).Sum();
+                    retVal.ClientPaymentActivity.Add(countPayment);
+                }
+                retVal.PaymentLastMonth = retVal.ClientPaymentActivity[DateTime.Now.Month - 1];
+                retVal.VisitedLocationsLastMonth = ordersLastMonth.Select(m => m.Order.Manager.LocationId).Distinct().Count();
             }
-            retVal.PaymentLastMonth = retVal.ClientPaymentActivity[DateTime.Now.Month - 1];
-            retVal.VisitedLocationsLastMonth = ordersLastMonth.Select(m => m.Order.Manager.LocationId).Distinct().Count();
+
             return retVal;
         }
 
         public ChartDataManagerVM GetChartDataManager(string userId)
         {
             var retVal = new ChartDataManagerVM(); 
-            var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId); 
-            var location = manager.Location;
-            var orders = location.Orders;
-            retVal.OrdersLastMonth = orders.Count;
-            retVal.AverageRate = !location.Feedbacks.Any() ? 0 : location.Feedbacks.Average(m => m.Stars);
-            retVal.BadRateCount = location.Feedbacks.Count(m => m.Stars<3);
-            retVal.NormalRateCount = location.Feedbacks.Count(m => m.Stars == 3 || m.Stars == 4);
-            retVal.PerfectRateCount = location.Feedbacks.Count(m => m.Stars==5);
-            for (var i = 1; i <= 12; i++)
+            var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId);
+            if (manager != null)
             {
-                var ordersForMonth = orders.Where(b => b.EndDate != null && ((DateTime) b.EndDate).Month == i);
-                var countPayment = ordersForMonth.Select(m =>
-                    m.OrderItems.Select(n => ( n.PricePerItem * (decimal)n.Count)).Sum()).Sum();
-                retVal.ClientPaymentActivity.Add(countPayment);
-            } 
-            retVal.PaymentLastMonth = retVal.ClientPaymentActivity[DateTime.Now.Month - 1];
-            var ordersToday = orders.Where(b => (b.StartDate.DayOfYear) == DateTime.Today.DayOfYear);
-            var ordersYesterday = orders.Where(b => (b.StartDate.DayOfYear) == DateTime.Today.AddDays(-1).DayOfYear);
-            retVal.ClientsToday = ordersToday.Select(m => m.OrderUsers.Count).Sum();
-            for (var i = 0; i < 24; i++)
-            {
-                var tablesToday = ordersToday.Count(m => (m.StartDate.Hour <= i && m.EndDate == null) ||
-                                                         (m.StartDate.Hour <= i && m.EndDate.Value.Hour >= i));
-                var tablesYesterday = ordersYesterday.Count(m => (m.StartDate.Hour <= i && m.EndDate == null) ||
-                                                         (m.StartDate.Hour <= i && m.EndDate.Value.Hour >= i));
-                retVal.TableOccupancyToday.Add(tablesToday);
-                retVal.TableOccupancyYesterday.Add(tablesYesterday);
+                var location = manager.Location;
+                if (location != null)
+                {
+                    var orders = location.Orders;
+                    retVal.OrdersLastMonth = orders.Count;
+                    retVal.AverageRate = !location.Feedbacks.Any() ? 0 : location.Feedbacks.Average(m => m.Stars);
+                    retVal.BadRateCount = location.Feedbacks.Count(m => m.Stars<3);
+                    retVal.NormalRateCount = location.Feedbacks.Count(m => m.Stars == 3 || m.Stars == 4);
+                    retVal.PerfectRateCount = location.Feedbacks.Count(m => m.Stars==5);
+                    for (var i = 1; i <= 12; i++)
+                    {
+                        var ordersForMonth = orders.Where(b => b.EndDate != null && ((DateTime) b.EndDate).Month == i);
+                        var countPayment = ordersForMonth.Select(m =>
+                            m.OrderItems.Select(n => ( n.PricePerItem * (decimal)n.Count)).Sum()).Sum();
+                        retVal.ClientPaymentActivity.Add(countPayment);
+                    } 
+                    retVal.PaymentLastMonth = retVal.ClientPaymentActivity[DateTime.Now.Month - 1];
+                    var ordersToday = orders.Where(b => (b.StartDate.DayOfYear) == DateTime.Today.DayOfYear);
+                    var ordersYesterday = orders.Where(b => (b.StartDate.DayOfYear) == DateTime.Today.AddDays(-1).DayOfYear);
+                    retVal.ClientsToday = ordersToday.Select(m => m.OrderUsers.Count).Sum();
+                    for (var i = 0; i < 24; i++)
+                    {
+                        var tablesToday = ordersToday.Count(m => (m.StartDate.Hour <= i && m.EndDate == null) ||
+                                                                 (m.StartDate.Hour <= i && m.EndDate.Value.Hour >= i));
+                        var tablesYesterday = ordersYesterday.Count(m => (m.StartDate.Hour <= i && m.EndDate == null) ||
+                                                                         (m.StartDate.Hour <= i && m.EndDate.Value.Hour >= i));
+                        retVal.TableOccupancyToday.Add(tablesToday);
+                        retVal.TableOccupancyYesterday.Add(tablesYesterday);
+                    }
+                }
             }
+
             return retVal;
         }
 

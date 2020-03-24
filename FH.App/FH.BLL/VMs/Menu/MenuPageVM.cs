@@ -25,9 +25,15 @@ namespace FH.BLL.VMs
             Info = m.Info;
             if (m.Icon != null) Icon = new IconVM(m.Icon);
             LocationName = m.Location?.Name;
+            var currency = "";
+            if (m.Location != null)
+            {
+                currency = m.Location.Currency;
+            }
+
             if (m.MenuItems != null && m.MenuItems.Any())
             {
-                MenuItems = m.MenuItems?.Select(e => new MenuItemPageVM(e)).ToList();
+                MenuItems = m.MenuItems?.Select(e => new MenuItemPageVM(e, currency)).ToList();
             }
         }
 

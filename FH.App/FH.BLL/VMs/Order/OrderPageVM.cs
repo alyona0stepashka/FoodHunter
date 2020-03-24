@@ -15,6 +15,7 @@ namespace FH.BLL.VMs
         public DateTime StartDate { get; set; } 
         public DateTime? EndDate { get; set; } 
         public int TableId { get; set; }
+        public string Currency { get; set; }
         public string TableNumber { get; set; }
         public int LocationId { get; set; }
         public string LocationName { get; set; }
@@ -31,30 +32,40 @@ namespace FH.BLL.VMs
             WelcomeCode = o.WelcomeCode;
             IsActive = o.IsActive;
             StartDate = o.StartDate;
-            EndDate = o.EndDate;
-            if (o.TableId != null) {TableId = o.TableId.Value;}
-            TableNumber = o.Table?.Number.ToString();
-            if (o.Table?.LocationId != null) {LocationId = (int) o.Table?.LocationId.Value;}
-
-            if (o.Table != null && o.Table.Location != null)
+            if (o.Location != null)
             {
-                LocationName = o.Table.Location?.Name;
-                CompanyName = o.Table.Location?.Company?.Name;
-                Address = o.Table.Location?.Address;
-            }
+                Currency = o.Location.Currency;
+                EndDate = o.EndDate;
+                if (o.TableId != null)
+                {
+                    TableId = o.TableId.Value;
+                }
 
-            if (o.Manager != null)
-            {
+                TableNumber = o.Table?.Number.ToString();
+                if (o.Table?.LocationId != null)
+                {
+                    LocationId = (int) o.Table?.LocationId.Value;
+                }
+
+                if (o.Table != null && o.Table.Location != null)
+                {
+                    LocationName = o.Table.Location?.Name;
+                    CompanyName = o.Table.Location?.Company?.Name;
+                    Address = o.Table.Location?.Address;
+                }
+
                 if (o.Manager?.UserProfile != null)
                 {
-                    Manager = new UserTabVM(o.Manager?.UserProfile);
+                    Manager = new UserTabVM(o.Manager?.UserProfile, o.Manager?.UserProfile.Sex, o.Manager?.UserProfile.File);
                     ManagerName = $"{o.Manager.UserProfile.FirstName} {o.Manager.UserProfile.LastName[0]}.";
                 }
+
+                if (o.OrderUsers != null && o.OrderUsers.Any())
+                {
+                    Clients = o.OrderUsers.Select(m => new OrderPageTabVM(m, o.Location.Currency)).ToList();
+                }
             }
-            if (o.OrderUsers != null && o.OrderUsers.Any())
-            {
-                Clients = o.OrderUsers.Select(m => new OrderPageTabVM(m)).ToList();
-            }
+
             if (o.ManagerCalls != null && o.ManagerCalls.Any())
             {
                 ManagerCalls = o.ManagerCalls.Select(m => new ManagerCallVM(m)).OrderBy(m=>m.CallTime).Reverse().ToList();

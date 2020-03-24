@@ -19,20 +19,21 @@ namespace FH.BLL.VMs
         public int Age { get; set; }
         public IconVM Photo { get; set; } 
 
-        public UserTabVM(UserProfile m)
+        public UserTabVM(UserProfile m, Sex s, FileModel f)
         {
             Id = m.UserId;
             FirstName = m.FirstName;
             LastName = m.LastName;
             FullName = $"{m.FirstName} {m.LastName[0]}.";
-            Sex = m.Sex.Value;
+            if (s != null) Sex =s.Value;
             Age = DateTime.Now.Year - m.DateBirth.Year;
             UserProfileId = m.Id;
             if (DateTime.Now.DayOfYear < m.DateBirth.DayOfYear)
             {
                 Age--;
             }
-            Photo = new IconVM(m.Id, $"{m.File?.Path}{m.File?.Name}{m.File?.Extension}");
+
+            if (f != null) Photo = new IconVM(m.Id, $"{f.Path}{f.Name}{f.Extension}");
         }
 
         public UserTabVM()

@@ -70,7 +70,7 @@ namespace FH.BLL.Services
             {
                 throw new Exception("MenuItem not found");
             }
-            var retMenu = new MenuItemPageVM(menu);
+            var retMenu = new MenuItemPageVM(menu, menu.Menu.Location.Currency);
             return retMenu;
         }
 
@@ -88,8 +88,10 @@ namespace FH.BLL.Services
                 MenuId = menu.MenuId,
                 FileModelId = fileId
             };
-            var menuNew = await _db.MenuItems.CreateAsync(dbMenu);
-            var retMenu = new MenuItemPageVM(menuNew);
+            var menuNew = await _db.MenuItems.CreateAsync(dbMenu); 
+            var menu2 = _db.Menus.GetAll().FirstOrDefault(m => m.Id == menu.MenuId);
+            var currency = menu2?.Location.Currency;
+            var retMenu = new MenuItemPageVM(menuNew, currency);
             return retMenu;
         }
 
@@ -121,7 +123,9 @@ namespace FH.BLL.Services
             item.IsActive = menu.IsActive;
             item.MenuId = menu.MenuId;
             var newItem = await _db.MenuItems.UpdateAsync(item);
-            return new MenuItemPageVM(newItem);
+            var menu2 = _db.Menus.GetAll().FirstOrDefault(m => m.Id == menu.MenuId);
+            var currency = menu2?.Location.Currency;
+            return new MenuItemPageVM(newItem, currency);
         }
     }
 }

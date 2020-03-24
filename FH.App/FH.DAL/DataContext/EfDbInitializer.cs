@@ -90,44 +90,44 @@ namespace FH.DAL.DataContext
             //---------------------
             if (!userManager.Users.Any())
             {
-                var newUser = new IdentityUser()
-                {
-                    Email = "q@q",
-                    UserName = "q@q",
-                    EmailConfirmed = true
-                };
-                var newUser2 = new IdentityUser
-                {
-                    Email = "a@a",
-                    UserName = "a@a",
-                    EmailConfirmed = true,
-                };
-                await userManager.CreateAsync(newUser, "parol01");
-                userManager.AddToRoleAsync(newUser, "manager").Wait();
-                await userManager.CreateAsync(newUser2, "parol01");
-                userManager.AddToRoleAsync(newUser2, "user").Wait();
-                var userProfile = new UserProfile()
-                {
-                    FirstName = "User",
-                    LastName = "Userovich",
-                    DateBirth = new DateTime(1994, 10, 4),
-                    DateLastOnline = DateTime.Now,
-                    SexId = id3,
-                    //FileId = fileId,
-                    UserId = newUser.Id
-                };
-                var userProfile2 = new UserProfile()
-                {
-                    FirstName = "Ivan",
-                    LastName = "Ivanovich",
-                    DateBirth = new DateTime(1994, 10, 4),
-                    DateLastOnline = DateTime.Now,
-                    SexId = id3,
-                    //FileId = fileId,
-                    UserId = newUser2.Id
-                };
-                await db.UserProfiles.CreateAsync(userProfile);
-                await db.UserProfiles.CreateAsync(userProfile2);
+                //var newUser = new IdentityUser()
+                //{
+                //    Email = "q@q",
+                //    UserName = "q@q",
+                //    EmailConfirmed = true
+                //};
+                //var newUser2 = new IdentityUser
+                //{
+                //    Email = "a@a",
+                //    UserName = "a@a",
+                //    EmailConfirmed = true,
+                //};
+                //await userManager.CreateAsync(newUser, "parol01");
+                //userManager.AddToRoleAsync(newUser, "manager").Wait();
+                //await userManager.CreateAsync(newUser2, "parol01");
+                //userManager.AddToRoleAsync(newUser2, "user").Wait();
+                //var userProfile = new UserProfile()
+                //{
+                //    FirstName = "User",
+                //    LastName = "Userovich",
+                //    DateBirth = new DateTime(1994, 10, 4),
+                //    DateLastOnline = DateTime.Now,
+                //    SexId = id3,
+                //    //FileId = fileId,
+                //    UserId = newUser.Id
+                //};
+                //var userProfile2 = new UserProfile()
+                //{
+                //    FirstName = "Ivan",
+                //    LastName = "Ivanovich",
+                //    DateBirth = new DateTime(1994, 10, 4),
+                //    DateLastOnline = DateTime.Now,
+                //    SexId = id3,
+                //    //FileId = fileId,
+                //    UserId = newUser2.Id
+                //};
+                //await db.UserProfiles.CreateAsync(userProfile);
+                //await db.UserProfiles.CreateAsync(userProfile2);
 
             }
         }

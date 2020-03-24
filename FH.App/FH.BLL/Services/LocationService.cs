@@ -27,15 +27,19 @@ namespace FH.BLL.Services
 
         public async Task<LocationPageVM> UpdateLocationAsync(CreateLocationVM location)
         {
-            var locationDb = await _db.Locations.GetByIdAsync(location.Id.Value);
-            locationDb.Name = location.Name;
-            locationDb.Address = location.Address;
-            locationDb.Longitude = location.Longitude;
-            locationDb.Latitude = location.Latitude;
-            locationDb.CompanyId = location.CompanyId;
-            locationDb.Currency = location.Currency;
-            var locNew = await _db.Locations.UpdateAsync(locationDb);
-            return new LocationPageVM(locNew);
+            if (location.Id != null)
+            {
+                var locationDb = await _db.Locations.GetByIdAsync(location.Id.Value);
+                locationDb.Name = location.Name;
+                locationDb.Address = location.Address;
+                locationDb.Longitude = location.Longitude;
+                locationDb.Latitude = location.Latitude;
+                locationDb.CompanyId = location.CompanyId;
+                locationDb.Currency = location.Currency;
+                var locNew = await _db.Locations.UpdateAsync(locationDb);
+                return new LocationPageVM(locNew);
+            }
+            throw new Exception("location.Id is missing");
         }
 
         public async Task<IconVM> UploadLocationTopPhoto(IFormFile photo, int locationId)
@@ -112,13 +116,14 @@ namespace FH.BLL.Services
                     AdminId = userId
                 };
                 var dbLocation = await _db.Locations.CreateAsync(newLocation);
-                var manager = new Manager
+                var manager = _db.Managers.GetAll().FirstOrDefault(m => m.UserProfile.UserId == userId);
+                if (manager != null)
                 {
-                    LocationId = newLocation.Id,
-                    UserProfileId = _userService.GetUserTabVM(userId).UserProfileId
-                };
-                await _db.Managers.CreateAsync(manager);
-            return new LocationPageVM(dbLocation);
+                    manager.LocationId = newLocation.Id;
+                    await _db.Managers.UpdateAsync(manager);
+                }
+
+                return new LocationPageVM(dbLocation);
           
         }
 

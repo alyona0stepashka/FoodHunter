@@ -147,15 +147,15 @@
                                             <div class="row">
                                                 <div *ngIf="item.PriceWithSales==null"
                                                     class="item text-center col-md-12">
-                                                    <span style="font-size: large;">{{item.Price}} BYN</span>
+                                                    <span
+                                                        style="font-size: large;">{{item.Price}}&nbsp;{{item.Currency}}</span>
                                                 </div>
                                                 <div *ngIf="item.PriceWithSales!=null"
                                                     class="item text-center col-md-12">
-                                                    <span style="font-size: large;">{{item.PriceWithSales}}
-                                                        BYN</span>&nbsp;
                                                     <span
-                                                        style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}
-                                                        BYN</span>
+                                                        style="font-size: large;">{{item.PriceWithSales}}&nbsp;{{item.Currency}}</span>&nbsp;
+                                                    <span
+                                                        style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}&nbsp;{{item.Currency}}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -201,7 +201,7 @@
 
     </mat-tab-group>
 
-    <!-- ---------NEW-MENU------------ -->
+    <!-- ---------NEW-MENU-ITEM----------- -->
     <ng-template #newMenuItem let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Create new menu item</h4>
@@ -229,7 +229,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label><i class="fas fa-flag"></i>&nbsp;Title</label>
+                                    <label>Title</label>
                                     <input Title="Title" type="text" formControlName="Title" class="form-control"
                                         [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Title.errors }"
                                         placeholder="Title" />
@@ -242,8 +242,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><i class="fas fa-dollar-sign"></i>&nbsp;Price (BYN)</label>
-                                    <input pattern="\d+([.]\d+)?" Title="Price" type="text" formControlName="Price"
+                                    <label><i class="fas fa-dollar-sign"></i>&nbsp;Price</label>
+                                    <input pattern="\d+([,]\d+)?" Title="Price" type="text" formControlName="Price"
                                         class="form-control"
                                         [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Price.errors }"
                                         placeholder="Price" />
@@ -251,8 +251,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><i class="fas fa-donate"></i>&nbsp;Discounted price (BYN)</label>
-                                    <input pattern="\d+([.]\d+)?" Title="Discounted price" type="text"
+                                    <label><i class="fas fa-donate"></i>&nbsp;Discounted price</label>
+                                    <input pattern="\d+([,]\d+)?" Title="Discounted price" type="text"
                                         formControlName="PriceWithSales" class="form-control"
                                         [ngClass]="{ 'is-invalid': submittedMenuItem && f2.PriceWithSales.errors }"
                                         placeholder="Discounted price" />
@@ -268,7 +268,7 @@
                             <label><i class="far fa-comment-alt"></i>&nbsp;Describe Info </label>
                             <textarea Title="Describe Info" type="text" formControlName="Info" class="form-control"
                                 [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Info.errors }"
-                                placeholder="Any info about your company..."></textarea>
+                                placeholder="Any info about item..."></textarea>
                             <div *ngIf="submittedMenuItem && f2.Info.errors" class="invalid-feedback">
                                 <div *ngIf="f2.Info.errors.required">Describe Info is required</div>
                             </div>
@@ -398,7 +398,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label><i class="fas fa-flag"></i>&nbsp;Title</label>
+                                    <label>Title</label>
                                     <input Title="Title" type="text" formControlName="Title" class="form-control"
                                         [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Title.errors }"
                                         placeholder="Title" />
@@ -411,8 +411,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><i class="fas fa-dollar-sign"></i>&nbsp;Price (BYN)</label>
-                                    <input pattern="\d+([.]\d+)?" Title="Price" type="text" formControlName="Price"
+                                    <label><i class="fas fa-dollar-sign"></i>&nbsp;Price</label>
+                                    <input pattern="\d+([,]\d+)?" Title="Price" type="text" formControlName="Price"
                                         class="form-control"
                                         [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Price.errors }"
                                         placeholder="Price" />
@@ -420,8 +420,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><i class="fas fa-donate"></i>&nbsp;Discounted price (BYN)</label>
-                                    <input pattern="\d+([.]\d+)?" Title="Discounted price" type="text"
+                                    <label><i class="fas fa-donate"></i>&nbsp;Discounted price</label>
+                                    <input pattern="\d+([,]\d+)?" Title="Discounted price" type="text"
                                         formControlName="PriceWithSales" class="form-control"
                                         [ngClass]="{ 'is-invalid': submittedMenuItem && f2.PriceWithSales.errors }"
                                         placeholder="Discounted price" />
@@ -498,14 +498,12 @@
                     <div class="row">
                         <div class="col-md-12" style="margin-top: 1rem;">
                             <label style="opacity: 0.6; font-weight: 800;">Price:&nbsp;&nbsp;</label>
-                            <span *ngIf="openedItem.PriceWithSales==null" style="font-size: 2rem;">{{openedItem.Price}}
-                                BYN</span>
+                            <span *ngIf="openedItem.PriceWithSales==null"
+                                style="font-size: 2rem;">{{openedItem.Price}}&nbsp;{{openedItem.Currency}}</span>
                             <span *ngIf="openedItem.PriceWithSales!=null"
-                                style="font-size: 2rem;">{{openedItem.PriceWithSales}}
-                                BYN</span>&nbsp;
+                                style="font-size: 2rem;">{{openedItem.PriceWithSales}}&nbsp;{{openedItem.Currency}}</span>&nbsp;
                             <span *ngIf="openedItem.PriceWithSales!=null"
-                                style="text-decoration-line: line-through; opacity: 0.5;">{{openedItem.Price}}
-                                BYN</span>
+                                style="text-decoration-line: line-through; opacity: 0.5;">{{openedItem.Price}}&nbsp;{{openedItem.Currency}}</span>
                         </div>
                     </div>
                     <div class="row">

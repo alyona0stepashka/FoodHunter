@@ -30,6 +30,9 @@
                         </i></h5>
                 </div>
                 <div class="card-body">
+                    <div *ngIf="tables==null || tables.length==0" class=" text-center" style="background: #8a8a8a26;">
+                        <label class="text-center">No Tables Yet</label>
+                    </div>
                     <table class="table table-striped">
                         <tbody>
                             <ng-container *ngFor="let item of tables">
