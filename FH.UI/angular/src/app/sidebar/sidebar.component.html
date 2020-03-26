@@ -1,0 +1,59 @@
+<div class="sidebar-wrapper">
+  <div class="logo">
+    <a href="/#/welcome/about-us" class="simple-text logo-mini">
+      <div class="logo-image-small">
+        <img src="assets/img/pusheen/1.png">
+      </div>
+    </a>
+    <a href="/#/welcome/about-us" class="simple-text logo-normal">
+      Food Hunter
+    </a>
+  </div>
+  <div *ngIf="isLogin" class="logo" style="padding: 0;">
+    <ul class="nav">
+      <li routerLinkActive="active">
+        <a class="dropdown-item" style="margin-top: -0.7rem;">
+          <img src="{{icon}}" class="avatar-mini" />
+          <span style="white-space: normal;">&nbsp;&nbsp;&nbsp;{{fullName}}<b class="caret"></b></span>
+        </a>
+        <ul class="dropdown-container collapsed">
+          <!-- <li *ngIf="isManager" style="margin:0;" routerLinkActive="active" class="switch-role-btn">
+            <a style="margin-top: 0;" (click)="switchRole()">
+              <span class="sidebar-mini-icon">S</span>
+              <span *ngIf="isCurrentUser" style="text-transform: none !important;">Switch current role to
+                Manager</span>
+              <span *ngIf="!isCurrentUser" style="text-transform: none !important;">Switch current role to Client</span>
+            </a>
+          </li> -->
+          <li style="margin:0;" routerLinkActive="active" class="logout-btn">
+            <a style="margin-top: 0;" (click)="logout()">
+              <span class="sidebar-mini-icon">L</span>
+              <span style="text-transform: none !important;">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <ul class="nav">
+    <li *ngFor="let menuItem of menuItems" routerLinkActive="active" class="{{menuItem.class}}">
+      <a *ngIf="menuItem.childItems.length!=0" class="dropdown-item">
+        <i class="nc-icon {{menuItem.icon}}"></i>
+        <span>{{menuItem.title}}<b class="caret" style="top: 1.5rem !important;"></b></span>
+        <!-- <i class="nc-icon nc-minimal-down" style="float:right;"></i> -->
+      </a>
+      <a *ngIf="menuItem.childItems.length==0" [routerLink]="[menuItem.path]">
+        <i class="nc-icon {{menuItem.icon}}"></i>
+        <p>{{menuItem.title}}</p>
+      </a>
+      <ul *ngIf="menuItem.childItems.length!=0" class="dropdown-container collapsed">
+        <li style="margin:0;" *ngFor="let childItem of menuItem.childItems" routerLinkActive="active"
+          class="{{childItem.class}} ">
+          <a [routerLink]="[childItem.path]">
+            <span class="sidebar-mini-icon">{{childItem.icon}}</span><span
+              style="text-transform: none !important;">{{childItem.title}}</span>
+          </a>
+      </ul>
+    </li>
+  </ul>
+</div>

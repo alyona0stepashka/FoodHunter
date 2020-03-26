@@ -1,0 +1,332 @@
+<!-- <div *ngIf="!isNotFound"> -->
+<div *ngIf="isOrderExist" class="row" style="background-color: #ffc5653b;">
+    <div class="col-md-6">
+        <div class="item text-left col-md-12" style="margin-top: 0.5rem; margin-bottom: 0.5rem; color: #54524e;">
+            <span style="white-space: normal; font-size: large; font-weight: bolder;"><i
+                    class="fas fa-user-plus"></i>&nbsp;Welcome Code:
+                {{order.WelcomeCode}}</span><br>
+            <span style="white-space: normal; opacity: 0.7;">{{order.CompanyName}}</span><br>
+            <i title="Open location page" (click)="redirectLocation(order.LocationId)" style="cursor: pointer;"
+                class="fas fa-external-link-alt"></i>&nbsp;<span
+                style="white-space: normal; opacity: 0.7;">{{order.LocationName}},&nbsp;{{order.Address}}&nbsp;(Table#{{order.TableNumber}})</span>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="item text-right col-md-12">
+            <span style="white-space: normal; font-size: small; opacity: 0.5;">started at:
+                {{this.datepipe.transform(order.StartDate, 'MMMM d, h:mm a')}}</span><br />
+            <span *ngIf="!order.IsActive" style="white-space: normal; font-size: small; opacity: 0.5;">ended at:
+                {{this.datepipe.transform(order.EndDate, 'MMMM d, h:mm a')}}</span><br *ngIf="!order.IsActive" />
+            <span *ngIf="order.Manager!=null" style="white-space: normal; font-size: small; opacity: 0.5;"><i
+                    class="fas fa-user-tie"></i>&nbsp;{{order.ManagerName}} serves you</span><br
+                *ngIf="order.Manager!=null" />
+            <span *ngIf="order.Manager==null && isManager" style="white-space: normal; font-size: small; opacity: 0.5;">
+                <button title="Call manager" class="btn" style="padding: inherit;"
+                    (click)="openModal(openCallManager, 'openCallManager', null)">
+                    <i class="fas fa-comment-dots"></i>
+                </button></span>
+        </div>
+    </div>
+</div>
+<mat-tab-group *ngIf="isOrderExist" style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+    <!-- ----------------FIRST TAB------------------- -->
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                <i class="fas fa-concierge-bell"></i>&nbsp;Service
+            </span>
+        </ng-template>
+        <div>
+            <div class="card card-user" style="min-height: auto;">
+                <div class="card-body">
+                    <div *ngIf="order.IsActive" class="row">
+                        <div class="col-md-12">
+                            <label class="card-title" style="font-size: 1.3em;">Order actions:&nbsp;</label>
+                            <button *ngIf="!isManager && order.IsActive" title="Call manager" class="btn"
+                                style="padding: inherit;" (click)="openModal(openCallManager, 'openCallManager', null)">
+                                <i class="fas fa-comment-dots"></i>
+                            </button>
+                            <button *ngIf="!isManager" title="Open my check" class="btn" style="padding: inherit;"
+                                (click)="openModal(showCheck, 'showCheck', 0)">
+                                <i class="fas fa-dollar-sign"></i>
+                            </button>
+                            <button *ngIf="!isManager" title="Add feedback about this order" class="btn"
+                                style="padding: inherit;" (click)="openModal(addFeedback, 'addFeedbackOrder', null)">
+                                <i class="fas fa-star"></i>
+                            </button>
+                            <button *ngIf="isManager && order.IsActive" title="Cancel this order-session" class="btn"
+                                style="padding: inherit;" (click)="cancelSession()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div><br>
+                    <div *ngIf="order.IsActive" class="row">
+                        <div class="col-md-12">
+                            <label class="card-title" style="font-size: 1.3em;">Active waiter calls:&nbsp;</label>
+                        </div>
+                    </div>
+                    <div *ngIf="!order.IsActive" class="row">
+                        <div *ngFor="let client of order.Clients" class="col-md-12">
+                            <label class="card-title"
+                                style="font-size: 1.3em;">{{client.User.FirstName}}&nbsp;{{client.User.LastName}}:&nbsp;{{client.totalSum}}&nbsp;{{order.Currency}}</label>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="order.IsActive">
+                        <div class="col-md-12">
+                            <ng-container *ngFor="let call of order.ManagerCalls">
+                                <div *ngIf="call.IsActive"
+                                    class="alert alert-danger alert-with-icon alert-dismissible fade show"
+                                    data-notify="container">
+                                    <button *ngIf="isManager" type="button" aria-hidden="true" class="close"
+                                        data-dismiss="alert" aria-label="Close" (click)="disableManagerCall(call.Id)">
+                                        <i class="nc-icon nc-simple-remove"></i>
+                                    </button>
+                                    <span data-notify="icon" class="nc-icon nc-bell-55"></span>
+                                    <span data-notify="message"><i
+                                            style="white-space: normal; font-style: normal; font-size: smaller;">[Waiter
+                                            call
+                                            at
+                                            {{this.datepipe.transform(call.CallTime, 'MMMM d, h:mm a')}}]&nbsp;&nbsp;</i>{{call.Comment}}</span>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <!-- -----------------------CLIENT-TAB---------------------------- -->
+    <mat-tab *ngFor="let client of order.Clients">
+        <ng-template mat-tab-label>
+            <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                {{client.User.FirstName}}&nbsp;{{client.User.LastName}},&nbsp;{{client.User.Age}}
+            </span>
+        </ng-template>
+        <div>
+            <div class="card card-user" style="min-height: auto;">
+                <div class="card-header">
+                    <!-- <h5 class="card-title" style="font-size: 1.3em;">Payment:&nbsp;{{client.OrderItems.}}</h5> -->
+                </div>
+                <div *ngIf="client.OrderItems==null || client.OrderItems.length==0" class="col-md-12">
+                    <div class="card-header">
+                        <h5 style="opacity:0.7" class="card-title">There is no order items yet</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table *ngIf="client.OrderItems.length>0" class="table table-striped">
+                        <tbody>
+                            <ng-container *ngFor="let item of client.OrderItems">
+                                <tr>
+                                    <td width="10%">
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <img style="max-height: 8rem; width: auto; cursor: pointer;"
+                                                    (click)="open(item.Photo.Number)"
+                                                    src="{{serverUrl}}{{item.Photo.Value}}" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="item text-center col-md-12" style="margin-top: 1rem;"
+                                                title="{{item.Rate}}">
+                                                <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true">
+                                                </ngb-rating>
+                                                <i *ngIf="item.Feedbacks!=null">({{item.Feedbacks.length}})</i>
+                                                <i *ngIf="item.Feedbacks==null">(0)</i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="68%">
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <span style="white-space: normal;">{{item.Title}}</span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="!isManager" class="row">
+                                            <div class="item text-center col-md-12">
+                                                <span style="white-space: normal;">Status: {{item.Status}}</span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="isManager" class="row">
+                                            <div class="item text-center col-md-12">
+                                                <select class="form-control" (change)="onChangeStatus($event, item.Id)"
+                                                    [disabled]="!order.IsActive">
+                                                    <option *ngFor="let status of statuses" value="{{status}}"
+                                                        [selected]="item.Status==status">{{status}}</option>
+                                                    <!-- [selected]="item.Status==status"> -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="20%">
+                                        <div class="row">
+                                            <div class="item text-center col-md-12">
+                                                <span
+                                                    style="font-size: large;">{{item.PricePerItem}}&nbsp;{{item.Currency}}
+                                                    x
+                                                    {{item.Count}}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="2%">
+                                        <div class="item text-center col-md-12" style="padding: 0;">
+                                            <ul style="list-style:none; padding:0; margin:0;">
+                                                <li *ngIf="!isManager && client.User.UserProfileId==userProfileId">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Add feedback"><i class="fas fa-comment-medical"
+                                                            (click)="openModal(addFeedback, 'addFeedback', item.MenuItemId)"></i></button>
+                                                </li>
+                                                <li *ngIf="isManager && order.IsActive">
+                                                    <button type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                        title="Remove" (click)="deleteOrderItem(item.Id)"><i
+                                                            class="fas fa-ban"></i></button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>
+<!-- ----------CALL-MANAGER--------- -->
+<ng-template #openCallManager let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;"><i
+                class="fas fa-comment-dots"></i>&nbsp;Call waiter&nbsp;&nbsp;
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12" style="margin-top: 1rem;">
+                    <textarea Title="Comment" style="border-left-width: 0; border-right-width: 0;" type="text"
+                        class="form-control" [(ngModel)]="managerCallMessage" placeholder="Comment...">
+                        </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button (click)="callManager()" class="btn btn-primary">Send</button>
+        </div>
+    </div>
+</ng-template>
+<!-- -------------SHOW-CURRENT-CHECK----------- -->
+<ng-template #showCheck let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;">
+            <i class="fas fa-cash-register"></i>&nbsp;Total: {{clientTotal.Sum}}&nbsp;{{order.Currency}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="col-md-12">
+            <table style="width: 100%;">
+                <tr *ngFor="let item of clientTotal.Items">
+                    <td>
+                        {{item.Title}}
+                    </td>
+                    <td>
+                        {{item.PricePerItem}}&nbsp;{{item.Currency}} x {{item.Count}}
+                    </td>
+                    <td>
+                        {{item.PricePerItem*item.Count}}&nbsp;{{item.Currency}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</ng-template>
+<!-----------------ADD-FEEDBACK------------------>
+<ng-template #addFeedback let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="fas fa-comment-medical"></i>&nbsp;Add feedback</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="feedbackForm">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
+                            accept="image/*" (change)="uploadPhoto($event.target.files)"
+                            class="form-control btn btn-primary" placeholder="Photo">
+                        <img [src]="imageUrl" class="avatar"
+                            style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Rate</label>
+                                <ngb-rating formControlName="Stars" max="5" [(rate)]="f.Stars.value"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submittedFeedback && f.Stars.errors }"></ngb-rating>
+                                <div *ngIf="submittedFeedback && f.Stars.errors" class="invalid-feedback">
+                                    <div *ngIf="f.Stars.errors.required">Stars is required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comment</label>
+                                <textarea Title="Comment" type="text" formControlName="Comment" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submittedFeedback && f.Comment.errors }"
+                                    placeholder="Comment about this menu item..."></textarea>
+                                <div *ngIf="submittedFeedback && f.Comment.errors" class="invalid-feedback">
+                                    <div *ngIf="f.Comment.errors.required">Comment is required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="submit" (click)="onSubmitFeedback()" class="btn btn-primary">Save
+                            changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<!-- -------------NO-ACTIVE-ORDERS---------- -->
+<div *ngIf="!isOrderExist" class="col-md-12">
+    <div class="card-header">
+        <h5 style="opacity:0.7" class="card-title">Now you are not assigned to any active order</h5>
+        <h6 style="opacity:0.7" class="card-title">If you already have "Welcome Code" you can join this order</h6>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <input class="form-control" type="text" [(ngModel)]="welcomeCode">
+            </div>
+            <div class="col-md-2 form-group" style="margin-top: -0.5rem;">
+                <button type="submit" (click)="onJoinOrder()" class="btn btn-primary">Join</button>
+            </div>
+        </div>
+        <h5 style="opacity:0.7" class="card-title">{{joinResult}}</h5>
+    </div>
+</div>
+
+<!-- //////////////////////////////////// -->
+
+<!-- <app-not-found *ngIf="isNotFound"></app-not-found> -->

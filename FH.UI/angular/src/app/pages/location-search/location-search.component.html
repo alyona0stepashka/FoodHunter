@@ -1,0 +1,114 @@
+<mat-tab-group style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+    <!-- -------------Basic Search------------------- -->
+    <mat-tab>
+        <ng-template mat-tab-label><span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+                <b>Search</b></span>
+        </ng-template>
+        <div>
+            <div class="card card-user" style="min-height: auto;">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="fas fa-search"></i>&nbsp;&nbsp;Let's look for some interesting
+                        places
+                    </h5>
+                </div>
+                <div class="card-body" style="min-height: auto;">
+                    <!-- <form [formGroup]="searchForm" (ngSubmit)="getSearchResult()"> -->
+                    <div class="row">
+                        <div class="col-md-1">
+                            <div class="form-group" style="margin-top: 1.1rem;">
+                                <label>Company</label>
+                                <input type="checkbox" [(ngModel)]="isCompany" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group" style="margin-top: 1.1rem;">
+                                <label>Location</label>
+                                <input type="checkbox" [(ngModel)]="isLocation" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label>Search word</label>
+                                <input type="text" [(ngModel)]="key" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <button class="btn btn-primary" style="margin-top: 1.55rem;"
+                                    (click)="getSearchResult()"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </form> -->
+                    <div *ngIf="isSearched" class="card card-user">
+                        <div class="card-header">
+                            <h5 class="card-title"><i class="fas fa-search"></i>&nbsp;&nbsp;We found
+                                {{searchResult.length}} results
+                            </h5>
+                        </div>
+                        <div class="card-body" style="min-height: auto;">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <ng-container *ngFor="let item of searchResult">
+                                        <tr>
+                                            <td width="10%">
+                                                <div class="row">
+                                                    <div class="item text-center col-md-12">
+                                                        <img style="max-height: 8rem; width: auto; cursor: pointer;"
+                                                            (click)="open(item.Number)"
+                                                            src="{{serverUrl}}{{item.PhotoPath}}" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="item text-center col-md-12" title="{{item.Rate}}">
+                                                        <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true">
+                                                        </ngb-rating>
+                                                        <i>({{item.RateCount}})</i>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td width="88%">
+                                                <div class="row">
+                                                    <div class="item text-center col-md-12">
+                                                        <span *ngIf="item.ObjType=='location'"
+                                                            (click)="redirect(item.ObjId, item.ObjType)"
+                                                            style="font-size: large; cursor: pointer; text-decoration: underline;">{{item.Title}}&nbsp;<i>(Location)</i></span>
+                                                        <span *ngIf="item.ObjType=='company'"
+                                                            style="font-size: large; cursor: auto !important; text-decoration: none !important;">{{item.Title}}&nbsp;<i>(Company)</i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div *ngIf="item.PriceWithSales==null"
+                                                        class="item text-center col-md-12">
+                                                        <span style="white-space: normal;">{{item.Address}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <!-- -------------Map Search------------------- -->
+    <!-- <mat-tab>
+        <ng-template mat-tab-label><span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+                <b>Map</b></span>
+        </ng-template>
+        <div>
+            <div class="card card-user" style="min-height: auto;">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="fas fa-map-marked-alt"></i>&nbsp;&nbsp;Map&nbsp;</h5>
+                </div>
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+    </mat-tab> -->
+
+</mat-tab-group>
+<!-- --------------new table modal---------- -->

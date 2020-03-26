@@ -1,0 +1,89 @@
+<div *ngIf="!isNotFound" class="col-md-12">
+    <div class="card card-user" [ngStyle]="{'background-image':'url('+topPhoto+')'}"
+        style="transform: translate3d(0px, 0px, 0px); background-size: cover;">
+        <div class="card-body" style="background-color: #ffffff; margin-top: 11rem;">
+            <div class="col-md-12" style="padding-left: 0; padding-right: 0;">
+                <div class="col-md-12" style="text-align: center; margin-top: -4rem;">
+                    <img src="{{companyPhoto}}"
+                        style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;" />
+                </div>
+
+                <div class="row">
+                    <div class="item col-md-12" style="margin-top: 1rem;" title="{{locationInfo.Rate}}">
+                        <ngb-rating max="5" [(rate)]="locationInfo.Rate" [readonly]="true">
+                        </ngb-rating>
+                        <i *ngIf="locationInfo.Feedbacks!=null">({{locationInfo.Feedbacks.length}})</i>
+                        <i *ngIf="locationInfo.Feedbacks==null">(0)</i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5><b>{{locationInfo.Name}} </b>"{{locationInfo.CompanyName}}"</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <i>{{locationInfo.Address}} </i>&nbsp;&nbsp;
+                        <a *ngIf="locationInfo.Facebook!=null" href="{{locationInfo.Facebook}}">&nbsp;<i
+                                class="fab fa-facebook-square"></i></a>
+                        <a *ngIf="locationInfo.Vk!=null" href="{{locationInfo.Vk}}">&nbsp;<i class="fab fa-vk"></i></a>
+                        <a *ngIf="locationInfo.Instagram!=null" href="{{locationInfo.Instagram}}">&nbsp;<i
+                                class="fab fa-instagram"></i></a>
+                        <a *ngIf="locationInfo.Site!=null" href="https://{{locationInfo.Site}}">&nbsp;<i
+                                class="fas fa-globe-americas"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-left: 0; padding-right: 0;">
+                    <mat-tab-group style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+                        <!-- ------------------------------------------>
+                        <mat-tab>
+                            <ng-template mat-tab-label><span
+                                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">Photo
+                                    Album</span>
+                            </ng-template>
+                            <div class="mat-tab-body-content" style="overflow: hidden;">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div *ngIf="lbAlbum.length==0" class=" text-center">
+                                            <label class="text-center">No Photo Yet</label>
+                                        </div>
+                                        <div *ngIf="lbAlbum.length>0" class="container col-md-12 row"
+                                            style="margin-bottom: inherit;">
+                                            <div *ngFor="let photo of locationInfo.PhotoAlbum; let i = index"
+                                                class="item text-center col-md-1" style="margin-top: 1rem;">
+                                                <img style="max-height: 4rem; width: auto; cursor: pointer;"
+                                                    (click)="open(photo.Number)" src="{{serverUrl}}{{photo.Value}}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <!-- ------------------------------------------>
+                        <mat-tab>
+                            <ng-template mat-tab-label><span
+                                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">Menus</span>
+                            </ng-template>
+                            <app-menu-manager style="background-color: aquamarine;"></app-menu-manager>
+                        </mat-tab>
+                        <!-- ------------------------------------------>
+                        <mat-tab>
+                            <ng-template mat-tab-label><span
+                                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">Tables</span>
+                            </ng-template>
+                            <app-tables-manager></app-tables-manager>
+                        </mat-tab>
+                        <!-- ------------------------------------------>
+                        <mat-tab>
+                            <ng-template mat-tab-label><span
+                                    style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">Feedbacks</span>
+                            </ng-template>
+                            <app-feedback-list [feedbacks]="locationInfo.Feedbacks"></app-feedback-list>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-not-found *ngIf="isNotFound"></app-not-found>

@@ -12,6 +12,9 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+wwwroot
+*.lock
+*.dblock
 
 # Build results
 [Dd]ebug/

@@ -1,0 +1,10 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~open-iconic/font/css/open-iconic-bootstrap.css";
+/* You can add global styles to this file, and also import other style files */
+input {
+  background: #ffffffdb;
+}
+
+.card-user .card-boby {
+  min-height: auto;
+}

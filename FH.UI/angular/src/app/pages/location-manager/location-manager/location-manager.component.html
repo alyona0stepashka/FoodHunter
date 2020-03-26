@@ -1,0 +1,364 @@
+<div *ngIf="isEdit" class="col-md-12">
+    <div class="card card-user">
+        <div class="card-header">
+            <h5 class="card-title"><i class="far fa-images"></i>&nbsp;Manage photos</h5>
+        </div>
+        <div class="card-body">
+            <!-- <input type="file" #Image accept="image/*" (change)="uploadPhoto($event.target.files)" class="form-control col-sm-6" placeholder="Photo..." />  -->
+            <!-- <img [src]="imageUrl" style="max-height: 100px; max-width: 100px" class="col-sm-6"> -->
+
+            <!-- <ngx-dropzone (change)="onFilesAdded($event)" ()>
+                <ngx-dropzone-label>Drop files</ngx-dropzone-label>
+                <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-preview>
+            </ngx-dropzone> -->
+            <ngx-dropzone #dropzone [multiple]="true" [accept]="'image/*'" [maxFileSize]="5242880" [showPreviews]="true"
+                (filesAdded)="onFilesAdded($event)" (filesRejected)="onClearPhoto()"></ngx-dropzone>
+            <button class="btn btn-primary" Title="Upload images" (click)="onUploadFiles()"><i
+                    class="fas fa-folder-plus"></i></button>
+            <button class="btn btn-error" Title="Clear images" (click)="dropzone.reset(); onClearPhoto();"><i
+                    class="fas fa-folder-minus"></i></button>
+        </div>
+        <div *ngIf="lbAlbum.length<1" class=" text-center">
+            <label class="text-center">No Photo Yet</label>
+        </div>
+        <div *ngIf="lbAlbum.length>0" class="container col-md-12 row" style="margin-bottom: inherit;">
+            <div *ngFor="let photo of location.PhotoAlbum; let i = index" class="item text-center col-md-1"
+                style="margin-top: 1rem;">
+                <button (click)="onDeletePhoto(photo.Id)" style="position: absolute;"><i
+                        class="fas fa-times"></i></button>
+                <img style="max-height: 4rem; width: auto; cursor: pointer;" (click)="open(i)"
+                    src="{{serverUrl}}{{photo.Value}}" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="card card-user">
+        <div class="card-header">
+            <h5 *ngIf="!isEdit" class="card-title"><i class="far fa-edit"></i>&nbsp;Register your business location
+                (re-login needed)</h5>
+            <h5 *ngIf="isEdit" class="card-title"><i class="far fa-edit"></i>&nbsp;Update your business location info
+            </h5>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label>Company</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
+                                (click)="openModal(newCompany)" title="Register your company if it is not yet">+ new</a>
+                            <select formControlName="CompanyId" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.CompanyId.errors }" placeholder="Company">
+                                <option value="" selected disabled hidden>Choose your company...</option>
+                                <option *ngFor="let company of companies" value="{{company.Id}}">
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img src="{{serverUrl}}{{company.LogoPath}}">
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{company.Name}}
+                                        </div>
+                                    </div>
+                            </select>
+                            <div *ngIf="submitted && f.CompanyId.errors" class="invalid-feedback">
+                                <div *ngIf="f.CompanyId.errors.required">Company is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label>Your coordinates (Lon/Lat)</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
+                                (click)="loadMap()">&oplus;
+                                find now</a>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input Title="Longitude" type="text" formControlName="Longitude"
+                                            class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.Longitude.errors }"
+                                            placeholder="Longitude" />
+                                        <div *ngIf="submitted && f.Longitude.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Longitude.errors.required">Longitude is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input Title="Latitude" type="text" formControlName="Latitude"
+                                            class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.Latitude.errors }"
+                                            placeholder="Latitude" />
+                                        <div *ngIf="submitted && f.Latitude.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Latitude.errors.required">Latitude is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Location Name</label>
+                            <input Title="Name" type="text" formControlName="Name" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.Name.errors }" placeholder="Name" />
+                            <div *ngIf="submitted && f.Name.errors" class="invalid-feedback">
+                                <div *ngIf="f.Name.errors.required">Name is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <input Title="Currency (BYN, $, EUR...)" type="text" formControlName="Currency"
+                                class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Currency.errors }"
+                                placeholder="Currency" />
+                            <div *ngIf="submitted && f.Currency.errors" class="invalid-feedback">
+                                <div *ngIf="f.Currency.errors.required">Currency is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input Title="Address" type="text" formControlName="Address" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.Address.errors }" placeholder="Address" />
+                            <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
+                                <div *ngIf="f.Address.errors.required">Address is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button *ngIf="!isEdit" type="submit" class="btn btn-primary">Register Location</button>
+                            <button *ngIf="isEdit" type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #newCompany let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Register your business company</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="companyForm" (ngSubmit)="onSubmitCompany()">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;" #Image
+                            accept="image/*" (change)="uploadPhoto($event.target.files)"
+                            class="form-control btn btn-primary" placeholder="Photo">
+                        <img [src]="imageUrl" class="avatar"
+                            style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                        <div *ngIf="submittedCompany && f2.Photo.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Photo.errors.required">Company Logo is required</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input Title="Name" type="text" formControlName="Name" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Name.errors }"
+                            placeholder="Full oficial name" />
+                        <div *ngIf="submittedCompany && f2.Name.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Name.errors.required">Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Specification</label>
+                        <select formControlName="SpecificationId" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.SpecificationId.errors }"
+                            placeholder="Specification">
+                            <option value="" selected disabled hidden>Choose your main specification...</option>
+                            <option *ngFor="let spec of specifications" value="{{spec.Id}}">
+                                {{spec.Value}}</option>
+                        </select>
+                        <div *ngIf="submittedCompany && f2.SpecificationId.errors" class="invalid-feedback">
+                            <div *ngIf="f2.SpecificationId.errors.required">Specification is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Contact Info</label>
+                        <textarea Title="ContactInfo" type="text" formControlName="ContactInfo" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.ContactInfo.errors }"
+                            placeholder="ContactInfo">
+                        </textarea>
+                        <div *ngIf="submittedCompany && f2.ContactInfo.errors" class="invalid-feedback">
+                            <div *ngIf="f2.ContactInfo.errors.required">Contact Info is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Describe Info</label>
+                        <textarea Title="Describe Info" type="text" formControlName="Describe" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Describe.errors }"
+                            placeholder="Any info about your company..."></textarea>
+                        <div *ngIf="submittedCompany && f2.Describe.errors" class="invalid-feedback">
+                            <div *ngIf="f2.Describe.errors.required">Describe Info is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><i class="nc-icon nc-world-2"></i>&nbsp;Site link</label>
+                        <input Title="Site" type="text" formControlName="Site" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Site.errors }" placeholder="Site link" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><i class="fab fa-facebook-square"></i>&nbsp;Facebook link</label>
+                        <input Title="Facebook" type="text" formControlName="Facebook" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Facebook.errors }"
+                            placeholder="Facebook link" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><i class="fab fa-instagram"></i>&nbsp;Instagram link</label>
+                        <input Title="Instagram" type="text" formControlName="Instagram" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Instagram.errors }"
+                            placeholder="Instagram link" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><i class="fab fa-vk"></i>&nbsp;Vk link</label>
+                        <input Title="Vk" type="text" formControlName="Vk" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedCompany && f2.Vk.errors }" placeholder="Vk link" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button type="submit" (click)="onSubmitCompany()" class="btn btn-primary">Register Company</button>
+        </div>
+        <!-- <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button> -->
+    </div>
+</ng-template>
+
+
+
+<!-- <ng-template #findCoordinates let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Is it your bussiness location coordinates?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card ">
+                    <div class="card-body ">
+                        Lng: {{lng}}, Lat:{{lat}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card ">
+                    <div class="card-header ">
+                        Google Maps
+                    </div>
+                    <div class="card-body ">
+                        <div id="mapGoogle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button (click)="setGeolocationForm()" class="btn btn-success">Yes</button>&nbsp;
+            <button (click)="loadMap()" class="btn btn-danger">No (Refresh geolocation)</button>
+        </div>
+    </div>
+</ng-template> -->
+
+<!-- <ng-template #findCoordinates let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Is it your bussiness location coordinates?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <agm-map [latitude]="lat" [longitude]="lng">
+            <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+        </agm-map>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button (click)="setGeolocationForm()" class="btn btn-success">Yes</button>&nbsp;
+            <button (click)="loadMap()" class="btn btn-danger">No (Refresh geolocation)</button>
+        </div>
+    </div>
+</ng-template> -->
+
+
+<ng-template #findCoordinates let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Is it your bussiness location coordinates?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false"
+            (mapClick)="mapClicked($event)">
+
+            <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label, i)"
+                [latitude]="m.lat" [longitude]="m.lng" [label]="m.label" [markerDraggable]="m.draggable"
+                (dragEnd)="markerDragEnd(m, $event)">
+
+                <agm-info-window>
+                    <strong>InfoWindow content</strong>
+                </agm-info-window>
+
+            </agm-marker>
+
+            <agm-circle [latitude]="lat + 0.3" [longitude]="lng" [radius]="5000" [fillColor]="'red'"
+                [circleDraggable]="true" [editable]="true">
+            </agm-circle>
+
+        </agm-map> -->
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button (click)="setGeolocationForm()" class="btn btn-success">Yes</button>&nbsp;
+            <button (click)="loadMap()" class="btn btn-danger">No (Refresh geolocation)</button>
+        </div>
+    </div>
+</ng-template>

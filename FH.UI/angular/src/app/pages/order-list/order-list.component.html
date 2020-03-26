@@ -1,0 +1,144 @@
+<mat-tab-group style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+    <!-- ----------------ALL-ORDERS------------------- -->
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                <i class="fas fa-concierge-bell"></i>&nbsp;All orders
+            </span>
+        </ng-template>
+        <div>
+            <div class="card card-user" style="min-height: auto;">
+                <div class="card-body">
+                    <!-- <div *ngIf="order.IsActive" class="row">
+                        <div class="col-md-12">
+                            <label class="card-title" style="font-size: 1.3em;">Order actions:&nbsp;</label>
+                            <button title="Call manager" class="btn" style="padding: inherit;"
+                                (click)="openModal(openCallManager, 'openCallManager', null)">
+                                <i class="fas fa-comment-dots"></i>
+                            </button>
+                            <button title="Open my check" class="btn" style="padding: inherit;"
+                                (click)="openModal(showCheck, 'showCheck', null)">
+                                <i class="fas fa-dollar-sign"></i>
+                            </button>
+                            <button *ngIf="isManager" title="Cancel this order-session" class="btn"
+                                style="padding: inherit;" (click)="cancelSession()">
+                                <i class="fas fa-door-open"></i>
+                            </button>
+                        </div>
+                    </div><br> -->
+                    <div *ngIf="!isHaveOrders" class=" text-center" style="background: #8a8a8a26;">
+                        <label class="text-center">No Orders Yet</label>
+                    </div>
+                    <div class="card-body">
+                        <table *ngIf="isHaveOrders" class="table table-striped">
+                            <tbody>
+                                <ng-container *ngFor="let order of orders">
+                                    <tr style="cursor: pointer;" (click)="redirectToOrder(order.Id)">
+                                        <td width="1%" *ngIf="order.IsActive" style="background-color: #8dd844;"
+                                            title="Active"></td>
+                                        <td width="1%" *ngIf="!order.IsActive" style="background-color: #cccccc;"
+                                            title="Canceled"></td>
+                                        <td width="30%">
+                                            <div class="row">
+                                                <div class="item text-center col-md-12">
+                                                    <span *ngIf="!isManager">
+                                                        <i title="Open location page"
+                                                            (click)="redirectToLocation(order.LocationId)"
+                                                            style="cursor: pointer;"
+                                                            class="fas fa-external-link-alt"></i>
+                                                        &nbsp;{{order.LocationName}}
+                                                    </span><br *ngIf="!isManager" />
+                                                    <span>Table#{{order.TableNumber}}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td width="55%">
+                                            <div class="row">
+                                                <div class="item text-center col-md-12">
+                                                    <span>{{this.datepipe.transform(order.StartDate, 'MMMM d, h:mm a')}}</span><br />
+                                                    <span>-</span><br />
+                                                    <span
+                                                        *ngIf="order.EndDate!=null">{{this.datepipe.transform(order.EndDate, 'MMMM d, h:mm a')}}</span>
+                                                    <span *ngIf="order.EndDate==null">...</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td width="10%">
+                                            <div class="row">
+                                                <div class="item text-center col-md-12">
+                                                    <!-- <span *ngIf="order.IsActive">
+                                                        <div
+                                                            style="border-radius:50%; width: 10px; height: 10px; background-color: #8dd844; margin:2%;display: inline-block;">
+                                                        </div>&nbsp;Active
+                                                    </span><br *ngIf="order.IsActive" />
+                                                    <span *ngIf="!order.IsActive">
+                                                        <div
+                                                            style="border-radius:50%; width: 10px; height: 10px; background-color: #cccccc; margin:2%;display: inline-block;">
+                                                        </div>&nbsp;Canceled
+                                                    </span><br *ngIf="!order.IsActive" /> -->
+                                                    <span *ngIf="order.ManagerId!=null && order.ManagerId!=0"
+                                                        title="Waiter">
+                                                        <i class="fas fa-user-tie"></i>&nbsp;{{order.ManagerName}}
+                                                    </span><br *ngIf="order.ManagerId!=null && order.ManagerId!=0" />
+                                                    <button
+                                                        *ngIf="isManager && (order.ManagerId==null || order.ManagerId==0)"
+                                                        type="submit" class="btn "
+                                                        style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem; background-color: #d84444;"
+                                                        title="Assign this order as waiter"
+                                                        (click)="assignOrderAsManager(order.Id)"><i
+                                                            class="fas fa-sign-in-alt"></i></button>
+                                                    <span *ngIf="order.ManagerId==null || order.ManagerId==0">&nbsp;No
+                                                        waiter
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <!-------------- MANAGER-CALLS ------------>
+    <mat-tab *ngIf="isManager">
+        <ng-template mat-tab-label>
+            <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                <i class="fas fa-fire-alt"></i>&nbsp;Waiter calls
+            </span>
+        </ng-template>
+        <div>
+            <div class="card card-user" style="min-height: auto;">
+                <div class="card-body">
+                    <div *ngIf="calls==null || calls.length==0" class=" text-center" style="background: #8a8a8a26;">
+                        <label class="text-center">No Active Calls Now</label>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ng-container *ngFor="let call of calls">
+                                    <div *ngIf="call.IsActive"
+                                        class="alert alert-danger alert-with-icon alert-dismissible fade show"
+                                        data-notify="container">
+                                        <button *ngIf="isManager" type="button" aria-hidden="true" class="close"
+                                            data-dismiss="alert" aria-label="Close"
+                                            (click)="disableManagerCall(call.Id)">
+                                            <i class="nc-icon nc-simple-remove"></i>
+                                        </button>
+                                        <span data-notify="icon" class="nc-icon nc-bell-55"></span>
+                                        <span data-notify="message"><i
+                                                style="white-space: normal; font-style: normal; font-size: smaller;">[
+                                                {{this.datepipe.transform(call.CallTime, 'MMMM d, h:mm a')}}]&nbsp;&nbsp;</i>Table#{{call.TableNumber}}:
+                                            {{call.Comment}}</span>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>

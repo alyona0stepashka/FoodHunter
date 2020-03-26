@@ -1,0 +1,540 @@
+<div *ngIf="!isNotFound">
+
+    <div *ngIf="!isLocationExist && isEdit" class="col-md-12">
+        <div class="card-header">
+            <h5 style="opacity:0.7" class="card-title">Before this you have to register your business location <a
+                    href="/#/dashboard-manager/location"><i>here</i></a></h5>
+        </div>
+    </div>
+
+    <!-- --------ADD-NEW-MENU--------- -->
+    <mat-tab-group style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;">
+
+        <mat-tab *ngIf="isEdit">
+            <ng-template mat-tab-label>
+                <!-- Todo [2020/02/21 AP] move onClick handler to the whole tab elelement - now it works on inner text only -->
+                <i class="fas fa-plus" (click)="setCurrentMenuId(0)"><span
+                        style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;"></span></i>
+            </ng-template>
+            <div>
+                <div class="card card-user" style="min-height: auto;">
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="far fa-edit"></i>&nbsp;&nbsp;Add new menu
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="menuForm" (ngSubmit)="onSubmitMenu()">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="form-group">
+                                        <label>Menu Name</label>
+                                        <input Title="Title" type="text" formControlName="Title" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submittedMenu && f.Title.errors }"
+                                            placeholder="Title" />
+                                        <div *ngIf="submittedMenu && f.Title.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Title.errors.required">Title is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Remark</label>
+                                        <select formControlName="IconId" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submittedMenu && f.IconId.errors }"
+                                            placeholder="Remark">
+                                            <option value="" selected disabled hidden>Choose a remark...</option>
+                                            <option *ngFor="let icon of icons" value="{{icon.Id}}">
+
+                                                <div class="row">
+                                                    <div class="col-md-1">
+                                                        <i class="{{icon.Value}}"></i>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        {{icon.Description}}
+                                                    </div>
+                                                </div>
+                                        </select>
+                                        <div *ngIf="submittedMenu && f.IconId.errors" class="invalid-feedback">
+                                            <div *ngIf="f.IconId.errors.required">Remark is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <input Title="Info" type="text" formControlName="Info" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submittedMenu && f.Info.errors }"
+                                            placeholder="Info" />
+                                        <div *ngIf="submittedMenu && f.Info.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Info.errors.required">Info is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Save menu</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <!-- ---------MENUS------------- -->
+        <mat-tab *ngFor="let menu of menus">
+            <ng-template mat-tab-label>
+                <i class="{{menu.Icon.Value}}" (click)="setCurrentMenuId(menu.Id)">
+                    <span style="font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 900">
+                        {{menu.Title}}
+                    </span>
+                </i>
+            </ng-template>
+            <div>
+                <div class="card card-user" style="min-height: auto;">
+                    <div class="card-header">
+                        <h5 class="card-title" style="font-size: 1.3em;">{{menu.Info}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div *ngIf="isEdit" class="row">
+                            <div class="col-md-12">
+                                <label class="card-title" style="font-size: 1.3em;">Menu actions:&nbsp;</label>
+                                <button title="Add new menu item" class="btn" style="padding: inherit;"
+                                    (click)="openModal(newMenuItem, 'newMenuItem', menu.Id)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button title="Edit menu" class="btn" style="padding: inherit;"
+                                    (click)="openModal(editMenu, 'editMenu', menu.Id)">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button title="Delete menu" class="btn" style="padding: inherit;"
+                                    (click)="deleteMenu(menu.Id)">
+                                    <i class="far fa-trash-alt"></i>
+                                </button></div>
+                        </div><br>
+                        <table class="table table-striped">
+                            <tbody>
+                                <ng-container *ngFor="let item of menu.MenuItems">
+                                    <tr *ngIf="item.IsActive || isEdit">
+                                        <td width="10%">
+                                            <div class="row">
+                                                <div class="item text-center col-md-12">
+                                                    <img style="max-height: 8rem; width: auto; cursor: pointer;"
+                                                        (click)="open(item.Photo.Number)"
+                                                        src="{{serverUrl}}{{item.Photo.Value}}" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="item text-center col-md-12" style="margin-top: 1rem;"
+                                                    title="{{item.Rate}}">
+                                                    <ngb-rating max="5" [(rate)]="item.Rate" [readonly]="true">
+                                                    </ngb-rating>
+                                                    <i *ngIf="item.FeedbacksCount!=null">({{item.FeedbacksCount}})</i>
+                                                    <i *ngIf="item.FeedbacksCount==null">(0)</i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td width="88%">
+                                            <div class="row">
+                                                <div class="item text-center col-md-12">
+                                                    <span *ngIf="!item.IsActive" style="white-space: normal;"><i
+                                                            title="Ttem is not visible to the clients"
+                                                            class="fas fa-eye-slash"></i>&nbsp;{{item.Title}}</span>
+                                                    <span *ngIf="item.IsActive"
+                                                        style="white-space: normal;">{{item.Title}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div *ngIf="item.PriceWithSales==null"
+                                                    class="item text-center col-md-12">
+                                                    <span
+                                                        style="font-size: large;">{{item.Price}}&nbsp;{{item.Currency}}</span>
+                                                </div>
+                                                <div *ngIf="item.PriceWithSales!=null"
+                                                    class="item text-center col-md-12">
+                                                    <span
+                                                        style="font-size: large;">{{item.PriceWithSales}}&nbsp;{{item.Currency}}</span>&nbsp;
+                                                    <span
+                                                        style="text-decoration-line: line-through; opacity: 0.5;">{{item.Price}}&nbsp;{{item.Currency}}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td width="2%">
+                                            <div class="item text-center col-md-12" style="padding: 0;">
+                                                <ul style="list-style:none; padding:0; margin:0;">
+                                                    <li>
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Show details"
+                                                            (click)="openModal(openMenuItem, 'openMenuItem', item.Id)"><i
+                                                                class="fas fa-info-circle"></i></button>
+                                                    </li>
+                                                    <li *ngIf="isEdit">
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Edit"><i class="fas fa-pen"
+                                                                (click)="openModal(editMenuItem, 'editMenuItem', item.Id)"></i></button>
+                                                    </li>
+                                                    <li *ngIf="isEdit">
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Delete" (click)="deleteMenuItem(item.Id)"><i
+                                                                class="fas fa-ban"></i></button>
+                                                    </li>
+                                                    <li *ngIf="!isEdit">
+                                                        <button type="submit" class="btn "
+                                                            style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                            title="Add to order" (click)="onOrderItem(item)"><i
+                                                                class="fas fa-shopping-basket"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
+
+    <!-- ---------NEW-MENU-ITEM----------- -->
+    <ng-template #newMenuItem let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Create new menu item</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="menuItemForm" (ngSubmit)="onSubmitMenuItem()">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;"
+                                #Image accept="image/*" (change)="uploadPhoto($event.target.files)"
+                                class="form-control btn btn-primary" placeholder="Photo">
+                            <img [src]="imageUrl" class="avatar"
+                                style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                            <div *ngIf="submittedMenuItem && f2.Photo.errors" class="invalid-feedback">
+                                <div *ngIf="f2.Photo.errors.required">Menu item photo is required</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input Title="Title" type="text" formControlName="Title" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Title.errors }"
+                                        placeholder="Title" />
+                                    <div *ngIf="submittedMenuItem && f2.Title.errors" class="invalid-feedback">
+                                        <div *ngIf="f2.Title.errors.required">Title is required</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><i class="fas fa-dollar-sign"></i>&nbsp;Price</label>
+                                    <input pattern="\d+([,]\d+)?" Title="Price" type="text" formControlName="Price"
+                                        class="form-control"
+                                        [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Price.errors }"
+                                        placeholder="Price" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><i class="fas fa-donate"></i>&nbsp;Discounted price</label>
+                                    <input pattern="\d+([,]\d+)?" Title="Discounted price" type="text"
+                                        formControlName="PriceWithSales" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submittedMenuItem && f2.PriceWithSales.errors }"
+                                        placeholder="Discounted price" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label><i class="far fa-comment-alt"></i>&nbsp;Describe Info </label>
+                            <textarea Title="Describe Info" type="text" formControlName="Info" class="form-control"
+                                [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Info.errors }"
+                                placeholder="Any info about item..."></textarea>
+                            <div *ngIf="submittedMenuItem && f2.Info.errors" class="invalid-feedback">
+                                <div *ngIf="f2.Info.errors.required">Describe Info is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label><i class="far fa-sticky-note"></i>&nbsp;Note for clients (serving size, taste
+                                characteristics, etc.)</label>
+                            <textarea Title="Note" type="text" formControlName="Note" class="form-control"
+                                [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Note.errors }" placeholder="Note">
+                    </textarea>
+                            <div *ngIf="submittedMenuItem && f2.Note.errors" class="invalid-feedback">
+                                <div *ngIf="f2.Note.errors.required">Note is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label><i class="far fa-eye"></i>&nbsp;Show in menu</label>&nbsp;
+                            <mat-slide-toggle [checked]="IsChecked" (change)="toggleIsActive()">
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="form-group">
+                <button type="submit" (click)="onSubmitMenuItem()" class="btn btn-primary">Save New Item</button>
+            </div>
+        </div>
+    </ng-template>
+    <!-------------EDIT-MENU--------------->
+    <ng-template #editMenu let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title"><i class="far fa-edit"></i>&nbsp;Edit your menu info</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="menuForm" (ngSubmit)="onSubmitEditMenu()">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label>Menu Name</label>
+                            <input Title="Title" type="text" formControlName="Title" class="form-control"
+                                [ngClass]="{ 'is-invalid': submittedEditMenu && f.Title.errors }" placeholder="Title" />
+                            <div *ngIf="submittedEditMenu && f.Title.errors" class="invalid-feedback">
+                                <div *ngIf="f.Title.errors.required">Title is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label>Remark</label>
+                            <select formControlName="IconId" class="form-control"
+                                [ngClass]="{ 'is-invalid': submittedEditMenu && f.IconId.errors }" placeholder="Remark">
+                                <option value="" selected disabled hidden>Choose a remark...</option>
+                                <option *ngFor="let icon of icons" value="{{icon.Id}}">
+
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <i class="{{icon.Value}}"></i>
+                                        </div>
+                                        <div class="col-md-10">
+                                            {{icon.Description}}
+                                        </div>
+                                    </div>
+                            </select>
+                            <div *ngIf="submittedEditMenu && f.IconId.errors" class="invalid-feedback">
+                                <div *ngIf="f.IconId.errors.required">Remark is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea Title="Describe Info" type="text" formControlName="Info" class="form-control"
+                                [ngClass]="{ 'is-invalid': submittedEditMenu && f.Info.errors }"
+                                placeholder="Any info about your company..."></textarea>
+                            <div *ngIf="submittedEditMenu && f.Info.errors" class="invalid-feedback">
+                                <div *ngIf="f.Info.errors.required">Info is required</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" (click)="onSubmitEditMenu()" class="btn btn-primary">Save
+                                changes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+    <!-- ----------EDIT-MENU-ITEM----------------- -->
+    <ng-template #editMenuItem let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Edit your menu item info</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="menuItemForm" (ngSubmit)="onSubmitEditMenuItem()">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="file" formControlName="Photo" style="max-width: 10rem; max-height: 10rem;"
+                                #Image accept="image/*" (change)="uploadPhoto($event.target.files)"
+                                class="form-control btn btn-primary" placeholder="Photo">
+                            <img [src]="editItemPhotoPath" class="avatar"
+                                style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); max-width: 10rem; max-height: 10rem; border-color: #ffffff; border-width: 2px;">
+                            <div *ngIf="submittedMenuItem && f2.Photo.errors" class="invalid-feedback">
+                                <div *ngIf="f2.Photo.errors.required">Menu item photo is required</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input Title="Title" type="text" formControlName="Title" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Title.errors }"
+                                        placeholder="Title" />
+                                    <div *ngIf="submittedMenuItem && f2.Title.errors" class="invalid-feedback">
+                                        <div *ngIf="f2.Title.errors.required">Title is required</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><i class="fas fa-dollar-sign"></i>&nbsp;Price</label>
+                                    <input pattern="\d+([,]\d+)?" Title="Price" type="text" formControlName="Price"
+                                        class="form-control"
+                                        [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Price.errors }"
+                                        placeholder="Price" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><i class="fas fa-donate"></i>&nbsp;Discounted price</label>
+                                    <input pattern="\d+([,]\d+)?" Title="Discounted price" type="text"
+                                        formControlName="PriceWithSales" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submittedMenuItem && f2.PriceWithSales.errors }"
+                                        placeholder="Discounted price" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label><i class="far fa-comment-alt"></i>&nbsp;Describe Info </label>
+                            <textarea Title="Describe Info" type="text" formControlName="Info" class="form-control"
+                                [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Info.errors }"
+                                placeholder="Any info about your company..."></textarea>
+                            <div *ngIf="submittedMenuItem && f2.Info.errors" class="invalid-feedback">
+                                <div *ngIf="f2.Info.errors.required">Describe Info is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label><i class="far fa-sticky-note"></i>&nbsp;Note for clients (serving size, taste
+                                characteristics, etc.)</label>
+                            <textarea Title="Note" type="text" formControlName="Note" class="form-control"
+                                [ngClass]="{ 'is-invalid': submittedMenuItem && f2.Note.errors }" placeholder="Note">
+                        </textarea>
+                            <div *ngIf="submittedMenuItem && f2.Note.errors" class="invalid-feedback">
+                                <div *ngIf="f2.Note.errors.required">Note is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label><i class="far fa-eye"></i>&nbsp;Show in menu</label>&nbsp;
+                            <mat-slide-toggle [checked]="IsChecked" (change)="toggleIsActive()">
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="form-group">
+                <button type="submit" (click)="onSubmitEditMenuItem()" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </ng-template>
+    <!-- ---------OPEN-MENU-ITEM-------------- -->
+    <ng-template #openMenuItem let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;">{{openedItem.Title}}&nbsp;&nbsp;
+            </h4>
+            <ngb-rating max="5" [(rate)]="openedItem.Rate" [readonly]="true" title="{{openedItem.FeedbacksCount}}">
+            </ngb-rating>
+            <i *ngIf="openedItem.FeedbacksCount!=null">({{openedItem.FeedbacksCount}})</i>
+            <i *ngIf="openedItem.FeedbacksCount==null">(0)</i>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="item text-center col-md-4">
+                    <img style="max-height: 22rem; width: auto;" (click)="open(openedItem.Photo.Number)"
+                        src="{{openItemPhotoPath}}" />
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 1rem;">
+                            <label style="opacity: 0.6; font-weight: 800;">Price:&nbsp;&nbsp;</label>
+                            <span *ngIf="openedItem.PriceWithSales==null"
+                                style="font-size: 2rem;">{{openedItem.Price}}&nbsp;{{openedItem.Currency}}</span>
+                            <span *ngIf="openedItem.PriceWithSales!=null"
+                                style="font-size: 2rem;">{{openedItem.PriceWithSales}}&nbsp;{{openedItem.Currency}}</span>&nbsp;
+                            <span *ngIf="openedItem.PriceWithSales!=null"
+                                style="text-decoration-line: line-through; opacity: 0.5;">{{openedItem.Price}}&nbsp;{{openedItem.Currency}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 1rem;">
+                            <label style="opacity: 0.6; font-weight: 800;">Description:</label>
+                            <textarea readonly
+                                style="cursor: auto; max-height: fit-content; background-color: white; border-left-width: 0; border-right-width: 0; overflow: hidden;"
+                                Title="Description" type="text" class="form-control" value="{{openedItem.Info}}"
+                                placeholder="Description">
+                        </textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 1rem;">
+                            <label style="opacity: 0.6; font-weight: 800;">Note for clients:</label>
+                            <textarea readonly readonly
+                                style="cursor: auto; max-height: fit-content; background-color: white; border-left-width: 0; border-right-width: 0; overflow: hidden;"
+                                Title="Note" type="text" class="form-control" value="{{openedItem.Note}}"
+                                placeholder="Note">
+                </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="margin-top: 1rem;">
+                    <label>Feedbacks</label>
+                    <app-feedback-list [feedbacks]="feedbacks"></app-feedback-list>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>
+<app-not-found *ngIf="isNotFound"></app-not-found>
