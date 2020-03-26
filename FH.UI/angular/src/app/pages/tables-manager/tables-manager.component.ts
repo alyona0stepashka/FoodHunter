@@ -289,6 +289,7 @@ export class TablesManagerComponent implements OnInit {
           );
           this.loadLocationTables();
           this.modalService.dismissAll();
+          this.submittedTable = false;
         },
         err => {
           console.log(err);
@@ -311,6 +312,7 @@ export class TablesManagerComponent implements OnInit {
           );
           this.loadLocationTables();
           this.modalService.dismissAll();
+          this.submittedTable = false;
         },
         err => {
           console.log(err);
@@ -341,6 +343,7 @@ export class TablesManagerComponent implements OnInit {
         );
         this.loadLocationTables();
         this.modalService.dismissAll();
+        this.submittedBook = false;
       },
       err => {
         console.log(err);
@@ -432,6 +435,7 @@ export class TablesManagerComponent implements OnInit {
   }
 
   get f() { return this.tableForm.controls; }
+  get f2() { return this.bookForm.controls; }
 
   openModal(content, goal?: string, id?: any) {
     if (goal == "newTable") {
