@@ -13,7 +13,6 @@ namespace FH.App.Controllers
 {
     [Route("api/static")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StaticController : ControllerBase
     {
         private readonly IStaticService _staticService;
@@ -23,6 +22,7 @@ namespace FH.App.Controllers
             _staticService = staticService;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         [Route("search")]
         public IActionResult GetSearchResult(SearchQueryVM search)
@@ -42,6 +42,7 @@ namespace FH.App.Controllers
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("client")]
         public IActionResult GetChartDataClient()
@@ -57,6 +58,7 @@ namespace FH.App.Controllers
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("manager")]
         public IActionResult GetChartDataManager()
@@ -87,6 +89,7 @@ namespace FH.App.Controllers
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("specification")]
         public IActionResult GetSpecifications()
@@ -102,6 +105,7 @@ namespace FH.App.Controllers
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("icon")]
         public IActionResult GetIcons()

@@ -22,6 +22,8 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+
 //using Microsoft.OData.Edm;
 
 namespace FH.App
@@ -51,7 +53,8 @@ namespace FH.App
 
             services.AddDbContext<EfDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"))
-                        .UseLazyLoadingProxies())
+
+                        .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)).UseLazyLoadingProxies())
                 .AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<EfDbContext>();
 

@@ -44,8 +44,7 @@ namespace FH.Models.Models
         public virtual List<OrderUser> OrderUsers { get; set; }
         public virtual List<ManagerCall> ManagerCalls { get; set; }
         public virtual List<OrderItem> OrderItems { get; set; }
-        public virtual Manager Manager { get; set; }
-        public virtual List<CuisineUser> CuisineUsers { get; set; }
+        public virtual Manager Manager { get; set; } 
 
     }
 }

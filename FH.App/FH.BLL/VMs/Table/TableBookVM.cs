@@ -42,7 +42,7 @@ namespace FH.BLL.VMs
                 }
             }
             //if (t.Table != null) {Table = new TableTabVM(t.Table); }
-            if (t.Client != null) { Client = new UserTabVM(t.Client); }
+            if (t.Client != null) { Client = new UserTabVM(t.Client, t.Client.Sex, t.Client.File); }
 
         }
     }

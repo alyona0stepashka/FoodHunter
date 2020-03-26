@@ -11,7 +11,7 @@ namespace FH.DAL.DataContext
         public EfDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<EfDbContext>();
-            optionsBuilder.UseSqlServer("Server=P-PAKHOLKOA\\SQLEXPRESS;Database=FHDBv2;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-D6DC2ID\\SQLEXPRESS;Database=FHDBv2;Trusted_Connection=True;");
 
             return new EfDbContext(optionsBuilder.Options);
         }

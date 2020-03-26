@@ -16,6 +16,7 @@ import { OrderManagerComponent } from './pages/order-manager/order-manager.compo
 import { OrderListComponent } from './pages/order-list/order-list.component';
 import { FeedbackListComponent } from './pages/feedback-list/feedback-list.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { StaffComponent } from './pages/staff/staff.component';
 
 export const AppRoutes: Routes = [
   //   {
@@ -60,6 +61,7 @@ export const AppRoutes: Routes = [
       { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard] },
       { path: 'order/:id', component: OrderManagerComponent, canActivate: [AuthGuard] },
       { path: 'feedbacks', component: FeedbackListComponent, canActivate: [AuthGuard] },
+      { path: 'staff', component: StaffComponent, canActivate: [AuthGuard] },
       // {path: 'register', component: RegisterComponent},
       // {path: 'about-us', component: AboutUsComponent},
       // {path: 'contact-us', component: ContactUsComponent},

@@ -1,0 +1,52 @@
+<div class="col-md-12">
+    <div class="card card-user">
+        <div class="card-header">
+            <h5 class="card-title">Staff management&nbsp;<i class="fas fa-plus" (click)="toggleRegister()"
+                    title="Register new user"></i></h5>
+        </div>
+        <div class="card-body">
+            <app-register *ngIf="isOpenRegister" [isStaff]="true" [locationId]="locationId"></app-register>
+            <table *ngIf="staff.length>0" class="table table-striped">
+                <tbody>
+                    <ng-container *ngFor="let user of staff">
+                        <tr>
+                            <td width="20%">
+                                <div class="row">
+                                    <div class="item text-left col-md-12">
+                                        <img style="max-height: 3rem; width: auto; cursor: pointer;"
+                                            (click)="open(user.Photo.Number)" src="{{serverUrl}}{{user.Photo.Value}}" />
+                                    </div>
+                                </div>
+                            </td>
+                            <td width="78%">
+                                <div class="row">
+                                    <div class="item text-center col-md-12">
+                                        <span style="white-space: normal;">
+                                            <i *ngIf="user.Sex=='Female'" class="fas fa-venus"
+                                                style="color:#dc3f6e;"></i>
+                                            <i *ngIf="user.Sex=='Male'" class="fas fa-mars" style="color:#3f93dc;"></i>
+                                            <i *ngIf="user.Sex=='Other'" class="fas fa-genderless"></i>
+                                            &nbsp;{{user.FullName}}, {{user.Age}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td width="2%">
+                                <div class="item text-center col-md-12" style="padding: 0;">
+                                    <ul style="list-style:none; padding:0; margin:0;">
+                                        <li>
+                                            <button type="submit" class="btn "
+                                                style="padding-left: 0.2rem; padding-right: 0.2rem; padding-top: 0.2rem; padding-bottom: 0.2rem;"
+                                                title="Delete user" (click)="deleteUser(user.Id)"><i
+                                                    class="fas fa-ban"></i></button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

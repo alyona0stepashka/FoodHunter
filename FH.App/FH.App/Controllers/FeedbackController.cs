@@ -38,6 +38,7 @@ namespace FH.App.Controllers
                 }
 
                 var locationFeedbacks = _feedbackService.GetFeedbacksByLocation(locationId);
+                locationFeedbacks.Reverse();
                 return Ok(locationFeedbacks);
             }
             catch (Exception ex)
@@ -60,6 +61,7 @@ namespace FH.App.Controllers
                     throw new Exception("itemId is missing");
                 } 
                 var itemFeedbacks = _feedbackService.GetFeedbacksByMenuItem(itemId);
+                itemFeedbacks.Reverse();
                 return Ok(itemFeedbacks);
             }
             catch (Exception ex)

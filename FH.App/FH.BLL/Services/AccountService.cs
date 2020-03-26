@@ -70,8 +70,8 @@ namespace FH.BLL.Services
             await _db.UserProfiles.CreateAsync(userProfile);
             if (model.Role == "manager")
             {
-                var manager = new Manager {UserProfileId = userProfile.Id};
-            await _db.Managers.CreateAsync(manager);
+                var manager = new Manager {UserProfileId = userProfile.Id, LocationId = model.LocationId};
+                await _db.Managers.CreateAsync(manager);
             }
 
             //await _chatService.SetLastOnlineAsync(user.Id);
@@ -119,11 +119,10 @@ namespace FH.BLL.Services
                 var roles = await _userManager.GetRolesAsync(user);
                 var isManager = roles.Any(m => m.Equals("manager"));
                 var profile = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId.Equals(user.Id));
-                var icon = $"{profile?.File?.Path}{profile?.File?.Name}{profile?.File?.Extension}";
-                var fullName = $"{profile?.FirstName} {profile?.LastName}";
-                var myLocation = _db.Locations.GetAll().FirstOrDefault(m => m.AdminId == user.Id);
-                var myLocationId = myLocation?.Id ?? 0;
                 var profileId = profile?.Id;
+                var icon = $"{profile?.File?.Path}{profile?.File?.Name}{profile?.File?.Extension}";
+                var fullName = $"{profile?.FirstName} {profile?.LastName}"; 
+                var myLocationId = _db.Managers.GetAll().FirstOrDefault(m => profileId != null && m.UserProfileId == profileId)?.LocationId ?? 0;
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -206,31 +205,37 @@ namespace FH.BLL.Services
             if (editResult == null)
             {
                 throw new Exception("Edit user info fail");
-            }
-
-            if (model.CuisinePreference != null)
-            {
-                var dbCuisinePrefs = _db.CuisineUsers.GetAll().Where(m => m.UserProfileId == userProfile.Id);
-                foreach (var dbItem in dbCuisinePrefs)
-                {
-                    if (!model.CuisinePreference.Select(m => m == dbItem.CuisineId).Any())
-                    {
-                        await _db.CuisineUsers.DeleteAsync(dbItem.Id);
-                        model.CuisinePreference.Remove(dbItem.CuisineId);
-                    }
-                }
-
-                foreach (var newItemId in model.CuisinePreference)
-                {
-                    var bu = await _db.CuisineUsers.CreateAsync(new CuisineUser
-                        {CuisineId = newItemId, UserProfileId = userProfile.Id});
-                }
-            }
+            } 
 
             await _emailService.SendEmailAsync(user.Email, "Edit your account info",
                 $"Your Account Info has been updating.");
 
         }
+
+        public List<UserTabVM> GetLocationStaff(string userId)
+        {
+            var managers = new List<UserTabVM>();
+            var manager = _db.UserProfiles.GetAll().FirstOrDefault(m => m.UserId == userId)?.Manager;
+            var location = _db.Locations.GetAll().FirstOrDefault(m => m.Id == manager.LocationId);
+            if (location != null)
+            { 
+                    managers = location.Managers.Select(m=>
+                    {
+                        if (m.UserProfile != null)
+                            return new UserTabVM(m.UserProfile, m.UserProfile.Sex, m.UserProfile.File);
+                        return new UserTabVM();
+                    }).ToList(); 
+            }
+
+            return managers;
+        }
+
+        public void DeleteUser(string userId)
+        {
+            var user = _userManager.Users.FirstOrDefault(m => m.Id == userId);
+            if (user != null) _userManager.DeleteAsync(user);
+        }
+
 
         public void Dispose()
         {

@@ -154,6 +154,8 @@ namespace FH.DAL.Migrations
 
                     b.Property<int?>("CompanyId");
 
+                    b.Property<string>("Currency");
+
                     b.Property<string>("Latitude");
 
                     b.Property<string>("Longitude");
@@ -334,35 +336,6 @@ namespace FH.DAL.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("FH.Models.Models.Subscription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("BuyDate");
-
-                    b.Property<DateTime>("EndDate");
-
-                    b.Property<int>("LocationId");
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<int>("SubscriptionTypeId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("SubscriptionTypeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Subscriptions");
-                });
-
             modelBuilder.Entity("FH.Models.Models.Table", b =>
                 {
                     b.Property<int>("Id")
@@ -464,38 +437,6 @@ namespace FH.DAL.Migrations
                     b.ToTable("CompanySpecifications");
                 });
 
-            modelBuilder.Entity("FH.Models.StaticModels.Cuisine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cuisines");
-                });
-
-            modelBuilder.Entity("FH.Models.StaticModels.CuisineUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CuisineId");
-
-                    b.Property<int>("UserProfileId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CuisineId");
-
-                    b.HasIndex("UserProfileId");
-
-                    b.ToTable("CuisineUsers");
-                });
-
             modelBuilder.Entity("FH.Models.StaticModels.OrderUser", b =>
                 {
                     b.Property<int>("Id")
@@ -513,23 +454,6 @@ namespace FH.DAL.Migrations
                     b.HasIndex("UserProfileId");
 
                     b.ToTable("OrderUsers");
-                });
-
-            modelBuilder.Entity("FH.Models.StaticModels.SubscriptionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Info");
-
-                    b.Property<decimal>("PricePerMonth");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SubscriptionTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -844,23 +768,6 @@ namespace FH.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("FH.Models.Models.Subscription", b =>
-                {
-                    b.HasOne("FH.Models.Models.Location", "Location")
-                        .WithMany("Subscriptions")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("FH.Models.StaticModels.SubscriptionType", "SubscriptionType")
-                        .WithMany("Subscriptions")
-                        .HasForeignKey("SubscriptionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("FH.Models.Models.Table", b =>
                 {
                     b.HasOne("FH.Models.Models.Location", "Location")
@@ -898,19 +805,6 @@ namespace FH.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("FH.Models.StaticModels.CuisineUser", b =>
-                {
-                    b.HasOne("FH.Models.StaticModels.Cuisine", "Cuisine")
-                        .WithMany("CuisineUsers")
-                        .HasForeignKey("CuisineId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("FH.Models.Models.UserProfile", "UserProfile")
-                        .WithMany("CuisineUsers")
-                        .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FH.Models.StaticModels.OrderUser", b =>

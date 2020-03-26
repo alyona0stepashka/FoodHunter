@@ -52,8 +52,7 @@
                                 <i class="fas fa-dollar-sign"></i>
                             </button>
                             <button *ngIf="!isManager" title="Add feedback about this order" class="btn"
-                                style="padding: inherit;"
-                                (click)="openModal(addFeedback, 'addFeedbackOrder', order.Id)">
+                                style="padding: inherit;" (click)="openModal(addFeedback, 'addFeedbackOrder', null)">
                                 <i class="fas fa-star"></i>
                             </button>
                             <button *ngIf="isManager && order.IsActive" title="Cancel this order-session" class="btn"
@@ -70,8 +69,7 @@
                     <div *ngIf="!order.IsActive" class="row">
                         <div *ngFor="let client of order.Clients" class="col-md-12">
                             <label class="card-title"
-                                style="font-size: 1.3em;">{{client.User.FirstName}}&nbsp;{{client.User.LastName}}:&nbsp;{{client.totalSum}}
-                                BYN</label>
+                                style="font-size: 1.3em;">{{client.User.FirstName}}&nbsp;{{client.User.LastName}}:&nbsp;{{client.totalSum}}&nbsp;{{order.Currency}}</label>
                         </div>
                     </div>
                     <div class="row" *ngIf="order.IsActive">
@@ -163,7 +161,9 @@
                                     <td width="20%">
                                         <div class="row">
                                             <div class="item text-center col-md-12">
-                                                <span style="font-size: large;">{{item.PricePerItem}} BYN x
+                                                <span
+                                                    style="font-size: large;">{{item.PricePerItem}}&nbsp;{{item.Currency}}
+                                                    x
                                                     {{item.Count}}</span>
                                             </div>
                                         </div>
@@ -226,7 +226,7 @@
 <ng-template #showCheck let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title" style="margin-top: auto;">
-            <i class="fas fa-cash-register"></i>&nbsp;Total: {{clientTotal.Sum}} BYN
+            <i class="fas fa-cash-register"></i>&nbsp;Total: {{clientTotal.Sum}}&nbsp;{{order.Currency}}
         </h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
@@ -240,10 +240,10 @@
                         {{item.Title}}
                     </td>
                     <td>
-                        {{item.PricePerItem}} BYN x {{item.Count}}
+                        {{item.PricePerItem}}&nbsp;{{item.Currency}} x {{item.Count}}
                     </td>
                     <td>
-                        {{item.PricePerItem*item.Count}} BYN
+                        {{item.PricePerItem*item.Count}}&nbsp;{{item.Currency}}
                     </td>
                 </tr>
             </table>
@@ -271,27 +271,36 @@
                     </div>
                 </div>
                 <div class="col-md-10">
-                    <div class="form-group">
-                        <label>Rate</label>
-                        <ngb-rating formControlName="Stars" max="5" [(rate)]="f.Stars.value" class="form-control"
-                            [ngClass]="{ 'is-invalid': submittedFeedback && f.Stars.errors }"></ngb-rating>
-                        <div *ngIf="submittedFeedback && f.Stars.errors" class="invalid-feedback">
-                            <div *ngIf="f.Stars.errors.required">Stars is required</div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Rate</label>
+                                <ngb-rating formControlName="Stars" max="5" [(rate)]="f.Stars.value"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submittedFeedback && f.Stars.errors }"></ngb-rating>
+                                <div *ngIf="submittedFeedback && f.Stars.errors" class="invalid-feedback">
+                                    <div *ngIf="f.Stars.errors.required">Stars is required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comment</label>
+                                <textarea Title="Comment" type="text" formControlName="Comment" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submittedFeedback && f.Comment.errors }"
+                                    placeholder="Comment about this menu item..."></textarea>
+                                <div *ngIf="submittedFeedback && f.Comment.errors" class="invalid-feedback">
+                                    <div *ngIf="f.Comment.errors.required">Comment is required</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Comment</label>
-                        <textarea Title="Comment" type="text" formControlName="Comment" class="form-control"
-                            [ngClass]="{ 'is-invalid': submittedFeedback && f.Comment.errors }"
-                            placeholder="Comment about this menu item..."></textarea>
-                        <div *ngIf="submittedFeedback && f.Comment.errors" class="invalid-feedback">
-                            <div *ngIf="f.Comment.errors.required">Comment is required</div>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <button type="submit" (click)="onSubmitFeedback()" class="btn btn-primary">Save
                             changes</button>

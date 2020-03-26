@@ -14,7 +14,7 @@
                 </ngx-dropzone-preview>
             </ngx-dropzone> -->
             <ngx-dropzone #dropzone [multiple]="true" [accept]="'image/*'" [maxFileSize]="5242880" [showPreviews]="true"
-                (filesAdded)="onFilesAdded($event)" (filesRejected)="onFilesRejected($event)"></ngx-dropzone>
+                (filesAdded)="onFilesAdded($event)" (filesRejected)="onClearPhoto()"></ngx-dropzone>
             <button class="btn btn-primary" Title="Upload images" (click)="onUploadFiles()"><i
                     class="fas fa-folder-plus"></i></button>
             <button class="btn btn-error" Title="Clear images" (click)="dropzone.reset(); onClearPhoto();"><i
@@ -38,7 +38,8 @@
 <div class="col-md-12">
     <div class="card card-user">
         <div class="card-header">
-            <h5 *ngIf="!isEdit" class="card-title"><i class="far fa-edit"></i>&nbsp;Register your business location</h5>
+            <h5 *ngIf="!isEdit" class="card-title"><i class="far fa-edit"></i>&nbsp;Register your business location
+                (re-login needed)</h5>
             <h5 *ngIf="isEdit" class="card-title"><i class="far fa-edit"></i>&nbsp;Update your business location info
             </h5>
         </div>
@@ -71,7 +72,7 @@
                     <div class="col-md-5">
                         <div class="form-group">
                             <label>Your coordinates (Lon/Lat)</label>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"
-                                (click)="openModal(findCoordinates)">&oplus;
+                                (click)="loadMap()">&oplus;
                                 find now</a>
                             <div class="row">
                                 <div class="col-md-6">
@@ -115,7 +116,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <input Title="Currency (BYN, $, EUR...)" type="text" formControlName="Currency"
+                                class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Currency.errors }"
+                                placeholder="Currency" />
+                            <div *ngIf="submitted && f.Currency.errors" class="invalid-feedback">
+                                <div *ngIf="f.Currency.errors.required">Currency is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
                         <div class="form-group">
                             <label>Address</label>
                             <input Title="Address" type="text" formControlName="Address" class="form-control"
@@ -124,6 +136,10 @@
                                 <div *ngIf="f.Address.errors.required">Address is required</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <button *ngIf="!isEdit" type="submit" class="btn btn-primary">Register Location</button>
                             <button *ngIf="isEdit" type="submit" class="btn btn-primary">Save Changes</button>
@@ -320,7 +336,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false"
+        <!-- <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false"
             (mapClick)="mapClicked($event)">
 
             <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label, i)"
@@ -337,7 +353,7 @@
                 [circleDraggable]="true" [editable]="true">
             </agm-circle>
 
-        </agm-map>
+        </agm-map> -->
     </div>
     <div class="modal-footer">
         <div class="form-group">

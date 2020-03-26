@@ -24,6 +24,7 @@ export class LocationService {
     body.append("Longitude", registerFormData.value.Longitude);
     body.append("Latitude", registerFormData.value.Latitude);
     body.append("Name", registerFormData.value.Name);
+    body.append("Currency", registerFormData.value.Currency);
     body.append("Address", registerFormData.value.Address);
     //body.append("Photo", fileToUpload);
     return this.http.post(environment.serverURL + '/api/location', body);
@@ -36,6 +37,7 @@ export class LocationService {
     body.append("Longitude", registerFormData.value.Longitude);
     body.append("Latitude", registerFormData.value.Latitude);
     body.append("Name", registerFormData.value.Name);
+    body.append("Currency", registerFormData.value.Currency);
     body.append("Address", registerFormData.value.Address);
     //body.append("Photo", fileToUpload);
     return this.http.put(environment.serverURL + '/api/location', body);

@@ -70,7 +70,8 @@ export class OrderManagerComponent implements OnInit {
   feedbackForm: FormGroup = this.formBuilder.group({
     Stars: [, [Validators.required]],
     Comment: ['', [Validators.required]],
-    MenuItemId: [0, [Validators.required]],
+    MenuItemId: [0],
+    LocationId: [0],
     UserProfileId: [0, [Validators.required]],
     Photo: [null]
   });

@@ -13,6 +13,8 @@ namespace FH.BLL.Interfaces
         Task<OperationDetails> ConfirmEmailAsync(string useId, string code);
         Task<object> LoginUserAsync(LoginVM model);
         Task EditAccountInfo(EditAccountInfoVM model);
+        List<UserTabVM> GetLocationStaff(string useId);
+        void DeleteUser(string useId);
         void Dispose();
     }
 }

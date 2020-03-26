@@ -24,13 +24,13 @@ namespace FH.BLL.Services
 
        public List<FeedbackVM> GetFeedbacksByLocation(int locationId)
         {
-            var ret = _db.Feedbacks.GetAll().Where(m => m.LocationId == locationId).Select(m=>new FeedbackVM(m)).ToList();
+            var ret = _db.Feedbacks.GetAll().Where(m => m.LocationId == locationId).Select(m=>new FeedbackVM(m, m.UserProfile, m.Photos)).ToList();
             return ret;
         }
 
        public List<FeedbackVM> GetFeedbacksByMenuItem(int itemId)
        {
-           var ret = _db.Feedbacks.GetAll().Where(m => m.MenuItemId == itemId).Select(m => new FeedbackVM(m)).ToList();
+           var ret = _db.Feedbacks.GetAll().Where(m => m.MenuItemId == itemId).Select(m => new FeedbackVM(m, m.UserProfile, m.Photos)).ToList();
            return ret;
         }
 
@@ -52,13 +52,17 @@ namespace FH.BLL.Services
            }
 
            var newFeedback = await _db.Feedbacks.CreateAsync(dbFeedback);
-           var retFeedback = new FeedbackVM(newFeedback);
-           if (f.UploadPhoto != null)
+           var f2 = _db.Feedbacks.GetAll().FirstOrDefault(m => m.Id == newFeedback.Id);
+           if (f2 != null)
            {
-               await _fileService.CreateFileDbAsync(f.UploadPhoto, retFeedback.Id);
-
+               var retFeedback = new FeedbackVM(f2, f2.UserProfile, f2.Photos);
+               if (f.UploadPhoto != null)
+               {
+                   await _fileService.CreateFileDbAsync(f.UploadPhoto, retFeedback.Id);
+               }
+               return retFeedback;
            }
-           return retFeedback;
+           throw new Exception("feedback not found");
        }
     }
 }

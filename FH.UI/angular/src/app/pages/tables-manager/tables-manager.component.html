@@ -30,6 +30,9 @@
                         </i></h5>
                 </div>
                 <div class="card-body">
+                    <div *ngIf="tables==null || tables.length==0" class=" text-center" style="background: #8a8a8a26;">
+                        <label class="text-center">No Tables Yet</label>
+                    </div>
                     <table class="table table-striped">
                         <tbody>
                             <ng-container *ngFor="let item of tables">
@@ -206,8 +209,8 @@
                     <div class="form-group">
                         <label>Number (unique value)</label>
                         <input Title="Number" type="text" formControlName="Number" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.Number.errors }" placeholder="Number" />
-                        <div *ngIf="submitted && f.Number.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': submittedTable && f.Number.errors }" placeholder="Number" />
+                        <div *ngIf="submittedTable && f.Number.errors" class="invalid-feedback">
                             <div *ngIf="f.Number.errors.required">Number is required</div>
                         </div>
                     </div>
@@ -216,8 +219,8 @@
                     <div class="form-group">
                         <label>Info (size, placement & etc.)</label>
                         <input Title="Info" type="text" formControlName="Info" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.Info.errors }" placeholder="Info" />
-                        <div *ngIf="submitted && f.Info.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': submittedTable && f.Info.errors }" placeholder="Info" />
+                        <div *ngIf="submittedTable && f.Info.errors" class="invalid-feedback">
                             <div *ngIf="f.Info.errors.required">Info is required</div>
                         </div>
                     </div>
@@ -253,7 +256,7 @@
                         </dl-date-time-picker>
                         <!-- <input type="datetime-local" formControlName="StartTime" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f2.StartTime.errors }" placeholder="StartTime" /> -->
-                        <div *ngIf="submitted && f2.StartTime.errors" class="invalid-feedback">
+                        <div *ngIf="submittedBook && f2.StartTime.errors" class="invalid-feedback">
                             <div *ngIf="f2.StartTime.errors.required">Start date is required</div>
                         </div>
                     </div>
@@ -266,7 +269,7 @@
                         </dl-date-time-picker>
                         <!-- <input type="datetime-local" formControlName="EndTime" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f2.EndTime.errors }" placeholder="EndTime" /> -->
-                        <div *ngIf="submitted && f2.EndTime.errors" class="invalid-feedback">
+                        <div *ngIf="submittedBook && f2.EndTime.errors" class="invalid-feedback">
                             <div *ngIf="f2.EndTime.errors.required">End date is required</div>
                         </div>
                     </div>
@@ -280,14 +283,14 @@
                     <div class="form-group">
                         <label>Free tables</label>
                         <select formControlName="TableId" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f2.TableId.errors }" placeholder="Table">
+                            [ngClass]="{ 'is-invalid': submittedBook && f2.TableId.errors }" placeholder="Table">
                             <!-- <option *ngIf="freeTables.length!=0" value="" selected disabled hidden>Choose a table...
                             </option>
                             <option *ngIf="freeTables.length==0" value="" selected disabled hidden>No one free table on
                                 picked time</option> -->
                             <option *ngFor="let t of freeTables" value="{{t.Id}}">#{{t.Number}} ({{t.Info}})</option>
                         </select>
-                        <div *ngIf="submitted && f2.TableId.errors" class="invalid-feedback">
+                        <div *ngIf="submittedBook && f2.TableId.errors" class="invalid-feedback">
                             <div *ngIf="f2.TableId.errors.required">Table is required</div>
                         </div>
                     </div>
@@ -296,8 +299,8 @@
                     <div class="form-group">
                         <label>Client ID</label>
                         <input type="text" formControlName="ClientId" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f2.ClientId.errors }" placeholder="ClientId" />
-                        <div *ngIf="submitted && f2.ClientId.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': submittedBook && f2.ClientId.errors }" placeholder="ClientId" />
+                        <div *ngIf="submittedBook && f2.ClientId.errors" class="invalid-feedback">
                             <div *ngIf="f2.ClientId.errors.required">Client ID is required</div>
                         </div>
                     </div>
@@ -308,7 +311,7 @@
                     <div class="form-group">
                         <label>Comment</label>
                         <input type="text" formControlName="Comment" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f2.Comment.errors }" placeholder="Comment" />
+                            [ngClass]="{ 'is-invalid': submittedBook && f2.Comment.errors }" placeholder="Comment" />
                     </div>
                 </div>
             </div>
@@ -341,7 +344,7 @@
                         </dl-date-time-picker>
                         <!-- <input type="datetime-local" formControlName="StartTime" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f2.StartTime.errors }" placeholder="StartTime" /> -->
-                        <div *ngIf="submitted && f2.StartTime.errors" class="invalid-feedback">
+                        <div *ngIf="submittedBook && f2.StartTime.errors" class="invalid-feedback">
                             <div *ngIf="f2.StartTime.errors.required">Start date is required</div>
                         </div>
                     </div>
@@ -354,7 +357,7 @@
                         </dl-date-time-picker>
                         <!-- <input type="datetime-local" formControlName="EndTime" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f2.EndTime.errors }" placeholder="EndTime" /> -->
-                        <div *ngIf="submitted && f2.EndTime.errors" class="invalid-feedback">
+                        <div *ngIf="submittedBook && f2.EndTime.errors" class="invalid-feedback">
                             <div *ngIf="f2.EndTime.errors.required">End date is required</div>
                         </div>
                     </div>
@@ -368,14 +371,14 @@
                     <div class="form-group">
                         <label>Free tables</label>
                         <select formControlName="TableId" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f2.TableId.errors }" placeholder="Table">
+                            [ngClass]="{ 'is-invalid': submittedBook && f2.TableId.errors }" placeholder="Table">
                             <!-- <option *ngIf="freeTables.length!=0" value="" selected disabled hidden>Choose a table...
                             </option>
                             <option *ngIf="freeTables.length==0" value="" selected disabled hidden>No one free table on
                                 picked time</option> -->
                             <option *ngFor="let t of freeTables" value="{{t.Id}}">#{{t.Number}} ({{t.Info}})</option>
                         </select>
-                        <div *ngIf="submitted && f2.TableId.errors" class="invalid-feedback">
+                        <div *ngIf="submittedBook && f2.TableId.errors" class="invalid-feedback">
                             <div *ngIf="f2.TableId.errors.required">Table is required</div>
                         </div>
                     </div>
@@ -384,8 +387,8 @@
                     <div class="form-group">
                         <label>Client ID</label>
                         <input type="text" disabled formControlName="ClientId" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f2.ClientId.errors }" placeholder="ClientId" />
-                        <div *ngIf="submitted && f2.ClientId.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': submittedBook && f2.ClientId.errors }" placeholder="ClientId" />
+                        <div *ngIf="submittedBook && f2.ClientId.errors" class="invalid-feedback">
                             <div *ngIf="f2.ClientId.errors.required">Client ID is required</div>
                         </div>
                     </div>
@@ -396,7 +399,7 @@
                     <div class="form-group">
                         <label>Comment</label>
                         <input type="text" formControlName="Comment" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f2.Comment.errors }" placeholder="Comment" />
+                            [ngClass]="{ 'is-invalid': submittedBook && f2.Comment.errors }" placeholder="Comment" />
                     </div>
                 </div>
             </div>

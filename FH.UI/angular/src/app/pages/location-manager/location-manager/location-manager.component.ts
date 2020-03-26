@@ -41,6 +41,7 @@ export class LocationManagerComponent implements OnInit {
     CompanyId: ['', [Validators.required]],
     Longitude: ['', [Validators.required]],
     Latitude: ['', [Validators.required]],
+    Currency: ['', [Validators.required]],
     Address: ['', [Validators.required]]
   });
   companyForm: FormGroup = this.formBuilder.group({
@@ -72,7 +73,7 @@ export class LocationManagerComponent implements OnInit {
 
   album = new Array();
   UploadFiles: File[] = new Array();
-  private lbAlbum: any[] = new Array();
+  lbAlbum: any[] = new Array();
   @ViewChild('dropzone', { static: true }) drop;
 
   ngOnInit() {
@@ -92,6 +93,7 @@ export class LocationManagerComponent implements OnInit {
               CompanyId: this.location.CompanyId,
               Longitude: this.location.Longitude,
               Latitude: this.location.Latitude,
+              Currency: this.location.Currency,
               Address: this.location.Address
             }
           );
@@ -128,6 +130,12 @@ export class LocationManagerComponent implements OnInit {
         this.toastr.error(err.error, 'Error');
       }
     );
+  }
+
+  public logout(e: any) {
+    localStorage.clear();
+    //window.location.reload(true);
+    this.router.navigateByUrl('/welcome/login');
   }
 
   get f() { return this.locationForm.controls; }
@@ -176,6 +184,7 @@ export class LocationManagerComponent implements OnInit {
               toastClass: "alert alert-success alert-with-icon"
             }
           );
+          this.logout("");
         },
         err => {
           console.log(err);
@@ -307,6 +316,7 @@ export class LocationManagerComponent implements OnInit {
       this.lat = pos.lat;
       this.myLatlng = new google.maps.LatLng(pos.lat, pos.lng);
       console.log(`Positon: ${pos.lng} ${pos.lat}`);
+      this.setGeolocationForm();
     });
     // var mapOptions = {
     //   zoom: 13,

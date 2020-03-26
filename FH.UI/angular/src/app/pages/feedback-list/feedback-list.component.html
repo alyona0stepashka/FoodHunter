@@ -1,0 +1,52 @@
+<div class="mat-tab-body-content" style="overflow: hidden;">
+    <div *ngIf="feedbacks.length==0 || feedbacks==null || feedbacks==undefined" class=" text-center"
+        style="background: #8a8a8a26;">
+        <label class="text-center">No Feedbacks Yet</label>
+    </div>
+    <div *ngIf="feedbacks.length>0" style="margin-bottom: inherit;">
+        <table class="table table-striped">
+            <tbody>
+                <ng-container *ngFor="let f of feedbacks">
+                    <tr>
+                        <td width="10%">
+                            <div *ngIf="f.User.Photo!=null && f.User.Photo.Value!=null" class="row">
+                                <div class="item text-center col-md-12">
+                                    <img style="max-height: 3rem; width: auto; cursor: pointer;"
+                                        (click)="open(f.User.Photo.Number)" clas="avatar-mini"
+                                        src="{{serverUrl}}{{f.User.Photo.Value}}" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="item text-center col-md-12">
+                                    <span style="white-space: normal; font-size: smaller;">{{f.User.FullName}},
+                                        {{f.User.Age}}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td width="80%">
+                            <div class="row">
+                                <div class="item text-left col-md-6" title="{{f.Stars}}">
+                                    <ngb-rating max="5" [(rate)]="f.Stars" [readonly]="true">
+                                    </ngb-rating>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="item text-left col-md-12">
+                                    <span style="white-space: normal;">{{f.Comment}}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td width="10%">
+                            <div *ngIf="f.Photos[0]!=null && f.Photos[0]!=undefined" class="row">
+                                <div class="item text-right col-md-12">
+                                    <img style="max-height: 3rem; width: auto; cursor: pointer;"
+                                        (click)="open(f.Photos[0].Number)" src="{{serverUrl}}{{f.Photos[0].Value}}" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>

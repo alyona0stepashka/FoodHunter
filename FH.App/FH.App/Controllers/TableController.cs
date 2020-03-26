@@ -36,6 +36,7 @@ namespace FH.App.Controllers
             try
             {
                 var companyPage = _tableService.GetMyTableBooks(User.Claims.First(c => c.Type == "UserID").Value);
+                companyPage.Reverse();
                 return Ok(companyPage);
             }
             catch (Exception ex)
@@ -58,6 +59,7 @@ namespace FH.App.Controllers
                     throw new Exception("locationId is missing");
                 }
                 var companyPage = _tableService.GetAllTableBooksByLocation(id);
+                companyPage.Reverse();
                 return Ok(companyPage);
             }
             catch (Exception ex)
@@ -146,6 +148,7 @@ namespace FH.App.Controllers
                     throw new Exception("locationId is missing");
                 }
                 var companyPage = _tableService.GetAllTablesByLocation(id);
+                companyPage.Reverse();
                 return Ok(companyPage);
             }
             catch (Exception ex)

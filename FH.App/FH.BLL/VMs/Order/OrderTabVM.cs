@@ -21,7 +21,7 @@ namespace FH.BLL.VMs
         public int ManagerId { get; set; }
         public List<ManagerCallVM> Calls { get; set; } = new List<ManagerCallVM>();
 
-        public OrderTabVM(Order o)
+        public OrderTabVM(Order o, Location l, UserProfile p)
         {
             Id = o.Id; 
             IsActive = o.IsActive;
@@ -32,16 +32,26 @@ namespace FH.BLL.VMs
             
             StartDate = o.StartDate;
             EndDate = o.EndDate;
-            if (o.Table.LocationId != null) {LocationId = o.Table.LocationId.Value;}
-            LocationName = o.Table.Location?.Name;  
-            TableNumber = o.Table.Number;
+            if (l != null) LocationId = l.Id;
+
+            if (o.Table != null)
+            {
+                if (l != null) LocationName = l.Name;
+                TableNumber = o.Table.Number;
+            }
+
             if (o.ManagerId != null)
             {
                 ManagerId = o.ManagerId.Value;
-                ManagerName = $"{o.Manager.UserProfile.FirstName} {o.Manager.UserProfile.LastName[0]}.";
+                ManagerName = $"{p.FirstName} {p.LastName[0]}.";
             }
 
             if (o.ManagerCalls != null) Calls = o.ManagerCalls.Select(m => new ManagerCallVM(m)).ToList();
+        }
+
+        public OrderTabVM()
+        {
+            
         }
     }
 }

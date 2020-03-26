@@ -14,11 +14,11 @@ namespace FH.BLL.VMs
         public UserTabVM User { get; set; }
         public List<OrderItemVM> OrderItems { get; set; }
 
-        public OrderPageTabVM(OrderUser o)
+        public OrderPageTabVM(OrderUser o, string currency)
         {
             Id = o.OrderId;
-            User = new UserTabVM(o.UserProfile);
-            OrderItems = o.Order.OrderItems.Where(m => m.UserId == User.UserProfileId).Select(m=>new OrderItemVM(m)).ToList(); 
+            if (o.UserProfile != null) User = new UserTabVM(o.UserProfile, o.UserProfile.Sex, o.UserProfile.File);
+            OrderItems = o.Order.OrderItems.Where(m => m.UserId == User.UserProfileId).Select(m=>new OrderItemVM(m, currency)).ToList(); 
         }
     }
 }

@@ -45,6 +45,7 @@ import { OrderManagerComponent } from './pages/order-manager/order-manager.compo
 import { OrderListComponent } from './pages/order-list/order-list.component';
 import { FeedbackListComponent } from './pages/feedback-list/feedback-list.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { StaffComponent } from './pages/staff/staff.component';
 
 //import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
@@ -69,6 +70,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     OrderListComponent,
     FeedbackListComponent,
     DashboardComponent,
+    StaffComponent,
     //AdminLayoutComponent
   ],
   imports: [

@@ -104,7 +104,7 @@ export class OrderListComponent implements OnInit {
         this.filteredOrders = this.orders;
         this.isHaveOrders = (this.orders != null && this.orders.length > 0);
         this.orders.forEach(o => {
-          this.calls.push(o.Calls);
+          this.calls = this.calls.concat(o.Calls);
         })
       },
       err => {
@@ -119,6 +119,7 @@ export class OrderListComponent implements OnInit {
       res => {
         this.orders = res as [];
         this.filteredOrders = this.orders;
+        this.isHaveOrders = (this.orders != null && this.orders.length > 0);
       },
       err => {
         console.log(err);
@@ -130,10 +131,19 @@ export class OrderListComponent implements OnInit {
   assignOrderAsManager(orderId) {
     this.signalRService.hubConnection.invoke('AssignManagerToSession', orderId, null)
       .then(res => {
-        new Promise(resolve => setTimeout(resolve, 1000));
-        this.redirectToOrder(orderId);
+        new Promise(resolve => setTimeout(resolve, 1000)).then(res => { this.redirectToOrder(orderId); });
+
       })
       .catch(err => console.error(err));
+  }
+
+  disableManagerCall(callId) {
+    this.signalRService.hubConnection.invoke('AcceptCallManager', callId)
+      .then(res => {
+      })
+      .catch(err => console.error(err));
+    console.log("click - disable - call");
+
   }
 
 }

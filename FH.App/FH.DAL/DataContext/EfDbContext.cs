@@ -5,6 +5,7 @@ using FH.Models.StaticModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace FH.DAL.DataContext
 {
@@ -12,18 +13,14 @@ namespace FH.DAL.DataContext
     {
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<FileModel> FileModels { get; set; }
-        public DbSet<Sex> Sexes { get; set; }
-        public DbSet<Cuisine> Cuisines { get; set; }
-        public DbSet<CuisineUser> CuisineUsers { get; set; }
+        public DbSet<Sex> Sexes { get; set; } 
         public DbSet<Company> Companys { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<CompanySpecification> CompanySpecifications { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Manager> Managers { get; set; }
         public DbSet<Menu> Menus { get; set; }
-        public DbSet<MenuItem> MenuItems { get; set; }
-        public DbSet<Subscription> Subscriptions { get; set; }
-        public DbSet<SubscriptionType> SubscriptionTypes { get; set; }
+        public DbSet<MenuItem> MenuItems { get; set; } 
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderUser> OrderUsers { get; set; }
         public DbSet<Icon> Icons { get; set; }
@@ -110,15 +107,7 @@ namespace FH.DAL.DataContext
             modelBuilder.Entity<OrderItem>().HasOne(m => m.MenuItem).WithMany(m => m.OrderItems).HasForeignKey(m => m.MenuItemId)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<OrderItem>().HasOne(m => m.User).WithMany(m => m.OrderItems).HasForeignKey(m => m.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-
-            modelBuilder.Entity<Subscription>().HasOne(m => m.SubscriptionType).WithMany(m => m.Subscriptions).HasForeignKey(m => m.SubscriptionTypeId)
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Subscription>().HasOne(m => m.Location).WithMany(m => m.Subscriptions).HasForeignKey(m => m.LocationId)
-                .OnDelete(DeleteBehavior.Restrict);
-            //            modelBuilder.Entity<Subscription>().HasOne(m => m.User).WithMany(m => m.Subscriptions)
-            //                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); 
 
 
             modelBuilder.Entity<Table>().HasOne(m => m.Location).WithMany(m => m.Tables).HasForeignKey(m => m.LocationId)
@@ -134,15 +123,7 @@ namespace FH.DAL.DataContext
             modelBuilder.Entity<UserProfile>().HasOne(m => m.File).WithOne(m => m.UserProfile)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<UserProfile>().HasOne(m => m.Sex).WithMany(m => m.Users).HasForeignKey(m => m.SexId)
-                .OnDelete(DeleteBehavior.Restrict);
-            //            modelBuilder.Entity<UserProfile>().HasOne(m => m.User).WithMany(m => m.OrderItems)
-            //                .OnDelete(DeleteBehavior.Restrict);
-
-
-            modelBuilder.Entity<CuisineUser>().HasOne(m => m.Cuisine).WithMany(m => m.CuisineUsers).HasForeignKey(m => m.CuisineId)
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<CuisineUser>().HasOne(m => m.UserProfile).WithMany(m => m.CuisineUsers).HasForeignKey(m => m.UserProfileId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); 
 
 
             modelBuilder.Entity<OrderUser>().HasOne(m => m.Order).WithMany(m => m.OrderUsers).HasForeignKey(m => m.OrderId)
