@@ -1,0 +1,19 @@
+# FoodHunter
+<i>.NET Core 2.2 WebAPI, Angular 8, EF Core, SignalR, Identity, JWT, MailKit, Swagger, Code First, LazyLoading, Material, ng-bootstrap, chart.js, ng-dropzone, ng-toastr</i><br/>
+<img src="https://sun9-19.userapi.com/c206724/v206724850/c739f/tu5DbgBLENQ.jpg"/>
+<img src="https://sun9-68.userapi.com/c206724/v206724850/c73b2/0jvd5dmbJeA.jpg"/>
+<img src="https://sun9-55.userapi.com/c206724/v206724850/c73cb/H_HLpBaCutI.jpg"/>
+<img src="https://sun9-51.userapi.com/c206724/v206724850/c73d4/VQW_ljzf_D4.jpg"/>
+<img src="https://sun9-69.userapi.com/c206724/v206724850/c73dd/58qVEU_zgCI.jpg"/>
+<img src="https://sun9-16.userapi.com/c206724/v206724850/c73e6/8kNHw3FLzuA.jpg"/>
+<img src="https://sun9-8.userapi.com/c206724/v206724850/c7414/DJODNxVPjos.jpg"/>
+<img src="https://sun9-27.userapi.com/c206724/v206724850/c741d/0nzkBor0Z8Y.jpg"/>
+<img src="https://sun9-16.userapi.com/c206724/v206724850/c7427/ErqXlsdEK-Y.jpg"/>
+<img src="https://sun9-27.userapi.com/c206724/v206724850/c7430/mFpCAo65Aoc.jpg"/>
+<img src="https://sun9-63.userapi.com/c206724/v206724850/c7439/lCfXluXlTlc.jpg"/>
+<img src="https://sun9-49.userapi.com/c206724/v206724850/c7442/tY1C2x9fW5o.jpg"/>
+<img src="https://sun9-33.userapi.com/c206724/v206724850/c744b/LJmbjFg2ZZY.jpg"/>
+<img src="https://sun9-9.userapi.com/c206724/v206724850/c73bb/NJMXbckrjbU.jpg"/>
+<img src="https://sun9-16.userapi.com/c206724/v206724850/c73f9/KJZapHlXmMc.jpg"/>
+<img src="https://sun9-33.userapi.com/c206724/v206724850/c7402/p2wjEvNYPUY.jpg"/>
+<img src="https://sun9-40.userapi.com/c206724/v206724850/c740b/wZ4KvdFZQnQ.jpg"/> 
