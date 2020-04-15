@@ -120,7 +120,7 @@ export class TablesManagerComponent implements OnInit {
         err => {
           this.isNotFound = true;
           console.log(err);
-          this.toastr.error(err.error, 'Error');
+          // this.toastr.error(err.error, 'Error');
         }
       );
     }
@@ -159,7 +159,7 @@ export class TablesManagerComponent implements OnInit {
         err => {
           this.isNotFound = true;
           console.log(err);
-          this.toastr.error(err.error, 'Error');
+          // this.toastr.error(err.error, 'Error');
         }
       );
     }
@@ -250,7 +250,7 @@ export class TablesManagerComponent implements OnInit {
     this.tableService.deleteTable(id).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Table is deleted</span>',
           "",
           {
             timeOut: 4000,
@@ -264,7 +264,7 @@ export class TablesManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -278,7 +278,7 @@ export class TablesManagerComponent implements OnInit {
       this.tableService.updateTable(this.tableForm, this.locationId).subscribe(
         (res: any) => {
           this.toastr.success(
-            '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+            '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Table is updated</span>',
             "",
             {
               timeOut: 4000,
@@ -293,7 +293,7 @@ export class TablesManagerComponent implements OnInit {
         },
         err => {
           console.log(err);
-          this.toastr.error(err.error, 'Error');
+          // this.toastr.error(err.error, 'Error');
         }
       );
     }
@@ -301,7 +301,7 @@ export class TablesManagerComponent implements OnInit {
       this.tableService.createTable(this.tableForm, this.locationId).subscribe(
         (res: any) => {
           this.toastr.success(
-            '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+            '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">New table is created</span>',
             "",
             {
               timeOut: 4000,
@@ -316,7 +316,7 @@ export class TablesManagerComponent implements OnInit {
         },
         err => {
           console.log(err);
-          this.toastr.error(err.error, 'Error');
+          // this.toastr.error(err.error, 'Error');
         }
       );
     }
@@ -332,7 +332,7 @@ export class TablesManagerComponent implements OnInit {
     this.tableService.createTableBook(this.bookForm, startTime, endTime).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your request is registered</span>',
           "",
           {
             timeOut: 4000,
@@ -347,7 +347,7 @@ export class TablesManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -356,7 +356,7 @@ export class TablesManagerComponent implements OnInit {
     this.tableService.cancelBook(id).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your request is canceled</span>',
           "",
           {
             timeOut: 4000,
@@ -370,7 +370,7 @@ export class TablesManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -379,7 +379,7 @@ export class TablesManagerComponent implements OnInit {
     this.tableService.acceptBook(id).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Request is accepted</span>',
           "",
           {
             timeOut: 4000,
@@ -393,7 +393,7 @@ export class TablesManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -402,7 +402,7 @@ export class TablesManagerComponent implements OnInit {
     this.tableService.declineBook(id).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Request is declined</span>',
           "",
           {
             timeOut: 4000,
@@ -416,7 +416,7 @@ export class TablesManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }

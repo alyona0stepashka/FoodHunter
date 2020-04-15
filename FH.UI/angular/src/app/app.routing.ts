@@ -19,27 +19,6 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { StaffComponent } from './pages/staff/staff.component';
 
 export const AppRoutes: Routes = [
-  //   {
-  //     path: '',
-  //     redirectTo: 'dashboard',
-  //     pathMatch: 'full',
-  //     //canActivate: [AuthGuard]
-  //   }, {
-  //     path: '',
-  //     component: AdminLayoutComponent,
-  //     //canActivate: [AuthGuard],
-  //     children: [
-  //         {
-  //       path: '',
-  //       loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule'
-  // }]},{
-  //     path: 'welcome',
-  //     component: UserLayoutComponent,
-  //     children: [
-  //         {
-  //       path: '',
-  //       loadChildren: './layouts/user-layout/user-layout.module#UserLayoutModule'
-  //   }]},{
   {
     path: 'welcome', component: LayoutComponent,
     children: [
@@ -62,9 +41,6 @@ export const AppRoutes: Routes = [
       { path: 'order/:id', component: OrderManagerComponent, canActivate: [AuthGuard] },
       { path: 'feedbacks', component: FeedbackListComponent, canActivate: [AuthGuard] },
       { path: 'staff', component: StaffComponent, canActivate: [AuthGuard] },
-      // {path: 'register', component: RegisterComponent},
-      // {path: 'about-us', component: AboutUsComponent},
-      // {path: 'contact-us', component: ContactUsComponent},
     ]
   }, {
     path: 'dashboard-user', component: LayoutComponent, canActivate: [AuthGuard],
@@ -77,9 +53,6 @@ export const AppRoutes: Routes = [
       { path: 'order/:id', component: OrderManagerComponent, canActivate: [AuthGuard] },
       { path: 'feedbacks', component: FeedbackListComponent, canActivate: [AuthGuard] },
       { path: 'search', component: LocationSearchComponent, canActivate: [AuthGuard] },
-      // {path: 'register', component: RegisterComponent},
-      // {path: 'about-us', component: AboutUsComponent},
-      // {path: 'contact-us', component: ContactUsComponent},
     ]
   },
   {

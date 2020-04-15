@@ -53,7 +53,7 @@ export class LocationPageComponent implements OnInit {
       err => {
         console.log(err);
         this.isNotFound = true;
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }

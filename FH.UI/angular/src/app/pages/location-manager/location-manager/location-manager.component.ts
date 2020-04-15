@@ -105,7 +105,7 @@ export class LocationManagerComponent implements OnInit {
         },
         err => {
           console.log(err);
-          this.toastr.error(err.error, 'Error');
+          // this.toastr.error(err.error, 'Error');
         }
       );
     };
@@ -121,13 +121,13 @@ export class LocationManagerComponent implements OnInit {
           },
           err => {
             console.log(err);
-            this.toastr.error(err.error, 'Error');
+            // this.toastr.error(err.error, 'Error');
           }
         );
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -165,7 +165,7 @@ export class LocationManagerComponent implements OnInit {
         },
         err => {
           console.log(err);
-          this.toastr.error(err.error, 'Error');
+          // this.toastr.error(err.error, 'Error');
         }
       );
 
@@ -188,7 +188,7 @@ export class LocationManagerComponent implements OnInit {
         },
         err => {
           console.log(err);
-          this.toastr.error(err.error, 'Error');
+          // this.toastr.error(err.error, 'Error');
         }
       );
     }
@@ -218,7 +218,7 @@ export class LocationManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -237,12 +237,12 @@ export class LocationManagerComponent implements OnInit {
   onDeletePhoto(id: number) {
     this.fileService.deleteLocationAlbumPhoto(id).subscribe(
       res => {
-        this.toastr.success('Photo deleted!', 'Deleting successful.');
+        this.toastr.success('Photo deleted', 'Deleting successful.');
         this.loadLocation();
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -275,7 +275,7 @@ export class LocationManagerComponent implements OnInit {
       this.drop.reset();
 
     } else {
-      this.toastr.error('Some of files not added', 'Process error');
+      // this.toastr.error('Some of files not added', 'Process error');
     }
   }
 

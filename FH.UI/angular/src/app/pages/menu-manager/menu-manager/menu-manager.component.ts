@@ -184,14 +184,14 @@ export class MenuManagerComponent implements OnInit {
           },
           err => {
             console.log(err);
-            this.toastr.error(err.error, 'Error');
+            // this.toastr.error(err.error, 'Error');
           }
         );
       },
       err => {
         this.isNotFound = true;
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -208,7 +208,7 @@ export class MenuManagerComponent implements OnInit {
     this.menuService.createMenu(this.menuForm, this.locationId).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">New menu is created</span>',
           "",
           {
             timeOut: 4000,
@@ -223,7 +223,7 @@ export class MenuManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -237,7 +237,7 @@ export class MenuManagerComponent implements OnInit {
     this.menuService.createMenuItem(this.menuItemForm, this.UploadFile).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">New menu item is created</span>',
           "",
           {
             timeOut: 4000,
@@ -253,7 +253,7 @@ export class MenuManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -266,7 +266,7 @@ export class MenuManagerComponent implements OnInit {
     this.menuService.updateMenu(this.menuForm, this.locationId).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Menu is updated</span>',
           "",
           {
             timeOut: 4000,
@@ -281,7 +281,7 @@ export class MenuManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -290,7 +290,7 @@ export class MenuManagerComponent implements OnInit {
     this.menuService.deleteMenu(id).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Menu is deleted</span>',
           "",
           {
             timeOut: 4000,
@@ -303,7 +303,7 @@ export class MenuManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -317,7 +317,7 @@ export class MenuManagerComponent implements OnInit {
     this.menuService.updateMenuItem(this.menuItemForm).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Menu item is updated</span>',
           "",
           {
             timeOut: 4000,
@@ -332,7 +332,7 @@ export class MenuManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
@@ -341,7 +341,7 @@ export class MenuManagerComponent implements OnInit {
     this.menuService.deleteMenuItem(id).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Menu item is deleted</span>',
           "",
           {
             timeOut: 4000,
@@ -355,7 +355,7 @@ export class MenuManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }

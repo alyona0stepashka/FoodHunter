@@ -299,7 +299,7 @@ export class OrderManagerComponent implements OnInit {
     this.feedbackService.createFeedback(this.feedbackForm, this.UploadFile).subscribe(
       (res: any) => {
         this.toastr.success(
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your business location is registered</span>',
+          '<span data-notify="icon" class="nc-icon nc-bell-55"></span><span data-notify="message">Your feedback is created</span>',
           "",
           {
             timeOut: 4000,
@@ -313,7 +313,7 @@ export class OrderManagerComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error(err.error, 'Error');
+        // this.toastr.error(err.error, 'Error');
       }
     );
   }
