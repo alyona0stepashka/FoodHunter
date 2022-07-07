@@ -41,7 +41,7 @@
     "express": "4.17.1",
     "jquery": "3.4.1",
     "jwt-decode": "^2.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "ngx-dropzone": "^1.2.0",
     "ngx-lightbox": "^2.1.1",
     "ngx-toastr": "10.0.4",
